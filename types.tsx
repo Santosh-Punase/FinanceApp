@@ -16,6 +16,7 @@ declare global {
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
+  AddNew: undefined;
   NotFound: undefined;
 };
 
@@ -33,3 +34,14 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
   BottomTabScreenProps<RootTabParamList, Screen>,
   NativeStackScreenProps<RootStackParamList>
 >;
+
+export type TransactionType = 'Cash-In' | 'Cash-Out';
+
+export type Transaction = {
+  transactionType: TransactionType,
+  amount: string,
+  category: string;
+  paymentMode: string;
+  remark: string;
+  date: Date;
+}
