@@ -13,7 +13,6 @@ export function Input({ placeholder, ...rest }: TextInputProps) {
 const styles = StyleSheet.create({
   inputWrapper: {
     position: 'relative',
-    backgroundColor: '#fff',
     width: '100%',
   },
   input: {
@@ -21,7 +20,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: '100%',
     height: 50,
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
   },
   inputLabel: {
     backgroundColor: '#fff',

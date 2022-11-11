@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import Layout from '../../constants/Layout';
 import { RootTabScreenProps } from '../../types';
 import { Text, View } from '../Themed';
-
+import { Card } from '../Card';
 import { dummyData } from './dummyData';
 
 
@@ -12,7 +12,7 @@ export default function TransactionList({ navigation }: { navigation: any }) {
     <>
     <ScrollView style={styles.list}>
       {dummyData.map((item, i) => (
-        <View style={styles.listItem} key={i} lightColor="#fff" darkColor='#010101'>
+        <Card style={styles.listItem} key={i}>
           <View style={styles.listItemLeft}>
             <View style={styles.listItemRow_1}>
               {item.category && <Text style={styles.category}>{item.category}</Text>}
@@ -24,7 +24,7 @@ export default function TransactionList({ navigation }: { navigation: any }) {
             {item.cashIn && <Text style={styles.credit}>{item.cashIn}</Text>}
             {item.cashOut && <Text style={styles.debit}>{item.cashOut}</Text>}
           </View>
-        </View>
+        </Card>
       ))}
       </ScrollView>
       <TouchableOpacity style={styles.addNewButton} onPress={() => navigation.navigate('AddNew')}>
@@ -48,31 +48,25 @@ const styles = StyleSheet.create({
   list: {
     width: Layout.window.width,
     padding: 10,
+    backgroundColor: '#dadada'
   },
   listItem: {
-    width: '100%',
-    padding: 10,
-    borderRadius: 8,
     marginBottom: 10,
-    flex: 1,
     flexDirection: 'row',
   },
   listItemLeft: {
     width: '75%',
     flexDirection: 'column',
-    backgroundColor: '#fff',
   },
   listItemRight: {
     width: '25%' ,
     flexDirection: 'column',
-    backgroundColor: '#fff',
     alignItems: 'flex-end',
     justifyContent: 'center',
     paddingRight: 5,
   },
   listItemRow_1: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
     marginBottom: 5,
   },
   category: {
