@@ -4,7 +4,7 @@ import TransactionList from '../components/Transactions/TransactionList';
 import { RootTabScreenProps } from '../types';
 
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+export default function TransactionScreen({ navigation }: RootTabScreenProps<'TabTwo'>) {
   return (
     <View style={styles.container}>
       {/* <Text style={styles.title}>Tab One</Text>
