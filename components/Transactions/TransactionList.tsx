@@ -1,15 +1,13 @@
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import Layout from '../../constants/Layout';
-import { RootTabScreenProps } from '../../types';
 import { Text, View } from '../Themed';
 import { Card } from '../Card';
 import { dummyData } from './dummyData';
 
 
-export default function TransactionList({ navigation }: { navigation: any }) {
+export default function TransactionList() {
 
   return (
-    <>
     <ScrollView style={styles.list}>
       {dummyData.map((item, i) => (
         <Card style={styles.listItem} key={i}>
@@ -26,11 +24,7 @@ export default function TransactionList({ navigation }: { navigation: any }) {
           </View>
         </Card>
       ))}
-      </ScrollView>
-      <TouchableOpacity style={styles.addNewButton} onPress={() => navigation.navigate('AddNew')}>
-        <Text style={styles.button}>+</Text>
-      </TouchableOpacity>
-      </>
+    </ScrollView>  
   );
 }
 
@@ -48,7 +42,6 @@ const styles = StyleSheet.create({
   list: {
     width: Layout.window.width,
     padding: 10,
-    backgroundColor: '#dadada'
   },
   listItem: {
     marginBottom: 10,
@@ -82,19 +75,4 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 8,
   },
-  addNewButton: {
-    position: 'absolute',
-    right: 10,
-    bottom: 10,
-    width: 60,  
-    height: 60,   
-    borderRadius: 30,            
-    backgroundColor: 'skyblue',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button: {
-    fontSize: 32,
-    fontWeight: 'bold',
-  }
 });

@@ -10,7 +10,7 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
       {/* <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
       {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}
-      <TransactionList navigation={navigation} />
+      <TransactionList />
     </View>
   );
 }
@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#dadada',
   },
   title: {
     fontSize: 20,
