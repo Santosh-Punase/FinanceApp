@@ -1,14 +1,36 @@
-import { StyleSheet } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Card } from '../components/Card';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
 export default function SettingScreen() {
+  const user = {
+    name: 'Santosh',
+    phoneNumber: '6574839300',
+    email: ''
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Three</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/SettingScreen.tsx" />
+      <Text style={styles.sectionHeader}>Profile</Text>
+      <Card style={[ { marginBottom: 10, }]}>
+        <View style={styles.profileIcon}>
+          <Text style={styles.profileInitial}>s</Text>
+        </View>
+        <View style={[{ flexDirection: 'column', marginBottom: 5, justifyContent: 'center' }]}>
+          <Text style={styles.header}>{user.name}</Text>
+          { user.phoneNumber && <Text style={styles.subHeader}>{user.phoneNumber}</Text> }
+          { user.email && <Text style={styles.subHeader}>{user.email}</Text> }
+        </View>
+      </Card>
+      <Text style={styles.sectionHeader}>Application</Text>
+      <Card>
+        <TouchableOpacity onPress={() => alert('Work in progress')} style={[{ flexDirection: 'row' }]}>
+          <FontAwesome name='sign-out' color={'black'} size={30} />
+          <Text style={styles.label}>Log-out</Text>
+        </TouchableOpacity>
+      </Card>
     </View>
   );
 }
@@ -16,16 +38,41 @@ export default function SettingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 10,
+    // backgroundColor: '#dadada',
   },
-  title: {
-    fontSize: 20,
+  sectionHeader: {
+    fontSize: 12,
     fontWeight: 'bold',
+    marginBottom: 10,
+    color: 'gray',
+    marginLeft: 10,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  profileIcon: {
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'lightblue',
+    marginRight: 20,
+  },
+  profileInitial: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    color: 'gray',
+  },
+  header: {
+    fontSize: 16,
+  },
+  subHeader: {
+    fontSize: 12
+  },
+  label: {
+    fontSize: 16,
+    marginLeft: 20,
   },
 });

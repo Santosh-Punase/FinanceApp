@@ -41,11 +41,11 @@ const styles = StyleSheet.create({
   },
   list: {
     width: Layout.window.width,
-    padding: 10,
+    // padding: 10,
   },
   listItem: {
-    marginBottom: 10,
-    flexDirection: 'row',
+    // marginBottom: 10,
+    borderRadius: 0,
   },
   listItemLeft: {
     width: '75%',
