@@ -9,6 +9,7 @@ export default function TransactionList() {
 
   return (
     <ScrollView style={styles.list}>
+      <Text style={styles.date}>11-Nov-2022</Text>
       {dummyData.map((item, i) => (
         <Card style={styles.listItem} key={i}>
           <View style={styles.listItemLeft}>
@@ -38,6 +39,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: 'red',
+  },
+  date: {
+    marginHorizontal: 20,
+    marginVertical: 5,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   list: {
     width: Layout.window.width,

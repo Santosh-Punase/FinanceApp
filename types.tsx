@@ -17,6 +17,7 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   AddNew: undefined;
+  Options: undefined;
   NotFound: undefined;
 };
 
@@ -46,3 +47,7 @@ export type Transaction = {
   remark: string;
   date: Date;
 }
+
+export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Root">;
+export type AddNewScreenProps = NativeStackScreenProps<RootStackParamList, "AddNew">;
+export type OptionsScreenProps = NativeStackScreenProps<RootStackParamList, "Options">;

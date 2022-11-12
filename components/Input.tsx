@@ -1,11 +1,11 @@
 import { TextInput, TextInputProps, View, Text, StyleSheet } from "react-native";
 
-export function Input({ placeholder, ...rest }: TextInputProps) {
+export function Input({ placeholder, showLabel=false, style, ...rest }: TextInputProps & { showLabel?: boolean }) {
 
   return (
     <View style={styles.inputWrapper}>
-      <Text style={styles.inputLabel}>{placeholder}</Text>
-      <TextInput style={styles.input} placeholder={placeholder} { ...rest } />
+      { showLabel && <Text style={styles.inputLabel}>{placeholder}</Text> }
+      <TextInput style={[styles.input, style ]} placeholder={placeholder} { ...rest } />
     </View>
   );
 }
@@ -25,9 +25,9 @@ const styles = StyleSheet.create({
   inputLabel: {
     backgroundColor: '#fff',
     zIndex: 2,
-    paddingHorizontal: 10,
+    paddingHorizontal: 6,
     position: 'absolute',
     top: -12,
-    left: 16
+    left: 10
   },
 });

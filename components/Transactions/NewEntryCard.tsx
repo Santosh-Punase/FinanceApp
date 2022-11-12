@@ -7,7 +7,7 @@ import { Transaction, TransactionType } from '../../types';
 import { Card } from '../Card';
 import { Input } from '../Input';
 
-export default function NewEntryCard() {
+export default function NewEntryCard({ navigation, category }: any) {
   const entryInitialState = {
     transactionType: 'Cash-In' as TransactionType,
     category: '',
@@ -16,16 +16,22 @@ export default function NewEntryCard() {
     amount: '',
     date: new Date
   }
-
   const [entry, setEntry] = useState<Transaction>(entryInitialState)
+
+  useEffect(() => {
+    setEntry({ ...entry, category })
+  }, [category]);
 
   const changeTransactionType = (transactionType: TransactionType) => {
     setEntry({ ...entry, transactionType });
   }
 
   const onAmountChange = (amount: string) => {
-    console.log(amount)
-    setEntry({ ...entry, amount: amount });
+    setEntry({ ...entry, amount });
+  }
+
+  const onRemarkChange = (remark: string) => {
+    setEntry({ ...entry, remark });
   }
 
   return (
@@ -37,8 +43,16 @@ export default function NewEntryCard() {
         </View>
       </View>
       <View style={styles.row}>
-        <Input placeholder='Amount' value={entry.amount || ''} keyboardType='numeric' onChangeText={onAmountChange} />
+        <Input showLabel placeholder='Amount' value={entry.amount || ''} keyboardType='numeric' onChangeText={onAmountChange} />
       </View>
+      <View style={styles.row}>
+        <Input showLabel placeholder='Remark' value={entry.remark || ''} onChangeText={onRemarkChange} />
+      </View>
+      <TouchableOpacity style={styles.dropdown} activeOpacity={1} onPress={() => navigation.navigate('Options')}>
+        <Text style={styles.label}>Category</Text>
+        <Text style={[entry.category ? {} : { color: 'gray' }]}>{entry.category || 'Category'}</Text>
+        <View style={styles.dropdownIcon} />
+      </TouchableOpacity>
     </Card>
   );
 }
@@ -47,7 +61,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 30,
   },
   transactionButton: {
     paddingVertical: 5,
@@ -57,5 +71,33 @@ const styles = StyleSheet.create({
   transactionButtonSelected: {
     color: '#fff',
     backgroundColor: 'blue',
+  },
+  dropdown: {
+    position: 'relative',
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderRadius: 8,
+    height: 50,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: '#fff',
+    top: -14,
+    left: 10,
+    paddingHorizontal: 6,
+  },
+  dropdownIcon: {
+    height: 15,
+    width: 15,
+    position: 'absolute',
+    borderBottomColor: 'black',
+    borderBottomWidth: 2,
+    borderRightColor: 'black',
+    borderRightWidth: 2,
+    right: 15,
+    top: 10,
+    transform: [{ rotateZ: '45deg' }],
   },
 });
