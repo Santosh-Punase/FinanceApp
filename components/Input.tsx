@@ -1,10 +1,10 @@
 import { TextInput, TextInputProps, View, Text, StyleSheet } from "react-native";
 
-export function Input({ placeholder, showLabel=false, style, ...rest }: TextInputProps & { showLabel?: boolean }) {
+export function Input({ placeholder, showLabel=false, label,  style, ...rest }: TextInputProps & { showLabel?: boolean, label?: string }) {
 
   return (
     <View style={styles.inputWrapper}>
-      { showLabel && <Text style={styles.inputLabel}>{placeholder}</Text> }
+      { showLabel && <Text style={styles.inputLabel}>{label || placeholder}</Text> }
       <TextInput style={[styles.input, style ]} placeholder={placeholder} { ...rest } />
     </View>
   );

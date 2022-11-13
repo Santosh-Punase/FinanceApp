@@ -25,21 +25,21 @@ export default function CategoryOptionsScreen({ navigation, route }: any) {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <Input value={searchString} style={[ isError ? { borderColor: 'red', borderWidth: 2 } : { } ]} onChangeText={(t) => setSearchString(t)} placeholder='Search / Add' />
-        <FontAwesome size={22} style={{ position: 'absolute', right: 10, }} name='search' color={'gray'} />
+        <Input value={searchString} style={[ isError ? { borderColor: 'red', borderWidth: 2 } : { } ]} onChangeText={(t) => {
+          setSearchString(t)
+          setIsError(false)
+        }} placeholder={isError ? 'Enter category' : 'Search / Add'} />
+        { !isError && <FontAwesome size={22} style={{ position: 'absolute', right: 10, }} name='search' color={'gray'} /> }
       </View>
-      {/* <View style={[{ marginTop: -10, marginBottom: 10 }]}>
-        <Text style={styles.error}>Please enter category to be added!</Text>
-      </View> */}
       <ScrollView style={[{ width: '100%' }]}>
         <View style={[{ width: '100%', borderWidth:1, borderRadius: 8, paddingTop: 10, }]}>
-          {categories.filter(c => c.includes(searchString)).map((c, i) => (
+          {categories.filter(c => c.toLowerCase().includes(searchString.toLowerCase())).map((c, i) => (
             <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} key={i} onPress={() => navigation.navigate('AddNew', { category: c })}>
               <Text style={styles.category}>{c}</Text>
             </TouchableOpacity>
           ))}
           <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} onPress={onAddNew}>
-            <Text style={[styles.category, { color: 'blue' }]}>Add</Text>
+            <Text style={[styles.category, { color: 'blue' }]}> + Add {searchString || 'New'}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -65,10 +65,5 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     height: 50,
     textAlignVertical: 'center',
-  },
-  error: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    color: 'red'
   },
 });
