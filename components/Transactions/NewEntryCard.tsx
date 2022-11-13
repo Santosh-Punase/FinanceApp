@@ -4,6 +4,7 @@ import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
 import { Transaction, TransactionType } from '../../types';
+import { Button } from '../Button';
 import { Card } from '../Card';
 import { Input } from '../Input';
 
@@ -18,41 +19,67 @@ export default function NewEntryCard({ navigation, category }: any) {
   }
   const [entry, setEntry] = useState<Transaction>(entryInitialState)
 
+  const paymentModes = ['GooglePay', 'Online', 'Credit Card'];
+  
+  const updateEntry = (key: keyof Transaction, value: string ) => {
+    setEntry({ ...entry, [key]: value })
+  }
+
   useEffect(() => {
-    setEntry({ ...entry, category })
+    updateEntry('category', category);
   }, [category]);
 
   const changeTransactionType = (transactionType: TransactionType) => {
-    setEntry({ ...entry, transactionType });
-  }
-
-  const onAmountChange = (amount: string) => {
-    setEntry({ ...entry, amount });
-  }
-
-  const onRemarkChange = (remark: string) => {
-    setEntry({ ...entry, remark });
+    updateEntry('transactionType', transactionType);
   }
 
   return (
-    <Card style={[{ flexDirection: 'column' }]}>
+    <Card style={[{ flexDirection: 'column', height: 450 }]}>
       <View style={[styles.row, { justifyContent: 'center' }]}>
-        <View style={[{ marginLeft: 10, flexDirection: 'row', backgroundColor: '#fff', borderRadius: 16, borderWidth: 2, borderColor: 'blue', }]}>
-          <TouchableOpacity activeOpacity={1} onPress={() => changeTransactionType('Cash-In')}><Text style={[styles.transactionButton, [entry.transactionType === 'Cash-In' ? styles.transactionButtonSelected : { }]]}>Cash-In</Text></TouchableOpacity>
-          <TouchableOpacity activeOpacity={1} onPress={() => changeTransactionType('Cash-Out')}><Text style={[styles.transactionButton, [entry.transactionType === 'Cash-Out' ? styles.transactionButtonSelected : { }]]}>Cash-Out</Text></TouchableOpacity>
+        <View style={[{ marginLeft: 10, flexDirection: 'row', width: '50%', justifyContent: 'space-between', }]}>
+          <Button
+            rounded
+            activeOpacity={1}
+            label='Cash-In'
+            selected={entry.transactionType === 'Cash-In'}
+            buttonType='success'
+            onPress={() => changeTransactionType('Cash-In')}
+          />
+          <Button
+            rounded
+            activeOpacity={1}
+            label='Cash-Out'
+            selected={entry.transactionType === 'Cash-Out'}
+            buttonType='error'
+            onPress={() => changeTransactionType('Cash-Out')}
+          />
         </View>
       </View>
       <View style={styles.row}>
-        <Input showLabel placeholder='Amount' value={entry.amount || ''} keyboardType='numeric' onChangeText={onAmountChange} />
+        <Input showLabel placeholder='Amount' value={entry.amount || ''} keyboardType='numeric' onChangeText={(amount) => updateEntry('amount', amount)} />
       </View>
       <View style={styles.row}>
-        <Input showLabel placeholder='Remark' value={entry.remark || ''} onChangeText={onRemarkChange} />
+        <Input showLabel label='Remark' placeholder='Item, Quantity, Person, Place etc' value={entry.remark || ''} onChangeText={(remark) => updateEntry('remark', remark)} />
       </View>
       <TouchableOpacity style={styles.dropdown} activeOpacity={1} onPress={() => navigation.navigate('Options')}>
         <Text style={styles.label}>Category</Text>
         <Text style={[entry.category ? {} : { color: 'gray' }]}>{entry.category || 'Category'}</Text>
         <View style={styles.dropdownIcon} />
       </TouchableOpacity>
+      <View style={styles.paymentModeWrapper}>
+        <Text style={styles.label}>Payment Mode</Text>
+        { paymentModes.map(paymentMode => (
+          <Button
+            key={paymentMode}
+            rounded
+            activeOpacity={1}
+            label={paymentMode}
+            style={[{ marginRight: 10, }]}
+            selected={entry.paymentMode === paymentMode}
+            onPress={() => updateEntry('paymentMode', paymentMode)}
+          />
+        ))}
+      </View>
     </Card>
   );
 }
@@ -63,15 +90,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 30,
   },
-  transactionButton: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 14,
-  },
-  transactionButtonSelected: {
-    color: '#fff',
-    backgroundColor: 'blue',
-  },
   dropdown: {
     position: 'relative',
     flexDirection: 'row',
@@ -80,6 +98,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingHorizontal: 16,
     paddingVertical: 10,
+    marginBottom: 30,
   },
   label: {
     position: 'absolute',
@@ -100,4 +119,11 @@ const styles = StyleSheet.create({
     top: 10,
     transform: [{ rotateZ: '45deg' }],
   },
+  paymentModeWrapper: {
+    position: 'relative',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  }
 });
