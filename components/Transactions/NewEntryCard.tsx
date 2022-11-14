@@ -36,7 +36,7 @@ export default function NewEntryCard({ navigation, category }: any) {
   }
 
   return (
-    <Card style={[{ flexDirection: 'column' }]}>
+    <Card style={[{ flexDirection: 'column', height: '100%', }]}>
       <View style={[styles.row, { justifyContent: 'center' }]}>
         <View style={[{ marginLeft: 10, flexDirection: 'row', width: '50%', justifyContent: 'space-between', }]}>
           <Button
@@ -92,7 +92,9 @@ export default function NewEntryCard({ navigation, category }: any) {
         />
       </View>
       <OverlayModal
-        title='Add new payment mode'
+        title='Add New Payment Mode'
+        placeholder='Payment Mode'
+        submitText='Save'
         visible={showModal}
         onSubmit={(text) => {
           setPaymentModes([ ...paymentModes, text]);
@@ -100,6 +102,25 @@ export default function NewEntryCard({ navigation, category }: any) {
         }}
         onCancel={() => setShowModal(false)}
       />
+      <View style={styles.bottomRow}>
+        <Button
+          activeOpacity={1}
+          label={'Save & Add New'}
+          buttonType='outline'
+          style={[{ width: '65%' }]}
+          labelStyles={styles.buttonLabel}
+          selected
+          onPress={() => null}
+        />
+        <Button
+          activeOpacity={1}
+          label={'Save'}
+          style={[{ width: '30%' }]}
+          labelStyles={styles.buttonLabel}
+          selected
+          onPress={() => null}
+        />
+      </View>
     </Card>
   );
 }
@@ -148,5 +169,17 @@ const styles = StyleSheet.create({
   },
   paymentModeButton: {
     marginBottom: 20,
-  }
+  },
+  bottomRow: {
+    flexDirection: 'row',
+    marginTop: 'auto',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  buttonLabel: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    width: '100%',
+    textAlign: 'center',
+  },
 });

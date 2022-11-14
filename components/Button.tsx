@@ -1,16 +1,18 @@
 import { Text, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
 
-type ButtonType = 'success' | 'error' | 'primary' | 'link';
+type ButtonType = 'success' | 'error' | 'primary' | 'link' | 'outline';
 
-export function Button({ onPress, label, rounded, selected, style, buttonType = "primary", ...rest }: TouchableOpacityProps & { label: string, rounded?: boolean, buttonType?: ButtonType, selected: boolean }) {
+export function Button({ onPress, label, rounded, selected, style, labelStyles, buttonType = "primary", ...rest }: TouchableOpacityProps & { label: string, rounded?: boolean, buttonType?: ButtonType, selected: boolean, labelStyles?: {} }) {
+
+  const borderRadius = rounded ? 14 : 4;
 
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.wrapper, style, rounded ? { borderRadius: 14 } : {}]}
+      style={[styles.wrapper, style, { borderRadius }]}
       { ...rest }
     >
-      <Text style={[styles.buttonLabel, selected ? styles[buttonType] : {}]}>{label}</Text>
+      <Text style={[styles.buttonLabel, { borderRadius }, labelStyles, selected ? styles[buttonType] : {}]}>{label}</Text>
     </TouchableOpacity>
   );
 }
@@ -18,13 +20,11 @@ export function Button({ onPress, label, rounded, selected, style, buttonType = 
 const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: '#dadada',
-    borderRadius: 4,
   },
   buttonLabel: {
     paddingTop: 4,
     paddingBottom: 6,
     paddingHorizontal: 10,
-    borderRadius: 14,
   },
   success: {
     color: '#fff',
@@ -41,5 +41,11 @@ const styles = StyleSheet.create({
   link: {
     color: 'blue',
     backgroundColor: '#fff',
-  }
+  },
+  outline: {
+    color: 'blue',
+    backgroundColor: '#fff',
+    borderColor: 'blue',
+    borderWidth: 1,
+  },
 });

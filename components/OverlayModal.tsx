@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   screenOverlay: {
     borderRadius: 15,
     marginTop: Layout.window.height * 0.25,
+    // marginTop: 'auto',
 	},
 	dialogPrompt: {
 		...Platform.select({
@@ -116,12 +117,12 @@ const styles = StyleSheet.create({
 	title: {
 		fontWeight: "bold",
 		fontSize: 26,
-		color: "black"
+		color: "black",
+		marginBottom: 20,
 	},
 	textInput: {
-		height: 40,
 		width: "100%",
-		marginVertical: 20,
+		marginBottom: 20,
 		...Platform.select({
 			ios: {
 				backgroundColor: "rgba(166, 170, 172, 0.9)"
