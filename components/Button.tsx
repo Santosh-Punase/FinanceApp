@@ -1,6 +1,6 @@
 import { Text, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
 
-type ButtonType = 'success' | 'error' | 'primary';
+type ButtonType = 'success' | 'error' | 'primary' | 'link';
 
 export function Button({ onPress, label, rounded, selected, style, buttonType = "primary", ...rest }: TouchableOpacityProps & { label: string, rounded?: boolean, buttonType?: ButtonType, selected: boolean }) {
 
@@ -37,4 +37,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     backgroundColor: 'blue',
   },
+  link: {
+    color: 'blue',
+    backgroundColor: '#fff',
+  }
 });

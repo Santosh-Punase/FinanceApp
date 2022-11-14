@@ -32,7 +32,7 @@ export default function CategoryOptionsScreen({ navigation, route }: any) {
         { !isError && <FontAwesome size={22} style={{ position: 'absolute', right: 10, }} name='search' color={'gray'} /> }
       </View>
       <ScrollView style={[{ width: '100%' }]}>
-        <View style={[{ width: '100%', borderWidth:1, borderRadius: 8, paddingTop: 10, }]}>
+        <View style={[{ width: '100%', paddingTop: 10, }]}>
           {categories.filter(c => c.toLowerCase().includes(searchString.toLowerCase())).map((c, i) => (
             <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} key={i} onPress={() => navigation.navigate('AddNew', { category: c })}>
               <Text style={styles.category}>{c}</Text>

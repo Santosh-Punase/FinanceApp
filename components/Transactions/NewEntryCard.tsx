@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
@@ -9,6 +9,7 @@ import { Card } from '../Card';
 import { Input } from '../Input';
 
 export default function NewEntryCard({ navigation, category }: any) {
+
   const entryInitialState = {
     transactionType: 'Cash-In' as TransactionType,
     category: '',
@@ -18,8 +19,7 @@ export default function NewEntryCard({ navigation, category }: any) {
     date: new Date
   }
   const [entry, setEntry] = useState<Transaction>(entryInitialState)
-
-  const paymentModes = ['GooglePay', 'Online', 'Credit Card'];
+  const [paymentModes, setPaymentModes] = useState<string[]>(['GooglePay', 'Online', 'Credit Card']);
   
   const updateEntry = (key: keyof Transaction, value: string ) => {
     setEntry({ ...entry, [key]: value })
@@ -61,7 +61,7 @@ export default function NewEntryCard({ navigation, category }: any) {
       <View style={styles.row}>
         <Input showLabel label='Remark' placeholder='Item, Quantity, Person, Place etc' value={entry.remark || ''} onChangeText={(remark) => updateEntry('remark', remark)} />
       </View>
-      <TouchableOpacity style={styles.dropdown} activeOpacity={1} onPress={() => navigation.navigate('Options')}>
+      <TouchableOpacity style={styles.dropdown} activeOpacity={1} onPress={() => navigation.navigate('Options', { header: 'Choose Category' })}>
         <Text style={styles.label}>Category</Text>
         <Text style={[entry.category ? {} : { color: 'gray' }]}>{entry.category || 'Category'}</Text>
         <View style={styles.dropdownIcon} />
@@ -74,11 +74,20 @@ export default function NewEntryCard({ navigation, category }: any) {
             rounded
             activeOpacity={1}
             label={paymentMode}
-            style={[{ marginRight: 10, }]}
+            style={[{ marginRight: 10, marginBottom: 10, }]}
             selected={entry.paymentMode === paymentMode}
             onPress={() => updateEntry('paymentMode', paymentMode)}
           />
         ))}
+        <Button
+          rounded
+          activeOpacity={1}
+          label={'+ Add New'}
+          buttonType='link'
+          style={[{ marginRight: 10, }]}
+          selected
+          onPress={() => null}
+        />
       </View>
     </Card>
   );
@@ -123,7 +132,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: 20,
   }
 });

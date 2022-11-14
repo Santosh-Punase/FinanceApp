@@ -46,7 +46,7 @@ function RootNavigator() {
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
         <Stack.Screen name="AddNew" component={AddNewScreen} options={{ title: 'Add New Entry' }} />
-        <Stack.Screen name="Options" component={CategoryOptionsScreen} options={{ title: 'Choose Category' }} />
+        <Stack.Screen name="Options" component={CategoryOptionsScreen} options={({ route }) => ({ title: route.params.header }) } />
       </Stack.Group>
     </Stack.Navigator>
   );
