@@ -18,6 +18,7 @@ export function Button({ onPress, label, rounded, selected, style, buttonType = 
 const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: '#dadada',
+    borderRadius: 4,
   },
   buttonLabel: {
     paddingTop: 4,

@@ -7,6 +7,7 @@ import { Transaction, TransactionType } from '../../types';
 import { Button } from '../Button';
 import { Card } from '../Card';
 import { Input } from '../Input';
+import { OverlayModal } from '../OverlayModal';
 
 export default function NewEntryCard({ navigation, category }: any) {
 
@@ -19,6 +20,7 @@ export default function NewEntryCard({ navigation, category }: any) {
     date: new Date
   }
   const [entry, setEntry] = useState<Transaction>(entryInitialState)
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [paymentModes, setPaymentModes] = useState<string[]>(['GooglePay', 'Online', 'Credit Card']);
   
   const updateEntry = (key: keyof Transaction, value: string ) => {
@@ -34,7 +36,7 @@ export default function NewEntryCard({ navigation, category }: any) {
   }
 
   return (
-    <Card style={[{ flexDirection: 'column', height: 450 }]}>
+    <Card style={[{ flexDirection: 'column' }]}>
       <View style={[styles.row, { justifyContent: 'center' }]}>
         <View style={[{ marginLeft: 10, flexDirection: 'row', width: '50%', justifyContent: 'space-between', }]}>
           <Button
@@ -74,7 +76,7 @@ export default function NewEntryCard({ navigation, category }: any) {
             rounded
             activeOpacity={1}
             label={paymentMode}
-            style={[{ marginRight: 10, marginBottom: 10, }]}
+            style={styles.paymentModeButton}
             selected={entry.paymentMode === paymentMode}
             onPress={() => updateEntry('paymentMode', paymentMode)}
           />
@@ -84,11 +86,20 @@ export default function NewEntryCard({ navigation, category }: any) {
           activeOpacity={1}
           label={'+ Add New'}
           buttonType='link'
-          style={[{ marginRight: 10, }]}
+          style={styles.paymentModeButton}
           selected
-          onPress={() => null}
+          onPress={() => setShowModal(true)}
         />
       </View>
+      <OverlayModal
+        title='Add new payment mode'
+        visible={showModal}
+        onSubmit={(text) => {
+          setPaymentModes([ ...paymentModes, text]);
+          setShowModal(false)
+        }}
+        onCancel={() => setShowModal(false)}
+      />
     </Card>
   );
 }
@@ -132,6 +143,10 @@ const styles = StyleSheet.create({
     position: 'relative',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
     paddingVertical: 20,
+  },
+  paymentModeButton: {
+    marginBottom: 20,
   }
 });
