@@ -1,9 +1,10 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Input } from '../components/Input';
 
 import { View, Text } from '../components/Themed';
+import Layout from '../constants/Layout';
 import useStore from '../hooks/useStore';
 import { Category } from '../store/type';
 import { parseObject, stringifyObject } from '../utils';
@@ -12,7 +13,7 @@ export default function CategoryOptionsScreen({ navigation, route }: any) {
 
   const [searchString, setSearchString] = useState<string>('');
   const [isError, setIsError] = useState<boolean>(false);
-  const [categories, setCategory] = useStore('categories');
+  const [categories, setCategory, isLoading] = useStore('categories');
 
   const parsedCategories: Category[] = categories !== '' ? parseObject(categories) : [];
 
@@ -51,16 +52,22 @@ export default function CategoryOptionsScreen({ navigation, route }: any) {
         { !isError && <FontAwesome size={22} style={{ position: 'absolute', right: 10, }} name='search' color={'gray'} /> }
       </View>
       <ScrollView style={[{ width: '100%' }]}>
-        <View style={[{ width: '100%', paddingTop: 10, }]}>
-          {parsedCategories.filter((c: Category) => c.name.toLowerCase().includes(searchString.toLowerCase())).sort((a,b) => b.timestamp - a.timestamp).map((c: Category, i: number) => (
-            <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} key={i} onPress={() => onSelect(c)}>
-              <Text style={styles.category}>{c.name}</Text>
+        { isLoading ? (
+          <View style={{ height: Layout.window.height - 200, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size={'large'} />
+          </View>
+        ) : (
+          <View style={[{ width: '100%', paddingTop: 10, }]}>
+            {parsedCategories.filter((c: Category) => c.name.toLowerCase().includes(searchString.toLowerCase())).sort((a,b) => b.timestamp - a.timestamp).map((c: Category, i: number) => (
+              <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} key={i} onPress={() => onSelect(c)}>
+                <Text style={styles.category}>{c.name}</Text>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} onPress={onAddNew}>
+              <Text style={[styles.category, { color: 'blue' }]}> + Add {searchString || 'New'}</Text>
             </TouchableOpacity>
-          ))}
-          <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} onPress={onAddNew}>
-            <Text style={[styles.category, { color: 'blue' }]}> + Add {searchString || 'New'}</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+        )}
       </ScrollView>
     </View>
   );
