@@ -15,6 +15,7 @@ export default function CategoryOptionsScreen({ navigation, route }: any) {
   const [isError, setIsError] = useState<boolean>(false);
   const [categories, setCategory, isLoading] = useStore('categories');
 
+  // @ts-ignore
   const parsedCategories: Category[] = categories !== '' ? parseObject(categories) : [];
 
   const updateTimestamp = (c: Category) => {
