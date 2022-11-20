@@ -1,20 +1,39 @@
 import { FontAwesome } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
-import { Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { useState } from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Input } from '../components/Input';
 
 import { View, Text } from '../components/Themed';
+import useStore from '../hooks/useStore';
+import { Category } from '../store/type';
+import { parseObject, stringifyObject } from '../utils';
 
 export default function CategoryOptionsScreen({ navigation, route }: any) {
 
   const [searchString, setSearchString] = useState<string>('');
   const [isError, setIsError] = useState<boolean>(false);
-  const [categories, setCategory] = useState<string[]>(['Grocerry','Food','Entertainment']);
+  const [categories, setCategory] = useStore('categories');
+
+  const parsedCategories: Category[] = categories !== '' ? parseObject(categories) : [];
+
+  const updateTimestamp = (c: Category) => {
+    const updatedCategories = parsedCategories.map(ct => ct.name === c.name ? c : ct);
+    setCategory(stringifyObject(updatedCategories));
+  }
+
+  const addNewCategory = (c: Category) => {
+    const updatedCategories = [ ...parsedCategories, c];
+    setCategory(stringifyObject(updatedCategories));
+  }
+
+  const onSelect = (category: Category) => {
+    updateTimestamp({ name: category.name, timestamp: Date.now() });
+    navigation.navigate('AddNew', { category: category.name })
+  }
 
   const onAddNew = () => {
     if(searchString) {
-      setCategory([ ...categories, searchString ]);
+      addNewCategory({ name: searchString, timestamp: Date.now() })
       setSearchString('');
       setIsError(false);
     } else {
@@ -33,9 +52,9 @@ export default function CategoryOptionsScreen({ navigation, route }: any) {
       </View>
       <ScrollView style={[{ width: '100%' }]}>
         <View style={[{ width: '100%', paddingTop: 10, }]}>
-          {categories.filter(c => c.toLowerCase().includes(searchString.toLowerCase())).map((c, i) => (
-            <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} key={i} onPress={() => navigation.navigate('AddNew', { category: c })}>
-              <Text style={styles.category}>{c}</Text>
+          {parsedCategories.filter((c: Category) => c.name.toLowerCase().includes(searchString.toLowerCase())).sort((a,b) => b.timestamp - a.timestamp).map((c: Category, i: number) => (
+            <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} key={i} onPress={() => onSelect(c)}>
+              <Text style={styles.category}>{c.name}</Text>
             </TouchableOpacity>
           ))}
           <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} onPress={onAddNew}>
