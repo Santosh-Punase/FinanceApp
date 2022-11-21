@@ -37,17 +37,6 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
   NativeStackScreenProps<RootStackParamList>
 >;
 
-export type TransactionType = 'Cash-In' | 'Cash-Out';
-
-export type Transaction = {
-  transactionType: TransactionType,
-  amount: string,
-  category: string;
-  paymentMode: string;
-  remark: string;
-  date: Date;
-}
-
 export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Root">;
 export type AddNewScreenProps = NativeStackScreenProps<RootStackParamList, "AddNew">;
 export type OptionsScreenProps = NativeStackScreenProps<RootStackParamList, "Options">;

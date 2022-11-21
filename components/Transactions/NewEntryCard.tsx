@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
 import useStore from '../../hooks/useStore';
-import { Transaction, TransactionType } from '../../types';
+import { Transaction, TransactionType } from '../../store/type';
 import { parseObject, stringifyObject } from '../../utils';
 import { Button } from '../Button';
 import { Card } from '../Card';
@@ -12,19 +12,22 @@ import { OverlayModal } from '../OverlayModal';
 
 export default function NewEntryCard({ navigation, category }: any) {
 
-  const entryInitialState = {
+  const entryInitialState: Transaction = {
     transactionType: 'Cash-In' as TransactionType,
     category: '',
     paymentMode: '',
     remark: '',
     amount: '',
-    date: new Date
+    createdAt: 0,
   }
   const [entry, setEntry] = useState<Transaction>(entryInitialState)
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [paymentModes, setPaymentModes, isLoading] = useStore('paymentModes');
+  const [paymentModes, setPaymentModes] = useStore('paymentModes');
+  const [ transactionList, setTransactionList ] = useStore('transactionList');
   // @ts-ignore
   const parsedPaymentModes: string[] = paymentModes !== '' ? parseObject(paymentModes) : [];
+  // @ts-ignore
+  const parsedTransactionList: Transaction[] = transactionList !== '' ? parseObject(transactionList) : [];
 
   const updateEntry = (key: keyof Transaction, value: string ) => {
     setEntry({ ...entry, [key]: value })
@@ -36,6 +39,23 @@ export default function NewEntryCard({ navigation, category }: any) {
 
   const changeTransactionType = (transactionType: TransactionType) => {
     updateEntry('transactionType', transactionType);
+  }
+
+  const saveEntry = () => {
+    const newEntry: Transaction = {
+      ...entry, createdAt: Date.now()
+    };
+    setTransactionList(stringifyObject([ ...parsedTransactionList, newEntry]));
+  }
+
+  const OnSaveClick = () => {
+    saveEntry();
+    navigation.navigate('Root');
+  }
+
+  const onSaveAndAddNewClick = () => {
+    saveEntry();
+    setEntry(entryInitialState);
   }
 
   return (
@@ -101,8 +121,7 @@ export default function NewEntryCard({ navigation, category }: any) {
             )}
           </View>
         </>
-      )
-      }
+      )}
       <OverlayModal
         title='Add New Payment Mode'
         placeholder='Payment Mode'
@@ -117,20 +136,22 @@ export default function NewEntryCard({ navigation, category }: any) {
       <View style={styles.bottomRow}>
         <Button
           activeOpacity={1}
+          disabled={!entry.paymentMode || !entry.remark}
           label={'Save & Add New'}
           buttonType='outline'
           style={[{ width: '65%' }]}
           labelStyles={styles.buttonLabel}
           selected
-          onPress={() => null}
+          onPress={onSaveAndAddNewClick}
         />
         <Button
           activeOpacity={1}
+          disabled={!entry.paymentMode || !entry.remark}
           label={'Save'}
           style={[{ width: '30%' }]}
           labelStyles={styles.buttonLabel}
           selected
-          onPress={() => null}
+          onPress={OnSaveClick}
         />
       </View>
     </Card>

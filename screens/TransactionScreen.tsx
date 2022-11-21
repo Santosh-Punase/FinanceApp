@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+
 import { Text, View } from '../components/Themed';
 import TransactionList from '../components/Transactions/TransactionList';
 import { RootTabScreenProps } from '../types';
@@ -20,7 +21,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#dadada',
   },
   title: {
     fontSize: 20,

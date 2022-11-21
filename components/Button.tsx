@@ -2,14 +2,16 @@ import { Text, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react
 
 type ButtonType = 'success' | 'error' | 'primary' | 'link' | 'outline';
 
-export function Button({ onPress, label, rounded, selected, style, labelStyles, buttonType = "primary", ...rest }: TouchableOpacityProps & { label: string, rounded?: boolean, buttonType?: ButtonType, selected: boolean, labelStyles?: {} }) {
+export function Button({ onPress, disabled, label, rounded, selected, style, labelStyles, buttonType = "primary", ...rest }: TouchableOpacityProps & { label: string, rounded?: boolean, buttonType?: ButtonType, selected: boolean, labelStyles?: {} }) {
 
   const borderRadius = rounded ? 14 : 4;
+  const opacity = disabled ? 0.5 : 1;
 
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.wrapper, style, { borderRadius }]}
+      disabled={disabled}
+      style={[styles.wrapper, style, { borderRadius, opacity }]}
       { ...rest }
     >
       <Text style={[styles.buttonLabel, { borderRadius }, labelStyles, selected ? styles[buttonType] : {}]}>{label}</Text>
