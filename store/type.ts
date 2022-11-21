@@ -5,6 +5,11 @@ export type Category = {
   timestamp: any
 };
 
+export type Option = {
+  name: string,
+  timestamp: any
+};
+
 export type TransactionType = 'Cash-In' | 'Cash-Out';
 
 export type Transaction = {
