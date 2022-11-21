@@ -88,7 +88,7 @@ export default function NewEntryCard({ navigation, category }: any) {
           <View style={styles.row}>
             <Input showLabel label='Remark' placeholder='Item, Quantity, Person, Place etc' value={entry.remark || ''} onChangeText={(remark) => updateEntry('remark', remark)} />
           </View>
-          <TouchableOpacity style={styles.dropdown} activeOpacity={1} onPress={() => navigation.navigate('Options', { header: 'Choose Category' })}>
+          <TouchableOpacity style={styles.dropdown} activeOpacity={1} onPress={() => navigation.navigate('Options', { header: 'Choose Category', selectedOption: entry.category })}>
             <Text style={styles.label}>Category</Text>
             <Text style={[entry.category ? {} : { color: 'gray' }]}>{entry.category || 'Category'}</Text>
             <View style={styles.dropdownIcon} />
