@@ -3,14 +3,14 @@ import { Text, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react
 export function FloatingButton({ onPress, disabled, label, style, labelStyles, ...rest }: TouchableOpacityProps & { label: string, labelStyles?: {} }) {
 
   return (
-    <TouchableOpacity style={styles.addNewButton} onPress={onPress} { ...rest }>
+    <TouchableOpacity style={[styles.buttonWrapper, style]} onPress={onPress} { ...rest }>
       <Text style={[styles.button, labelStyles]}>{label}</Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  addNewButton: {
+  buttonWrapper: {
     position: 'absolute',
     right: 10,
     bottom: 10,

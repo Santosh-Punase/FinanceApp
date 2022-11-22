@@ -55,11 +55,11 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
           <View style={[{ width: '100%', paddingTop: 10, }]}>
             {filteredRecords.map((op: Option, i: number) => (
               <View style={styles.listItem} key={i} >
-                { selectedOption === op.name
-                  ? <Ionicons name="radio-button-on" size={24} style={styles.radioIcon} color="blue" />
-                  : <Ionicons name="radio-button-off" size={24} style={styles.radioIcon} color="black" />
-                }
-                <TouchableOpacity onPress={() => onSelect(op)}>
+                <TouchableOpacity onPress={() => onSelect(op)} style={{ flexDirection: 'row', alignItems: 'center' }} activeOpacity={1}>
+                  { selectedOption === op.name
+                    ? <Ionicons name="radio-button-on" size={24} style={styles.radioIcon} color="blue" />
+                    : <Ionicons name="radio-button-off" size={24} style={styles.radioIcon} color="black" />
+                  }
                   <Text style={styles.category}>{op.name}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => createTwoButtonAlert(op.name)}>
@@ -81,7 +81,7 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
           </View>
         )}
       </ScrollView>
-      <FloatingButton onPress={() => setShowModal(true)} label={'+'} />
+      <FloatingButton onPress={() => setShowModal(true)} label={'+'} style={{ bottom: 40, right: 20 }}/>
       <OverlayModal
         title={`Add New ${recordType}`}
         placeholder={recordType}
@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
   },
   listItem: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    // justifyContent: 'space-between',
+    // alignItems: 'center',
     marginBottom: 10,
     marginRight: 16,
     borderRadius: 8,
