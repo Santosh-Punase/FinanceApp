@@ -3,12 +3,13 @@ import { Platform, StyleSheet } from 'react-native';
 
 import { View } from '../components/Themed';
 import NewEntryCard from '../components/Transactions/NewEntryCard';
+import { AddNewScreenProps } from '../types';
 
-export default function AddNewScreen({ navigation, route }: any) {
+export default function AddNewScreen({ navigation, route }: AddNewScreenProps) {
 
   return (
     <View style={styles.container}>
-      <NewEntryCard navigation={navigation} category={route?.params?.category} />
+      <NewEntryCard navigation={navigation} route={route} />
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>

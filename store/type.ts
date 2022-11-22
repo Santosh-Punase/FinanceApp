@@ -1,5 +1,7 @@
 export type StoreKey = 'categories' | 'paymentModes' | 'transactionList';
 
+export type DropdownLabel = 'categories' | 'paymentModes';
+
 export type Option = {
   name: string,
   createdAt: any,

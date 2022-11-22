@@ -76,7 +76,7 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
         )}
         { filteredRecords.length === 0 && (
           <View style={styles.noResult}>
-            <Text style={styles.noResultHeader}>{`No ${recordPluralName} Found`}</Text>
+            <Text style={styles.noResultHeader}>{`No ${recordType} Found`}</Text>
             <Text style={styles.noResultSubHeader}>Try searching with different name or add new</Text>
           </View>
         )}

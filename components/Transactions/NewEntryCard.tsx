@@ -4,13 +4,13 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import useStore from '../../hooks/useStore';
 import { Transaction, TransactionType } from '../../store/type';
+import { AddNewScreenProps } from '../../types';
 import { parseObject, stringifyObject } from '../../utils';
 import { Button } from '../Button';
 import { Card } from '../Card';
 import { Input } from '../Input';
-import { OverlayModal } from '../OverlayModal';
 
-export default function NewEntryCard({ navigation, category }: any) {
+export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
 
   const entryInitialState: Transaction = {
     transactionType: 'Cash-In' as TransactionType,
@@ -21,11 +21,7 @@ export default function NewEntryCard({ navigation, category }: any) {
     createdAt: 0,
   }
   const [entry, setEntry] = useState<Transaction>(entryInitialState)
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [paymentModes, setPaymentModes] = useStore('paymentModes');
   const [ transactionList, setTransactionList ] = useStore('transactionList');
-  // @ts-ignore
-  const parsedPaymentModes: string[] = paymentModes !== '' ? parseObject(paymentModes) : [];
   // @ts-ignore
   const parsedTransactionList: Transaction[] = transactionList !== '' ? parseObject(transactionList) : [];
 
@@ -34,8 +30,12 @@ export default function NewEntryCard({ navigation, category }: any) {
   }
 
   useEffect(() => {
-    updateEntry('category', category);
-  }, [category]);
+    updateEntry('category', route?.params?.category || '');
+  }, [route?.params?.category]);
+
+  useEffect(() => {
+    updateEntry('paymentMode', route?.params?.paymentMode || '');
+  }, [route?.params?.paymentMode]);
 
   const changeTransactionType = (transactionType: TransactionType) => {
     updateEntry('transactionType', transactionType);
@@ -88,51 +88,18 @@ export default function NewEntryCard({ navigation, category }: any) {
           <View style={styles.row}>
             <Input showLabel label='Remark' placeholder='Item, Quantity, Person, Place etc' value={entry.remark || ''} onChangeText={(remark) => updateEntry('remark', remark)} />
           </View>
-          <TouchableOpacity style={styles.dropdown} activeOpacity={1} onPress={() => navigation.navigate('Options', { header: 'Choose Category', category: entry.category })}>
+          <TouchableOpacity style={styles.dropdown} activeOpacity={1} onPress={() => navigation.navigate('Options', { header: 'Choose Category', category: entry.category, paymentMode: entry.paymentMode, dropdownLabel: 'categories' })}>
             <Text style={styles.label}>Category</Text>
             <Text style={[entry.category ? {} : { color: 'gray' }]}>{entry.category || 'Category'}</Text>
             <View style={styles.dropdownIcon} />
           </TouchableOpacity>
-          <View style={styles.paymentModeWrapper}>
-            <Text style={[styles.label, { left: 0 }]}>Payment Mode</Text>
-            { parsedPaymentModes.map(paymentMode => (
-              <Button
-                key={paymentMode}
-                rounded
-                activeOpacity={1}
-                label={paymentMode}
-                style={styles.paymentModeButton}
-                selected={entry.paymentMode === paymentMode}
-                onPress={() => updateEntry('paymentMode', paymentMode)}
-              />
-            ))}
-            { parsedPaymentModes.length < 10 && (
-              <View style={{ width: '100%' }}>
-                <Button
-                  rounded
-                  activeOpacity={1}
-                  label={'+ Add New'}
-                  buttonType='link'
-                  style={[styles.paymentModeButton, { alignSelf: 'flex-start' }]}
-                  selected
-                  onPress={() => setShowModal(true)}
-                />
-              </View>
-            )}
-          </View>
+          <TouchableOpacity style={styles.dropdown} activeOpacity={1} onPress={() => navigation.navigate('Options', { header: 'Choose Payment Mode', category: entry.category, paymentMode: entry.paymentMode, dropdownLabel: 'paymentModes' })}>
+            <Text style={styles.label}>Payment Mode</Text>
+            <Text style={[entry.paymentMode ? {} : { color: 'gray' }]}>{entry.paymentMode || 'Payment Mode'}</Text>
+            <View style={styles.dropdownIcon} />
+          </TouchableOpacity>
         </>
       )}
-      <OverlayModal
-        title='Add New Payment Mode'
-        placeholder='Payment Mode'
-        submitText='Save'
-        visible={showModal}
-        onSubmit={(text) => {
-          setPaymentModes(stringifyObject([ ...parsedPaymentModes, text]));
-          setShowModal(false)
-        }}
-        onCancel={() => setShowModal(false)}
-      />
       <View style={styles.bottomRow}>
         <Button
           activeOpacity={1}
@@ -198,17 +165,6 @@ const styles = StyleSheet.create({
     right: 15,
     top: 14,
     transform: [{ rotateZ: '45deg' }],
-  },
-  paymentModeWrapper: {
-    position: 'relative',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    paddingVertical: 20,
-    paddingHorizontal: 5,
-  },
-  paymentModeButton: {
-    marginBottom: 20,
   },
   bottomRow: {
     flexDirection: 'row',
