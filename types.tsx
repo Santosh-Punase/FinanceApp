@@ -16,8 +16,8 @@ declare global {
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
-  AddNew: undefined;
-  Options: { header: string, selectedOption: string };
+  AddNewTransaction: { category: string } | undefined;
+  Options: { header: string, category: string };
   NotFound: undefined;
 };
 
@@ -27,7 +27,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 >;
 
 export type RootTabParamList = {
-  TabOne: undefined;
+  TabOne: { category: string } | undefined;
   TabTwo: undefined;
   TabThree: undefined;
 };
@@ -38,5 +38,5 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 >;
 
 export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Root">;
-export type AddNewScreenProps = NativeStackScreenProps<RootStackParamList, "AddNew">;
+export type AddNewScreenProps = NativeStackScreenProps<RootStackParamList, "AddNewTransaction">;
 export type OptionsScreenProps = NativeStackScreenProps<RootStackParamList, "Options">;

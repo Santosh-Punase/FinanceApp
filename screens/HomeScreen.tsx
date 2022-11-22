@@ -3,14 +3,15 @@ import { StyleSheet } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { FloatingButton } from '../components/FloatingButton';
 import { Text, View } from '../components/Themed';
+import { RootTabScreenProps } from '../types';
 
-export default function HomeScreen({ navigation }: { navigation: any }) {
+export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <EditScreenInfo path="/screens/HomeScreen.tsx" />
-      <FloatingButton onPress={() => navigation.navigate('AddNew')} label={'+'} />
+      <FloatingButton onPress={() => navigation.navigate('AddNewTransaction')} label={'+'} />
     </View>
   );
 }

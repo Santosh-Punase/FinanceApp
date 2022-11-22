@@ -45,7 +45,7 @@ function RootNavigator() {
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
-        <Stack.Screen name="AddNew" component={AddNewScreen} options={{ title: 'Add New Entry' }} />
+        <Stack.Screen name="AddNewTransaction" component={AddNewScreen} options={{ title: 'Add New Entry' }} />
         <Stack.Screen name="Options" component={CategoryOptionsScreen} options={({ route }) => ({ title: route.params.header }) } />
       </Stack.Group>
     </Stack.Navigator>

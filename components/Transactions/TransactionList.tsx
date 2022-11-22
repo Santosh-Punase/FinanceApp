@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import dayjs from 'dayjs';
@@ -28,12 +28,11 @@ export default function TransactionList() {
   return (
     <ScrollView style={styles.list}>
       {parsedTransactionList.map((item: Transaction, i) => {
-        // if(i > 3) return null
         const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
         const isDifferentDate = currentDate !== date;
         currentDate = date;
         return (
-          <>
+          <React.Fragment key={i}>
             { isDifferentDate && <Text style={styles.date}>{date}</Text>}
             <Card style={styles.listItem} key={i}>
               <View style={styles.listItemLeft}>
@@ -48,7 +47,7 @@ export default function TransactionList() {
                 {item.transactionType === 'Cash-Out' && <Text style={styles.debit}>{item.amount}</Text>}
               </View>
             </Card>
-          </>
+          </React.Fragment>
         )})
       }
     </ScrollView>  

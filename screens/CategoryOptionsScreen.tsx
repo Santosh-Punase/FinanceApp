@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react';
 
 import useStore from '../hooks/useStore';
-import { Category } from '../store/type';
+import { Option } from '../store/type';
 import { parseObject, stringifyObject } from '../utils';
 import { OptionsList } from '../components/OptionsList';
 import { HeaderSearchBar } from '../components/HeaderSearchBar';
+import { OptionsScreenProps } from '../types';
 
-export default function CategoryOptionsScreen({ navigation, route }: any) {
+export default function CategoryOptionsScreen({ navigation, route }: OptionsScreenProps) {
 
   const [searchString, setSearchString] = useState<string>('');
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState<boolean>(false);
   const [categories, mutateOptions, isLoading] = useStore('categories');
-  const selectedOption = route.params.selectedOption;
+  const selectedOption = route.params.category;
 
   useEffect(() => {
     navigation.setOptions({
@@ -26,37 +27,41 @@ export default function CategoryOptionsScreen({ navigation, route }: any) {
   }, [navigation, isSearchBoxOpen, searchString]);
 
   // @ts-ignore
-  const parsedCategories: Category[] = categories !== '' ? parseObject(categories) : [];
+  const parsedOptionsArray: Option[] = categories !== '' ? parseObject(categories) : []; //njjkn
 
-  const updateTimestamp = (c: Category) => {
-    const updatedCategories = parsedCategories.map(ct => ct.name === c.name ? c : ct);
-    mutateOptions(stringifyObject(updatedCategories));
+  const updateTimestamp = (record: Option) => {
+    const updatedOptions = parsedOptionsArray.map(op => op.name === record.name ? record : op);
+    mutateOptions(stringifyObject(updatedOptions));
   }
 
-  const addNewCategory = (c: Category) => {
-    const updatedCategories = [ ...parsedCategories, c];
-    mutateOptions(stringifyObject(updatedCategories));
+  const addNewOption = (op: Option) => {
+    const updatedOptions = [ ...parsedOptionsArray, op];
+    mutateOptions(stringifyObject(updatedOptions));
   }
 
-  const onSelect = (category: Category) => {
-    updateTimestamp({ name: category.name, timestamp: Date.now() });
-    navigation.navigate('AddNew', { category: category.name })
+  const onSelect = (selection: Option) => {
+    updateTimestamp({ ...selection, lastUsedAt: Date.now() });
+    navigation.navigate('AddNewTransaction', { category: selection.name })
   }
 
   const onAddNew = (name: string) => {
-    addNewCategory({ name, timestamp: Date.now() })
+    addNewOption({ name, createdAt: Date.now(), updatedAt: Date.now() })
     setSearchString('');
     setIsSearchBoxOpen(false)
   }
 
+  const sortOptions = (a: Option, b: Option) => {
+    return a.name.localeCompare(b.name);
+  }
+
   return (
     <OptionsList
-      filteredRecords={parsedCategories.filter((c: Category) => c.name.toLowerCase().includes(searchString.toLowerCase())).sort((a,b) => a.name.localeCompare(b.name))}
+      filteredRecords={parsedOptionsArray.filter((p: Option) => p.name.toLowerCase().includes(searchString.toLowerCase())).sort(sortOptions)}
       recordPluralName='categories'
       isLoading={isLoading}
       searchString={searchString}
       selectedOption={selectedOption}
-      allRecords={parsedCategories}
+      allRecords={parsedOptionsArray}
       recordType='Category'
       onAddNew={onAddNew}
       onSelect={onSelect}

@@ -1,13 +1,10 @@
 export type StoreKey = 'categories' | 'paymentModes' | 'transactionList';
 
-export type Category = {
-  name: string,
-  timestamp: any
-};
-
 export type Option = {
   name: string,
-  timestamp: any
+  createdAt: any,
+  updatedAt?: any,
+  lastUsedAt?: any,
 };
 
 export type TransactionType = 'Cash-In' | 'Cash-Out';
