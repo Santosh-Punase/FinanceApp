@@ -20,7 +20,7 @@ import TransactionScreen from '../screens/TransactionScreen';
 import SettingScreen from '../screens/SettingScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
-import CategoryOptionsScreen from '../screens/CategoryOptionsScreen';
+import OptionsScreen from '../screens/OptionsScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -46,7 +46,7 @@ function RootNavigator() {
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
         <Stack.Screen name="AddNewTransaction" component={AddNewScreen} options={{ title: 'Add New Entry' }} />
-        <Stack.Screen name="Options" component={CategoryOptionsScreen} options={({ route }) => ({ title: route.params.header }) } />
+        <Stack.Screen name="Options" component={OptionsScreen} options={({ route }) => ({ title: route.params.header }) } />
       </Stack.Group>
     </Stack.Navigator>
   );

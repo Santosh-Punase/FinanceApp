@@ -7,7 +7,7 @@ import { OptionsList } from '../components/OptionsList';
 import { HeaderSearchBar } from '../components/HeaderSearchBar';
 import { OptionsScreenProps } from '../types';
 
-export default function CategoryOptionsScreen({ navigation, route }: OptionsScreenProps) {
+export default function OptionsScreen({ navigation, route }: OptionsScreenProps) {
 
   const dropdownLabel: DropdownLabel = route?.params?.dropdownLabel;
   const [searchString, setSearchString] = useState<string>('');
