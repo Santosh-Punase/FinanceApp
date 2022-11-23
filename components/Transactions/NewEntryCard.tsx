@@ -20,7 +20,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
     amount: '',
     createdAt: 0,
   }
-  const [entry, setEntry] = useState<Transaction>(entryInitialState)
+  const [entry, setEntry] = useState<Transaction>(entryInitialState);
   const [ transactionList, setTransactionList ] = useStore('transactionList');
   // @ts-ignore
   const parsedTransactionList: Transaction[] = transactionList !== '' ? parseObject(transactionList) : [];
@@ -54,6 +54,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
   }
 
   const onSaveAndAddNewClick = () => {
+    navigation.setParams({ category: '', paymentMode: '' });
     saveEntry();
     setEntry({ ...entryInitialState, transactionType: entry.transactionType });
   }
@@ -63,7 +64,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
       <View style={[styles.row, { justifyContent: 'center' }]}>
         <View style={[{ marginLeft: 10, flexDirection: 'row', width: '50%', justifyContent: 'space-between', }]}>
           <Button
-            rounded
+            // rounded
             activeOpacity={1}
             label='CASH IN'
             selected={entry.transactionType === 'Cash-In'}
@@ -71,7 +72,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
             onPress={() => changeTransactionType('Cash-In')}
           />
           <Button
-            rounded
+            // rounded
             activeOpacity={1}
             label='CASH OUT'
             selected={entry.transactionType === 'Cash-Out'}
