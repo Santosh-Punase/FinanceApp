@@ -55,7 +55,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
 
   const onSaveAndAddNewClick = () => {
     saveEntry();
-    setEntry(entryInitialState);
+    setEntry({ ...entryInitialState, transactionType: entry.transactionType });
   }
 
   return (
