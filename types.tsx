@@ -6,7 +6,7 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { DropdownLabel } from './store/type';
+import { DropdownLabel, TransactionType } from './store/type';
 
 declare global {
   namespace ReactNavigation {
@@ -17,7 +17,7 @@ declare global {
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
-  AddNewTransaction: { category: string, paymentMode: string } | undefined;
+  AddNewTransaction: { category: string, paymentMode: string, transactionType?: TransactionType } | undefined;
   Options: { header: string, category: string, paymentMode: string, dropdownLabel: DropdownLabel };
   NotFound: undefined;
 };

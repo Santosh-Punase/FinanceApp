@@ -13,7 +13,7 @@ import { Input } from '../Input';
 export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
 
   const entryInitialState: Transaction = {
-    transactionType: 'Cash-In' as TransactionType,
+    transactionType: route?.params?.transactionType || 'Cash-In',
     category: '',
     paymentMode: '',
     remark: '',

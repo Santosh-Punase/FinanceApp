@@ -11,7 +11,16 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <EditScreenInfo path="/screens/HomeScreen.tsx" />
-      <FloatingButton onPress={() => navigation.navigate('AddNewTransaction', { category: '', paymentMode: '' })} label={'+'} />
+      <FloatingButton
+        onPress={() => navigation.navigate('AddNewTransaction', { category: '', paymentMode: '', transactionType: 'Cash-In' })}
+        label={'+'}
+        style={{ backgroundColor: 'green', bottom: 100, }}
+      />
+      <FloatingButton
+        onPress={() => navigation.navigate('AddNewTransaction', { category: '', paymentMode: '', transactionType: 'Cash-Out' })}
+        label={'+'}
+        style={{ backgroundColor: 'red', bottom: 20, }}
+      />
     </View>
   );
 }
