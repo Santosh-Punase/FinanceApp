@@ -1,4 +1,4 @@
-import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Card } from '../components/Card';
 
@@ -27,7 +27,7 @@ export default function SettingScreen() {
       <Text style={styles.sectionHeader}>Application</Text>
       <Card>
         <TouchableOpacity onPress={() => alert('Work in progress')} style={[{ flexDirection: 'row' }]}>
-          <FontAwesome name='sign-out' color={'black'} size={30} />
+          <AntDesign name='logout' color={'black'} size={30} />
           <Text style={styles.label}>Log-out</Text>
         </TouchableOpacity>
       </Card>
