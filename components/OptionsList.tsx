@@ -53,23 +53,26 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
           </View>
         ) : (
           <View style={[{ width: '100%', paddingTop: 10, }]}>
-            {filteredRecords.map((op: Option, i: number) => (
-              <View style={styles.listItem} key={i} >
-                <TouchableOpacity onPress={() => onSelect(op)} style={{ flexDirection: 'row', alignItems: 'center' }} activeOpacity={1}>
-                  { selectedOption === op.name
-                    ? <Ionicons name="radio-button-on" size={24} style={styles.radioIcon} color="blue" />
-                    : <Ionicons name="radio-button-off" size={24} style={styles.radioIcon} color="black" />
-                  }
-                  <Text style={styles.category}>{op.name}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => createTwoButtonAlert(op.name)}>
-                  <Text style={styles.closeIcon}>+</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
+            {filteredRecords.map((op: Option, i: number) => {
+              const isSelected = selectedOption === op.name;
+              return (
+                <View style={isSelected ? [styles.listItem, { backgroundColor: 'lightblue' }] : styles.listItem} key={i} >
+                  <TouchableOpacity onPress={() => onSelect(op)} style={styles.labelWrapper} activeOpacity={1}>
+                    { isSelected
+                      ? <Ionicons name="radio-button-on" size={24} style={styles.radioIcon} color="blue" />
+                      : <Ionicons name="radio-button-off" size={24} style={styles.radioIcon} color="black" />
+                    }
+                    <Text style={styles.optionLabel}>{op.name}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => createTwoButtonAlert(op.name)}>
+                    <Text style={styles.closeIcon}>+</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            )}
             { searchString && (
               <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} onPress={() => onAddNew(searchString)}>
-                <Text style={[styles.category, { color: 'blue' }]}> + Add {searchString}</Text>
+                <Text style={[styles.optionLabel, { color: 'blue' }]}> + Add {searchString}</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -117,30 +120,31 @@ const styles = StyleSheet.create({
   },
   listItem: {
     flexDirection: 'row',
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
     marginBottom: 10,
-    marginRight: 16,
     borderRadius: 8,
+  },
+  labelWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '90%',
   },
   radioIcon: {
     marginVertical: 'auto',
     paddingLeft: 16,
   },
   closeIcon: {
-    paddingHorizontal: 16,
-    paddingVertical: 5,
+    paddingHorizontal: 10,
     height: 50,
     textAlignVertical: 'center',
     fontSize: 30,
     color: 'red',
     transform: [{ rotateZ: '45deg' }]
   },
-  category: {
+  optionLabel: {
     paddingHorizontal: 16,
     paddingVertical: 5,
     height: 50,
-    width: Layout.window.width - 100,
     textAlignVertical: 'center',
   },
   noResult: {

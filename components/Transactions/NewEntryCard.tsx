@@ -59,13 +59,13 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
   }
 
   return (
-    <Card style={[{ flexDirection: 'column', height: '100%', paddingBottom: 0, }]}>
+    <Card style={[styles.wrapperCard, { borderColor: entry.transactionType === 'Cash-In' ? 'green' : 'red' }]}>
       <View style={[styles.row, { justifyContent: 'center' }]}>
         <View style={[{ marginLeft: 10, flexDirection: 'row', width: '50%', justifyContent: 'space-between', }]}>
           <Button
             rounded
             activeOpacity={1}
-            label='Cash-In'
+            label='CASH IN'
             selected={entry.transactionType === 'Cash-In'}
             buttonType='success'
             onPress={() => changeTransactionType('Cash-In')}
@@ -73,7 +73,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
           <Button
             rounded
             activeOpacity={1}
-            label='Cash-Out'
+            label='CASH OUT'
             selected={entry.transactionType === 'Cash-Out'}
             buttonType='error'
             onPress={() => changeTransactionType('Cash-Out')}
@@ -126,6 +126,12 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  wrapperCard: {
+    flexDirection: 'column',
+    height: '100%',
+    paddingBottom: 0,
+    borderTopWidth: 4,
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
