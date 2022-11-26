@@ -88,6 +88,7 @@ function BottomTabNavigator() {
               />
             </Pressable>
           ),
+          headerShadowVisible: true,
         })}
       />
       <BottomTab.Screen
@@ -97,6 +98,7 @@ function BottomTabNavigator() {
           title: 'Transactions',
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="swap" color={color} />,
+          headerShadowVisible: true,
         }}
       />
       <BottomTab.Screen
@@ -106,6 +108,7 @@ function BottomTabNavigator() {
           title: 'Settings',
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="setting" color={color} />,
+          headerShadowVisible: true,
         }}
       />
     </BottomTab.Navigator>
