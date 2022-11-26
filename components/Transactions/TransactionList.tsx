@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import dayjs from 'dayjs';
+import { getCalendars } from 'expo-localization';
 
 import Layout from '../../constants/Layout';
 import { Text, View } from '../Themed';
@@ -28,23 +29,27 @@ export default function TransactionList() {
   return (
     <ScrollView style={styles.list}>
       {parsedTransactionList.map((item: Transaction, i) => {
-        const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
-        const isDifferentDate = currentDate !== date;
-        currentDate = date;
+        // const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
+        // const isDifferentDate = currentDate !== date;
+        // currentDate = date;
         return (
           <React.Fragment key={i}>
-            { isDifferentDate && <Text style={styles.date}>{date}</Text>}
+            {/* { isDifferentDate && <Text style={styles.date}>{date}</Text>} */}
             <Card style={styles.listItem} key={i}>
-              <View style={styles.listItemLeft}>
-                <View style={styles.listItemRow_1}>
-                  {item.category && <Text style={styles.category}>{item.category}</Text>}
-                  {item.paymentMode && <Text style={styles.paymentMode}>{item.paymentMode}</Text>}
+              <View style={styles.listItemWrapper}>
+                <View style={styles.transactionDetails}>
+                  {item.remark && <Text>{item.remark}</Text>}
+                  <View style={styles.listItemRow_1}>
+                    {item.category && <Text style={styles.category}>{item.category}</Text>}
+                    {item.paymentMode && <Text style={styles.paymentMode}>{item.paymentMode}</Text>}
+                  </View>
+                  <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text>
                 </View>
-                {item.remark && <Text>{item.remark}</Text>}
-              </View>
-              <View style={styles.listItemRight}>
-                {item.transactionType === 'Cash-In' && <Text style={styles.credit}>{item.amount}</Text>}
-                {item.transactionType === 'Cash-Out' && <Text style={styles.debit}>{item.amount}</Text>}
+                <View style={styles.amount}>
+                  {item.transactionType === 'Cash-In' && <Text style={styles.credit}>{item.amount
+                  }</Text>}
+                  {item.transactionType === 'Cash-Out' && <Text style={styles.debit}>{item.amount}</Text>}
+                </View>
               </View>
             </Card>
           </React.Fragment>
@@ -56,13 +61,13 @@ export default function TransactionList() {
 
 const styles = StyleSheet.create({
   credit: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
     color: 'green',
+    paddingBottom: 3,
   },
   debit: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    paddingBottom: 3,
     color: 'red',
   },
   date: {
@@ -74,36 +79,47 @@ const styles = StyleSheet.create({
   },
   list: {
     width: Layout.window.width,
-    // padding: 10,
   },
   listItem: {
-    // marginBottom: 10,
     borderRadius: 0,
+    paddingVertical: 0,
   },
-  listItemLeft: {
-    width: '75%',
-    flexDirection: 'column',
-  },
-  listItemRight: {
-    width: '25%' ,
-    flexDirection: 'column',
-    alignItems: 'flex-end',
+  listItemWrapper: {
+    flexDirection: 'row',
     justifyContent: 'center',
-    paddingRight: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderBottomWidth: 0.5,
+    borderColor: 'rgba(0,0,0, 0.4)',
+  },
+  transactionDetails: {
+    width: '70%',
+    flexDirection: 'column',
+  },
+  transactionTime: {
+    color: 'rgba(0,0,0, 0.6)',
+  },
+  amount: {
+    width: '30%' ,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   listItemRow_1: {
     flexDirection: 'row',
-    marginBottom: 5,
+    marginVertical: 5,
   },
   category: {
-    backgroundColor: 'lightblue',
+    backgroundColor: 'rgba(235, 128, 47, 0.2)',
+    color: 'rgba(235, 128, 47, 1)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
     marginRight: 10, 
   },
   paymentMode: {
-    backgroundColor: 'lightgreen',
+    backgroundColor: 'rgba(96, 133, 214, 0.2)',
+    color: 'rgba(9, 75, 219, 1)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
