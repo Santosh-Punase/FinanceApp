@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import dayjs from 'dayjs';
@@ -11,27 +11,35 @@ import { dummyData } from './dummyData';
 import useStore from '../../hooks/useStore';
 import { Transaction } from '../../store/type';
 import { parseObject } from '../../utils';
+import TransactionFilters from './TransactionFilters';
 
+export const filterInitialState = {
+  TRANSACTION_TYPE: '',
+}
 
 export default function TransactionList() {
   const [ transactionList, , , , fetchList ] = useStore('transactionList');
   // @ts-ignore
   const parsedTransactionList: Transaction[] = transactionList !== '' ? parseObject(transactionList).sort((a,b) => b.createdAt - a.createdAt) : [];
-  let currentDate = '';
+  const [selectedFilters, setSelectedFilters] = useState(filterInitialState)
 
   useFocusEffect(
     useCallback(() => {
       fetchList();
-      console.log(transactionList)
     }, [transactionList])
   );
 
   return (
     <ScrollView style={styles.list}>
+      <TransactionFilters
+        selectedFilters={selectedFilters}
+        setFilter={(filter, selectedOptions) => setSelectedFilters({ ...selectedFilters, [filter]: selectedOptions})}
+      />
       {parsedTransactionList.map((item: Transaction, i) => {
         // const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
         // const isDifferentDate = currentDate !== date;
         // currentDate = date;
+        if(selectedFilters.TRANSACTION_TYPE !== '' && item.transactionType !== selectedFilters.TRANSACTION_TYPE) return null;
         return (
           <React.Fragment key={i}>
             {/* { isDifferentDate && <Text style={styles.date}>{date}</Text>} */}
