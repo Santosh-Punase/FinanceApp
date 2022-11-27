@@ -13,8 +13,9 @@ import { Transaction } from '../../store/type';
 import { parseObject } from '../../utils';
 import TransactionFilters from './TransactionFilters';
 
-export const filterInitialState = {
+export const filterInitialState: { TRANSACTION_TYPE: string, CATEGORY: string[] } = {
   TRANSACTION_TYPE: '',
+  CATEGORY: [],
 }
 
 export default function TransactionList() {
@@ -40,6 +41,7 @@ export default function TransactionList() {
         // const isDifferentDate = currentDate !== date;
         // currentDate = date;
         if(selectedFilters.TRANSACTION_TYPE !== '' && item.transactionType !== selectedFilters.TRANSACTION_TYPE) return null;
+        if(selectedFilters.CATEGORY.length !== 0 && !selectedFilters.CATEGORY.includes(item.category)) return null;
         return (
           <React.Fragment key={i}>
             {/* { isDifferentDate && <Text style={styles.date}>{date}</Text>} */}

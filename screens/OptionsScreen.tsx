@@ -12,7 +12,7 @@ export default function OptionsScreen({ navigation, route }: OptionsScreenProps)
   const dropdownLabel: DropdownLabel = route?.params?.dropdownLabel;
   const [searchString, setSearchString] = useState<string>('');
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState<boolean>(false);
-  const [availabelOptions, mutateOptions, isLoading] = useStore(dropdownLabel);
+  const [availableOptions, mutateOptions, isLoading] = useStore(dropdownLabel);
   const selectedOption = dropdownLabel === 'categories' ? route?.params?.category : route?.params?.paymentMode;
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function OptionsScreen({ navigation, route }: OptionsScreenProps)
   }, [navigation, isSearchBoxOpen, searchString]);
 
   // @ts-ignore
-  const parsedOptionsArray: Option[] = availabelOptions !== '' ? parseObject(availabelOptions) : [];
+  const parsedOptionsArray: Option[] = availableOptions !== '' ? parseObject(availableOptions) : [];
 
   const updateTimestamp = (record: Option) => {
     const updatedOptions = parsedOptionsArray.map(op => op.name === record.name ? record : op);

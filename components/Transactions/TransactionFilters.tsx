@@ -3,55 +3,71 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Dropdown } from '../Dropdown';
-import { TransactionType } from '../../store/type';
 import { Text, View } from '../Themed';
 import { FilterModal } from '../Modals/FilterModal';
-import { RadioButton } from '../RadioButton';
+import { Checkbox, RadioButton } from '../RadioButton';
+import useStore from '../../hooks/useStore';
+import { Option } from '../../store/type';
+import { parseObject } from '../../utils';
 
-export type FilterType = 'TRANSACTION_TYPE';
+export type FilterType = 'TRANSACTION_TYPE' | 'CATEGORY' | 'NONE';
 
 interface Props {
   selectedFilters : {
     TRANSACTION_TYPE: string,
+    CATEGORY: string[]
   },
-  setFilter: (filter: string, selectedOptions: string | string[]) => void
+  setFilter: (filter: FilterType, selectedOptions: string | string[]) => void
 }
 
 export default function TransactionFilters({ selectedFilters, setFilter }: Props) {
-  const [visibleModal, setVisibleModal] = useState<FilterType | 'NONE'>('NONE');
-  // const [options, setOptions] = useState<string[]>([]);
-  const [options, setOptions] = useState<string>('');
+  const [visibleModal, setVisibleModal] = useState<FilterType>('NONE');
+  const [options, setOptions] = useState<string[]>([]);
+  const [option, setOption] = useState<string>('');
+
+  const [availableCategories, , isCategoryLoading] = useStore('categories');
+
+  // @ts-ignore
+  const parsedCategories: Option[] = availableCategories !== '' ? parseObject(availableCategories) : [];
 
   useEffect(()=> {
     if(visibleModal === 'NONE') {
-      // setOptions([]);
-      setOptions('');
-    } else {
-      setOptions(selectedFilters.TRANSACTION_TYPE)
-    }
+      setOptions([]);
+      setOption('');
+    } else if(visibleModal === 'TRANSACTION_TYPE') {
+      setOption(selectedFilters.TRANSACTION_TYPE)
+    } else (
+      setOptions(selectedFilters[visibleModal])
+    )
   }, [visibleModal]);
 
-  const _OnFilterSelect = (op: TransactionType) => {
-    // if(options.includes(op)) {
-    //   setOptions(options.filter(o => o!== op));
-    // } else {
-    //   setOptions([ ...options, op]);
-    // }
-    setOptions(op)
+  const _OnFilterSelect = (op: string) => {
+    setOption(op)
+  }
+
+  const _OnMultiFilterSelect = (op: string) => {
+    if(options.includes(op)) {
+      setOptions(options.filter(o => o!== op));
+    } else {
+      setOptions([ ...options, op]);
+    }
   }
 
   const onClearAll = () => {
-    setOptions('');
+    setOption('');
+    setOptions([]);
   }
 
-  const onApplyFilter = () => {
-    setFilter(visibleModal, options);
+  const onCloseModal = () => setVisibleModal('NONE');
+
+  const onApplyFilter = (filters: string | string[]) => {
+    setFilter(visibleModal, filters);
     setVisibleModal('NONE');
   }
 
   return (
     <View style={styles.filterRow}>
-      <AntDesign name='filter' size={30} style={{ marginRight: 10, }}/>
+      <AntDesign name='filter' size={30} style={{ marginRight: 10, }} />
       <Dropdown
         style={styles.filterSelect}
         iconStyle={styles.filterDropdownIcon}
@@ -59,22 +75,47 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
         value={selectedFilters.TRANSACTION_TYPE}
         onPress={() => setVisibleModal('TRANSACTION_TYPE')}
       />
+      <Dropdown
+        style={selectedFilters.CATEGORY.length !== 0 ? [styles.filterSelect, { }] : styles.filterSelect}
+        iconStyle={styles.filterDropdownIcon}
+        placeholder='Category'
+        value={selectedFilters.CATEGORY.length !== 0  ? 'Category' : ''}
+        label={selectedFilters.CATEGORY.length !== 0  ? `${selectedFilters.CATEGORY.length}` : ''}
+        labelStyles={styles.filterApplied}
+        onPress={() => setVisibleModal('CATEGORY')}
+      />
       <FilterModal
         title='Set Filter For Transaction Type'
         visible={visibleModal === 'TRANSACTION_TYPE'}
-        onClose={() => setVisibleModal('NONE')}
-        onSubmit={onApplyFilter}
+        onClose={onCloseModal}
+        onSubmit={() => onApplyFilter(option)}
         onCancel={onClearAll}
       >
         <View style={styles.optionsWrapper}>
           <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnFilterSelect('Cash-In')}>
-            <RadioButton isSelected={options === 'Cash-In'} />
+            <RadioButton isSelected={option === 'Cash-In'} />
             <Text style={styles.filterOption}>CASH IN</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnFilterSelect('Cash-Out')}>
-            <RadioButton isSelected={options === 'Cash-Out'} />
+            <RadioButton isSelected={option === 'Cash-Out'} />
             <Text style={styles.filterOption}>CASH OUT</Text>
           </TouchableOpacity>
+        </View>
+      </FilterModal>
+      <FilterModal
+        title='Set Filter For Category'
+        visible={visibleModal === 'CATEGORY'}
+        onClose={onCloseModal}
+        onSubmit={() => onApplyFilter(options)}
+        onCancel={onClearAll}
+      >
+        <View style={styles.optionsWrapper}>
+          { parsedCategories.map((c, i)=> (
+            <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnMultiFilterSelect(c.name)} key={c.createdAt}>
+              <Checkbox isSelected={options.includes(c.name)} />
+              <Text style={styles.filterOption}>{c.name}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </FilterModal>
   </View>
@@ -83,8 +124,8 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
 
 const styles = StyleSheet.create({
   filterRow: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingLeft: 15,
+    paddingVertical: 15,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#dadada', // 'rgba(96, 133, 214, 0.6)'
@@ -93,8 +134,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 0,
     height: 30,
-    paddingTop: 4,
+    paddingTop: 3,
     paddingRight: 30,
+    marginRight: 15,
+    backgroundColor: 'white',
+    borderWidth: 0,
   },
   filterDropdownIcon: {
     top: 7.5,
@@ -115,5 +159,13 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     fontSize: 15,
     color: 'black'
+  },
+  filterApplied: {
+    backgroundColor: 'rgba(242, 7, 58, 1)',
+    fontSize: 10,
+    top: -10,
+    left: 5,
+    borderRadius: 20,
+    color: 'white',
   },
 });
