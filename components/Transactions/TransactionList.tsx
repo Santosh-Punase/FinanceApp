@@ -43,9 +43,9 @@ export default function TransactionList() {
         if(selectedFilters.TRANSACTION_TYPE !== '' && item.transactionType !== selectedFilters.TRANSACTION_TYPE) return null;
         if(selectedFilters.CATEGORY.length !== 0 && !selectedFilters.CATEGORY.includes(item.category)) return null;
         return (
-          <React.Fragment key={i}>
+          <React.Fragment key={item.createdAt}>
             {/* { isDifferentDate && <Text style={styles.date}>{date}</Text>} */}
-            <Card style={styles.listItem} key={i}>
+            <Card style={styles.listItem}>
               <View style={styles.listItemWrapper}>
                 <View style={styles.transactionDetails}>
                   {item.remark && <Text>{item.remark}</Text>}

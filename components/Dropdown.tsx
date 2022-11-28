@@ -1,15 +1,16 @@
-import { Text, View, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import { Text, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
 
-export function Dropdown({ onPress, disabled, label, style, labelStyles, iconStyle, value, placeholder, ...rest }: TouchableOpacityProps & { label?: string, labelStyles?: {}, iconStyle?: {}, placeholder?: string, value?: string }) {
+export function Dropdown({ onPress, disabled, label, style, labelStyles, iconStyle, value, placeholder, ...rest }: TouchableOpacityProps & { label?: string, labelStyles?: {}, iconStyle?: { size?: number, color?: string }, placeholder?: string, value?: string }) {
 
   return (
     <TouchableOpacity style={[styles.dropdown, style]} onPress={onPress} { ...rest }>
       { label && <Text style={[styles.label, labelStyles]}>{label}</Text> }
       { !value || value === ''
-      ? <Text style={{ color: 'gray' }}>{placeholder}</Text>
-      : <Text>{value}</Text>
+      ? <Text style={[styles.value, { color: 'gray' }]}>{placeholder}</Text>
+      : <Text style={styles.value}>{value}</Text>
       }
-      <View style={[styles.dropdownIcon, iconStyle]} />
+      <AntDesign name="caretdown" size={iconStyle?.size || 20} color={iconStyle?.color || 'black'} />
     </TouchableOpacity>
   );
 }
@@ -22,8 +23,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 50,
     paddingHorizontal: 16,
-    paddingTop: 14,
     marginBottom: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   label: {
     position: 'absolute',
@@ -44,4 +46,7 @@ const styles = StyleSheet.create({
     top: 14.5,
     transform: [{ rotateZ: '45deg' }],
   },
+  value: {
+    marginRight: 5,
+  }
 });
