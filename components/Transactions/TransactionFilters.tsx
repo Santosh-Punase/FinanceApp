@@ -10,14 +10,16 @@ import useStore from '../../hooks/useStore';
 import { Option } from '../../store/type';
 import { parseObject } from '../../utils';
 
-export type FilterType = 'TRANSACTION_TYPE' | 'CATEGORY' | 'NONE';
+export type FilterType = 'TRANSACTION_TYPE' | 'CATEGORY' | 'PAYMENT_MODE' | 'NONE';
+export type SelectedFilters = {
+  TRANSACTION_TYPE: string,
+  CATEGORY: string[]
+  PAYMENT_MODE: string[]
+}
 
 interface Props {
-  selectedFilters : {
-    TRANSACTION_TYPE: string,
-    CATEGORY: string[]
-  },
-  setFilter: (filter: FilterType, selectedOptions: string | string[]) => void
+  selectedFilters : SelectedFilters;
+  setFilter: (filter: FilterType, selectedOptions: string | string[]) => void;
 }
 
 export default function TransactionFilters({ selectedFilters, setFilter }: Props) {
@@ -26,9 +28,13 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
   const [option, setOption] = useState<string>('');
 
   const [availableCategories, , isCategoryLoading] = useStore('categories');
+  const [availablePModes, , isPModeLoading] = useStore('paymentModes');
 
   // @ts-ignore
   const parsedCategories: Option[] = availableCategories !== '' ? parseObject(availableCategories) : [];
+
+  // @ts-ignore
+  const parsedPModes: Option[] = availablePModes !== '' ? parseObject(availablePModes) : [];
 
   useEffect(()=> {
     if(visibleModal === 'NONE') {
@@ -69,20 +75,32 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
     <View style={styles.filterRow}>
       <AntDesign name='filter' size={30} style={{ marginRight: 10, }} />
       <Dropdown
+        key='transaction_type'
         style={styles.filterSelect}
-        iconStyle={styles.filterDropdownIcon}
+        iconStyle={{ size: 15 }}
         placeholder='Transaction Type'
         value={selectedFilters.TRANSACTION_TYPE}
         onPress={() => setVisibleModal('TRANSACTION_TYPE')}
       />
       <Dropdown
+        key='category'
         style={selectedFilters.CATEGORY.length !== 0 ? [styles.filterSelect, { }] : styles.filterSelect}
-        iconStyle={styles.filterDropdownIcon}
+        iconStyle={{ size: 15 }}
         placeholder='Category'
         value={selectedFilters.CATEGORY.length !== 0  ? 'Category' : ''}
         label={selectedFilters.CATEGORY.length !== 0  ? `${selectedFilters.CATEGORY.length}` : ''}
         labelStyles={styles.filterApplied}
         onPress={() => setVisibleModal('CATEGORY')}
+      />
+      <Dropdown
+        key='pMode'
+        style={selectedFilters.PAYMENT_MODE.length !== 0 ? [styles.filterSelect, { }] : styles.filterSelect}
+        iconStyle={{ size: 15 }}
+        placeholder='Payment Mode'
+        value={selectedFilters.PAYMENT_MODE.length !== 0  ? 'Payment Mode' : ''}
+        label={selectedFilters.PAYMENT_MODE.length !== 0  ? `${selectedFilters.PAYMENT_MODE.length}` : ''}
+        labelStyles={styles.filterApplied}
+        onPress={() => setVisibleModal('PAYMENT_MODE')}
       />
       <FilterModal
         title='Set Filter For Transaction Type'
@@ -111,9 +129,25 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
       >
         <View style={styles.optionsWrapper}>
           { parsedCategories.map((c, i)=> (
-            <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnMultiFilterSelect(c.name)} key={c.createdAt}>
+            <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnMultiFilterSelect(c.name)} key={c.name}>
               <Checkbox isSelected={options.includes(c.name)} />
               <Text style={styles.filterOption}>{c.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </FilterModal>
+      <FilterModal
+        title='Set Filter For Payment Mode'
+        visible={visibleModal === 'PAYMENT_MODE'}
+        onClose={onCloseModal}
+        onSubmit={() => onApplyFilter(options)}
+        onCancel={onClearAll}
+      >
+        <View style={styles.optionsWrapper}>
+          { parsedPModes.map((p, i)=> (
+            <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnMultiFilterSelect(p.name)} key={p.name}>
+              <Checkbox isSelected={options.includes(p.name)} />
+              <Text style={styles.filterOption}>{p.name}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -131,20 +165,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#dadada', // 'rgba(96, 133, 214, 0.6)'
   },
   filterSelect: {
-    alignSelf: 'center',
     marginBottom: 0,
     height: 30,
-    paddingTop: 3,
-    paddingRight: 30,
     marginRight: 15,
-    backgroundColor: 'white',
-    borderWidth: 0,
-  },
-  filterDropdownIcon: {
-    top: 7.5,
-    right: 10,
-    height: 10,
-    width: 10,
   },
   optionsWrapper: {
     paddingHorizontal: 15,
@@ -163,7 +186,7 @@ const styles = StyleSheet.create({
   filterApplied: {
     backgroundColor: 'rgba(242, 7, 58, 1)',
     fontSize: 10,
-    top: -10,
+    top: -8,
     left: 5,
     borderRadius: 20,
     color: 'white',

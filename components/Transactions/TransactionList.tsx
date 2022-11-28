@@ -11,11 +11,12 @@ import { dummyData } from './dummyData';
 import useStore from '../../hooks/useStore';
 import { Transaction } from '../../store/type';
 import { parseObject } from '../../utils';
-import TransactionFilters from './TransactionFilters';
+import TransactionFilters, { SelectedFilters } from './TransactionFilters';
 
-export const filterInitialState: { TRANSACTION_TYPE: string, CATEGORY: string[] } = {
+export const filterInitialState: SelectedFilters = {
   TRANSACTION_TYPE: '',
   CATEGORY: [],
+  PAYMENT_MODE: [],
 }
 
 export default function TransactionList() {
@@ -42,6 +43,7 @@ export default function TransactionList() {
         // currentDate = date;
         if(selectedFilters.TRANSACTION_TYPE !== '' && item.transactionType !== selectedFilters.TRANSACTION_TYPE) return null;
         if(selectedFilters.CATEGORY.length !== 0 && !selectedFilters.CATEGORY.includes(item.category)) return null;
+        if(selectedFilters.PAYMENT_MODE.length !== 0 && !selectedFilters.PAYMENT_MODE.includes(item.paymentMode)) return null;
         return (
           <React.Fragment key={item.createdAt}>
             {/* { isDifferentDate && <Text style={styles.date}>{date}</Text>} */}
