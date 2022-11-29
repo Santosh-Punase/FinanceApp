@@ -77,15 +77,17 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
       <AntDesign name='filter' size={30} style={{ marginHorizontal: 15, }} />
       <Dropdown
         key='transaction_type'
-        style={styles.filterSelect}
+        style={selectedFilters.TRANSACTION_TYPE ? [styles.filterSelect, styles.filterSelected] : styles.filterSelect}
         iconStyle={{ size: 15 }}
         placeholder='Transaction Type'
+        label={selectedFilters.TRANSACTION_TYPE ? '1' : ''}
+        labelStyles={styles.filterApplied}
         value={selectedFilters.TRANSACTION_TYPE}
         onPress={() => setVisibleModal('TRANSACTION_TYPE')}
       />
       <Dropdown
         key='category'
-        style={selectedFilters.CATEGORY.length !== 0 ? [styles.filterSelect, { }] : styles.filterSelect}
+        style={selectedFilters.CATEGORY.length !== 0 ? [styles.filterSelect, styles.filterSelected] : styles.filterSelect}
         iconStyle={{ size: 15 }}
         placeholder='Category'
         value={selectedFilters.CATEGORY.length !== 0  ? 'Category' : ''}
@@ -95,7 +97,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
       />
       <Dropdown
         key='pMode'
-        style={selectedFilters.PAYMENT_MODE.length !== 0 ? [styles.filterSelect, { }] : styles.filterSelect}
+        style={selectedFilters.PAYMENT_MODE.length !== 0 ? [styles.filterSelect, styles.filterSelected] : styles.filterSelect}
         iconStyle={{ size: 15 }}
         placeholder='Payment Mode'
         value={selectedFilters.PAYMENT_MODE.length !== 0  ? 'Payment Mode' : ''}
@@ -162,12 +164,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 60,
     alignItems: 'center',
-    backgroundColor: '#dadada', // 'rgba(96, 133, 214, 0.6)'
+    // backgroundColor: '#dadada', // 'rgba(96, 133, 214, 0.6)'
   },
   filterSelect: {
     marginBottom: 0,
     height: 30,
     marginRight: 15,
+  },
+  filterSelected: {
+    backgroundColor: 'rgba(96, 133, 214, 0.1)',
   },
   optionsWrapper: {
     paddingHorizontal: 15,
