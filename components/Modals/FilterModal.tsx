@@ -26,7 +26,7 @@ export function FilterModal({ title, visible, cancelText='Clear All', submitText
       <View style={styles.modalBackdrop}>
         <View style={styles.screenOverlay}>
           <View style={styles.dialogPrompt}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingTop: 10, }}>
+            <View style={styles.titleWrapper}>
               <Text style={styles.title}>
                 {title}
               </Text>
@@ -102,7 +102,14 @@ const styles = StyleSheet.create({
 		color: "black",
 		marginBottom: 20,
 	},
-
+  titleWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
 	buttonsOuterView: {
 		flexDirection: "row",
 		...Platform.select({
@@ -112,6 +119,7 @@ const styles = StyleSheet.create({
 			}
 		}),
 		width: "100%",
+    paddingTop: 10,
 	},
 	buttonsDivider: {
 		...Platform.select({
@@ -120,7 +128,7 @@ const styles = StyleSheet.create({
 				backgroundColor: "rgba(0,0,0,0.5)"
 			},
 			android: {
-				width: 20
+				width: 0
 			}
 		}),
 	},
@@ -143,7 +151,7 @@ const styles = StyleSheet.create({
 			ios: { flex: 1 },
 			android: {}
 		}),
-		marginVertical: 10,
+		margin: 10,
 		padding: 10,
     backgroundColor: '#fff',
     borderColor: 'blue',

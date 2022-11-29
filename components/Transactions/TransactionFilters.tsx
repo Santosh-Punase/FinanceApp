@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   },
   optionsWrapper: {
     paddingHorizontal: 15,
-    marginBottom: 20,
+    paddingBottom: 20,
   },
   filterOptionRow: {
     flexDirection: 'row',
