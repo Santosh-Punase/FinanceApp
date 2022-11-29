@@ -32,42 +32,44 @@ export default function TransactionList() {
   );
 
   return (
-    <ScrollView style={styles.list}>
+    <>
       <TransactionFilters
         selectedFilters={selectedFilters}
         setFilter={(filter, selectedOptions) => setSelectedFilters({ ...selectedFilters, [filter]: selectedOptions})}
       />
-      {parsedTransactionList.map((item: Transaction, i) => {
-        // const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
-        // const isDifferentDate = currentDate !== date;
-        // currentDate = date;
-        if(selectedFilters.TRANSACTION_TYPE !== '' && item.transactionType !== selectedFilters.TRANSACTION_TYPE) return null;
-        if(selectedFilters.CATEGORY.length !== 0 && !selectedFilters.CATEGORY.includes(item.category)) return null;
-        if(selectedFilters.PAYMENT_MODE.length !== 0 && !selectedFilters.PAYMENT_MODE.includes(item.paymentMode)) return null;
-        return (
-          <React.Fragment key={item.createdAt}>
-            {/* { isDifferentDate && <Text style={styles.date}>{date}</Text>} */}
-            <Card style={styles.listItem}>
-              <View style={styles.listItemWrapper}>
-                <View style={styles.transactionDetails}>
-                  {item.remark && <Text>{item.remark}</Text>}
-                  <View style={styles.listItemRow_1}>
-                    {item.category && <Text style={styles.category}>{item.category}</Text>}
-                    {item.paymentMode && <Text style={styles.paymentMode}>{item.paymentMode}</Text>}
+      <ScrollView style={styles.list}>
+        {parsedTransactionList.map((item: Transaction, i) => {
+          // const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
+          // const isDifferentDate = currentDate !== date;
+          // currentDate = date;
+          if(selectedFilters.TRANSACTION_TYPE !== '' && item.transactionType !== selectedFilters.TRANSACTION_TYPE) return null;
+          if(selectedFilters.CATEGORY.length !== 0 && !selectedFilters.CATEGORY.includes(item.category)) return null;
+          if(selectedFilters.PAYMENT_MODE.length !== 0 && !selectedFilters.PAYMENT_MODE.includes(item.paymentMode)) return null;
+          return (
+            <React.Fragment key={item.createdAt}>
+              {/* { isDifferentDate && <Text style={styles.date}>{date}</Text>} */}
+              <Card style={styles.listItem}>
+                <View style={styles.listItemWrapper}>
+                  <View style={styles.transactionDetails}>
+                    {item.remark && <Text>{item.remark}</Text>}
+                    <View style={styles.listItemRow_1}>
+                      {item.category && <Text style={styles.category}>{item.category}</Text>}
+                      {item.paymentMode && <Text style={styles.paymentMode}>{item.paymentMode}</Text>}
+                    </View>
+                    <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text>
                   </View>
-                  <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text>
+                  <View style={styles.amount}>
+                    {item.transactionType === 'Cash-In' && <Text style={styles.credit}>{item.amount
+                    }</Text>}
+                    {item.transactionType === 'Cash-Out' && <Text style={styles.debit}>{item.amount}</Text>}
+                  </View>
                 </View>
-                <View style={styles.amount}>
-                  {item.transactionType === 'Cash-In' && <Text style={styles.credit}>{item.amount
-                  }</Text>}
-                  {item.transactionType === 'Cash-Out' && <Text style={styles.debit}>{item.amount}</Text>}
-                </View>
-              </View>
-            </Card>
-          </React.Fragment>
-        )})
-      }
-    </ScrollView>  
+              </Card>
+            </React.Fragment>
+          )})
+        }
+      </ScrollView>  
+    </>
   );
 }
 
@@ -91,6 +93,7 @@ const styles = StyleSheet.create({
   },
   list: {
     width: Layout.window.width,
+    height: Layout.window.height - 150,
   },
   listItem: {
     borderRadius: 0,

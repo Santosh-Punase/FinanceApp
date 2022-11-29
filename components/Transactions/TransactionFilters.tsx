@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 import { Dropdown } from '../Dropdown';
 import { Text, View } from '../Themed';
@@ -9,6 +9,7 @@ import { Checkbox, RadioButton } from '../RadioButton';
 import useStore from '../../hooks/useStore';
 import { Option } from '../../store/type';
 import { parseObject } from '../../utils';
+import Layout from '../../constants/Layout';
 
 export type FilterType = 'TRANSACTION_TYPE' | 'CATEGORY' | 'PAYMENT_MODE' | 'NONE';
 export type SelectedFilters = {
@@ -72,8 +73,8 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
   }
 
   return (
-    <View style={styles.filterRow}>
-      <AntDesign name='filter' size={30} style={{ marginRight: 10, }} />
+    <ScrollView contentContainerStyle={styles.filterRow} horizontal showsHorizontalScrollIndicator={false}>
+      <AntDesign name='filter' size={30} style={{ marginHorizontal: 15, }} />
       <Dropdown
         key='transaction_type'
         style={styles.filterSelect}
@@ -127,14 +128,14 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
         onSubmit={() => onApplyFilter(options)}
         onCancel={onClearAll}
       >
-        <View style={styles.optionsWrapper}>
+        <ScrollView style={styles.optionsWrapper}>
           { parsedCategories.map((c, i)=> (
             <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnMultiFilterSelect(c.name)} key={c.name}>
               <Checkbox isSelected={options.includes(c.name)} />
               <Text style={styles.filterOption}>{c.name}</Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       </FilterModal>
       <FilterModal
         title='Set Filter For Payment Mode'
@@ -143,24 +144,23 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
         onSubmit={() => onApplyFilter(options)}
         onCancel={onClearAll}
       >
-        <View style={styles.optionsWrapper}>
+        <ScrollView style={styles.optionsWrapper}>
           { parsedPModes.map((p, i)=> (
             <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnMultiFilterSelect(p.name)} key={p.name}>
               <Checkbox isSelected={options.includes(p.name)} />
               <Text style={styles.filterOption}>{p.name}</Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       </FilterModal>
-  </View>
+  </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   filterRow: {
-    paddingLeft: 15,
-    paddingVertical: 15,
     flexDirection: 'row',
+    height: 60,
     alignItems: 'center',
     backgroundColor: '#dadada', // 'rgba(96, 133, 214, 0.6)'
   },
@@ -172,6 +172,8 @@ const styles = StyleSheet.create({
   optionsWrapper: {
     paddingHorizontal: 15,
     paddingBottom: 20,
+    backgroundColor: 'white',
+    maxHeight: Layout.window.height * 0.4,
   },
   filterOptionRow: {
     flexDirection: 'row',
