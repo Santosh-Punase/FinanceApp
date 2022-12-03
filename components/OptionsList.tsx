@@ -5,6 +5,7 @@ import { StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Alert } fr
 import Layout from "../constants/Layout";
 import { Option } from "../store/type";
 import { FloatingButton } from "./FloatingButton";
+import { NoRecord } from "./NoRecord";
 import { OverlayModal } from "./OverlayModal";
 import { View, Text } from "./Themed";
 
@@ -78,10 +79,10 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
           </View>
         )}
         { filteredRecords.length === 0 && (
-          <View style={styles.noResult}>
-            <Text style={styles.noResultHeader}>{`No ${recordType} Found`}</Text>
-            <Text style={styles.noResultSubHeader}>Try searching with different name or add new</Text>
-          </View>
+          <NoRecord
+            header={`No ${recordType} Found`}
+            subHeader="Try searching with different name or add new"
+          />
         )}
       </ScrollView>
       <FloatingButton onPress={() => setShowModal(true)} label={'+'} style={{ bottom: 40, right: 20 }}/>
@@ -146,18 +147,5 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     height: 50,
     textAlignVertical: 'center',
-  },
-  noResult: {
-    height: 300,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  noResultHeader: {
-    fontSize: 22,
-  },
-  noResultSubHeader: {
-    fontSize: 14,
-    marginTop: 10,
   },
 });
