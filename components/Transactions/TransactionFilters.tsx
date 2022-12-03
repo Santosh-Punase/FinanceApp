@@ -23,6 +23,8 @@ interface Props {
   setFilter: (filter: FilterType, selectedOptions: string | string[]) => void;
 }
 
+const OPTIONS_WRAPPER_HEIGHT = Layout.window.height * 0.4;
+
 export default function TransactionFilters({ selectedFilters, setFilter }: Props) {
   const [visibleModal, setVisibleModal] = useState<FilterType>('NONE');
   const [options, setOptions] = useState<string[]>([]);
@@ -137,7 +139,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
       >
         <ScrollView style={styles.optionsWrapper}>
           { isCategoryLoading
-          ? <ActivityIndicator size={'large'} />
+          ? <ActivityIndicator size={'large'} style={{ height: OPTIONS_WRAPPER_HEIGHT }} />
           : parsedCategories.map((c, i)=> (
             <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnMultiFilterSelect(c.name)} key={c.name}>
               <Checkbox isSelected={options.includes(c.name)} />
@@ -155,7 +157,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
       >
         <ScrollView style={styles.optionsWrapper}>
           { isPModeLoading
-          ? <ActivityIndicator size={'large'} />
+          ? <ActivityIndicator size={'large'} style={{ height: OPTIONS_WRAPPER_HEIGHT }} />
           : parsedPModes.map((p, i)=> (
             <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnMultiFilterSelect(p.name)} key={p.name}>
               <Checkbox isSelected={options.includes(p.name)} />
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingBottom: 20,
     backgroundColor: 'white',
-    height: Layout.window.height * 0.4,
+    height: OPTIONS_WRAPPER_HEIGHT,
   },
   filterOptionRow: {
     flexDirection: 'row',

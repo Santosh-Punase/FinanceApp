@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { getCalendars } from 'expo-localization';
@@ -19,8 +19,10 @@ export const filterInitialState: SelectedFilters = {
   PAYMENT_MODE: [],
 }
 
+const LIST_HEIGHT = Layout.window.height - 150;
+
 export default function TransactionList() {
-  const [ transactionList, , , , fetchList ] = useStore('transactionList');
+  const [ transactionList, , isLoading , , fetchList ] = useStore('transactionList');
   // @ts-ignore
   const parsedTransactionList: Transaction[] = transactionList !== '' ? parseObject(transactionList).sort((a,b) => b.createdAt - a.createdAt) : [];
   const [selectedFilters, setSelectedFilters] = useState(filterInitialState)
@@ -38,7 +40,9 @@ export default function TransactionList() {
         setFilter={(filter, selectedOptions) => setSelectedFilters({ ...selectedFilters, [filter]: selectedOptions})}
       />
       <ScrollView style={styles.list}>
-        {parsedTransactionList.map((item: Transaction, i) => {
+        { isLoading
+        ? <ActivityIndicator size={'large'} style={{ height: LIST_HEIGHT }} />
+        : parsedTransactionList.map((item: Transaction, i) => {
           // const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
           // const isDifferentDate = currentDate !== date;
           // currentDate = date;
@@ -93,7 +97,7 @@ const styles = StyleSheet.create({
   },
   list: {
     width: Layout.window.width,
-    height: Layout.window.height - 150,
+    height: LIST_HEIGHT,
   },
   listItem: {
     borderRadius: 0,
