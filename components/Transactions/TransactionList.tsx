@@ -12,6 +12,7 @@ import useStore from '../../hooks/useStore';
 import { Transaction } from '../../store/type';
 import { parseObject } from '../../utils';
 import TransactionFilters, { SelectedFilters } from './TransactionFilters';
+import { NoRecord } from '../NoRecord';
 
 export const filterInitialState: SelectedFilters = {
   TRANSACTION_TYPE: '',
@@ -33,6 +34,12 @@ export default function TransactionList() {
     }, [transactionList])
   );
 
+  const filteredList = parsedTransactionList.filter((item: Transaction, i: number) => (
+    (selectedFilters.TRANSACTION_TYPE === '' || item.transactionType === selectedFilters.TRANSACTION_TYPE) &&
+    (selectedFilters.CATEGORY.length === 0 || selectedFilters.CATEGORY.includes(item.category)) &&
+    (selectedFilters.PAYMENT_MODE.length === 0 || selectedFilters.PAYMENT_MODE.includes(item.paymentMode))
+  ));
+
   return (
     <>
       <TransactionFilters
@@ -42,13 +49,10 @@ export default function TransactionList() {
       <ScrollView style={styles.list}>
         { isLoading
         ? <ActivityIndicator size={'large'} style={{ height: LIST_HEIGHT }} />
-        : parsedTransactionList.map((item: Transaction, i) => {
+        : filteredList.map((item: Transaction, i: number) => {
           // const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
           // const isDifferentDate = currentDate !== date;
           // currentDate = date;
-          if(selectedFilters.TRANSACTION_TYPE !== '' && item.transactionType !== selectedFilters.TRANSACTION_TYPE) return null;
-          if(selectedFilters.CATEGORY.length !== 0 && !selectedFilters.CATEGORY.includes(item.category)) return null;
-          if(selectedFilters.PAYMENT_MODE.length !== 0 && !selectedFilters.PAYMENT_MODE.includes(item.paymentMode)) return null;
           return (
             <React.Fragment key={item.createdAt}>
               {/* { isDifferentDate && <Text style={styles.date}>{date}</Text>} */}
@@ -72,6 +76,13 @@ export default function TransactionList() {
             </React.Fragment>
           )})
         }
+        { filteredList.length === 0 && (
+          <NoRecord
+            header='No Transactions Found'
+            subHeader='Try removing filters'
+            onCancel={() => setSelectedFilters(filterInitialState)}
+          />
+        )}
       </ScrollView>  
     </>
   );
