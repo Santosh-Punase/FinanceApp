@@ -14,7 +14,6 @@ import { parseObject } from '../../utils';
 import TransactionFilters, { SelectedFilters } from './TransactionFilters';
 import { NoRecord } from '../NoRecord';
 
-
 export const filterInitialState: SelectedFilters = {
   TRANSACTION_TYPE: '',
   CATEGORY: [],
