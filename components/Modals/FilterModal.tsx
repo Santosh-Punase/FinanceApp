@@ -1,8 +1,8 @@
 import { AntDesign } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, TouchableOpacity, Modal, Platform } from "react-native";
-import Layout from "../../constants/Layout";
+import { StyleSheet, TouchableOpacity, Modal } from "react-native";
 import { View, Text } from "../Themed";
+import { modalStyles } from "./modal.styles";
 import { ModalFooter } from "./ModalFooter";
 
 type ModalProps = {
@@ -23,10 +23,10 @@ export function FilterModal({ title, visible, cancelText='Clear All', submitText
       transparent={true}
       animationType="slide"
       visible={visible}
-      onRequestClose={onCancel}>
-      <View style={styles.modalBackdrop}>
-        <View style={styles.screenOverlay}>
-          <View style={styles.dialogPrompt}>
+      onRequestClose={onClose}>
+      <View style={modalStyles.modalBackdrop}>
+        <View style={modalStyles.screenOverlay}>
+          <View style={modalStyles.dialogPrompt}>
             <View style={styles.titleWrapper}>
               <Text style={styles.title}>
                 {title}
@@ -36,7 +36,7 @@ export function FilterModal({ title, visible, cancelText='Clear All', submitText
               </TouchableOpacity>
             </View>
             {React.isValidElement(children) ? children : null}
-            <ModalFooter cancelText={cancelText} submitText={submitText} onSubmit={onSubmit} onCancel={onCancel} />
+            <ModalFooter cancelText={cancelText} submitText={submitText} onSubmit={onSubmit} onCancel={onCancel} showCancelButtonIcon />
           </View>
         </View>
       </View>
@@ -45,36 +45,6 @@ export function FilterModal({ title, visible, cancelText='Clear All', submitText
 }
 
 const styles = StyleSheet.create({
-  modalBackdrop: {
-    height: Layout.window.height,
-    backgroundColor: "black",
-    opacity: 0.8,
-  },
-  screenOverlay: {
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    marginTop: 'auto',
-	},
-	dialogPrompt: {
-		...Platform.select({
-			ios: {
-				opacity: 0.9,
-				backgroundColor: "white",
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-			},
-			android: {
-        opacity: 1,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-				backgroundColor: "white"
-			}
-		}),
-		padding: 10,
-    width: '100%',
-		flexDirection: "column",
-		justifyContent: "flex-start",
-	},
 	title: {
 		fontSize: 16,
 		color: "black",

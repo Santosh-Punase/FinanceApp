@@ -11,7 +11,7 @@ type Props = {
   showCancelButtonIcon?: boolean;
 }
 
-export function ModalFooter({ cancelText, submitText, showCancelButtonIcon=true, onSubmit, onCancel }: Props) {
+export function ModalFooter({ cancelText, submitText, showCancelButtonIcon=false, onSubmit, onCancel }: Props) {
 
   return (
     <View style={styles.buttonsOuterView}>
