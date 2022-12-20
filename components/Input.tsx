@@ -1,11 +1,28 @@
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useRef } from "react";
 import { TextInput, TextInputProps, View, Text, StyleSheet } from "react-native";
 
-export function Input({ placeholder, showLabel=false, label, style, ...rest }: TextInputProps & { showLabel?: boolean, label?: string }) {
+export function Input({ placeholder, showLabel=false, label, style, autoFocus, ...rest }: TextInputProps & { showLabel?: boolean, label?: string }) {
+  const textRef = useRef<TextInput>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+     // When the screen is focused
+     const focus = () => {
+      setTimeout(() => {
+      
+       textRef?.current?.focus();
+      }, 100);
+     };
+     focus();
+     return focus; // cleanup
+    }, [textRef?.current]),
+  );
 
   return (
     <View style={styles.inputWrapper}>
       { showLabel && <Text style={styles.inputLabel}>{label || placeholder}</Text> }
-      <TextInput style={[styles.input, style ]} placeholder={placeholder} { ...rest } />
+      <TextInput ref={autoFocus ? textRef : undefined} style={[styles.input, style ]} placeholder={placeholder} { ...rest } />
     </View>
   );
 }

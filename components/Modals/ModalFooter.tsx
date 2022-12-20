@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
 		}),
 		width: "100%",
     paddingTop: 10,
+		paddingBottom: 20,
 	},
 	buttonsDivider: {
 		...Platform.select({

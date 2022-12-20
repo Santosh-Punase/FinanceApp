@@ -1,6 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, Modal, Platform } from "react-native";
+import React, { useRef, useState } from "react";
+import { StyleSheet, TouchableOpacity, Modal, Platform, TextInput, KeyboardAvoidingView } from "react-native";
 import { Input } from "../Input";
 import { View, Text } from "../Themed";
 import { modalStyles } from "./modal.styles";
@@ -8,15 +8,15 @@ import { ModalFooter } from "./ModalFooter";
 
 type Props = {
   title: string;
-  visible: boolean;
+  initialValue?: string;
   onSubmit: (text: string) => void;
   placeholder?: string
   onCancel: () => void;
   onChangeText?: (text: string) => void;
 }
 
-export function InputModal({ title, visible, onSubmit, onCancel, onChangeText, placeholder }: Props) {
-  const [value, setValue] = useState<string>('');
+export function InputModal({ title, onSubmit, initialValue = '', onCancel, onChangeText, placeholder }: Props) {
+  const [value, setValue] = useState<string>(initialValue);
 
   const _onChangeText = (value: string) => {
 		setValue(value);
@@ -32,14 +32,15 @@ export function InputModal({ title, visible, onSubmit, onCancel, onChangeText, p
 		onCancel();
     setValue('');
 	}
+
   return (
     <Modal
       transparent={true}
       animationType="slide"
-      visible={visible}
+      visible
       onRequestClose={onCancel}>
       <View style={modalStyles.modalBackdrop}>
-        <View style={modalStyles.screenOverlay}>
+        <KeyboardAvoidingView style={modalStyles.screenOverlay} behavior={Platform.OS === "android" ? 'position' : 'height'}>
           <View style={modalStyles.dialogPrompt}>
             <View style={styles.titleWrapper}>
               <Text style={styles.title}>
@@ -50,17 +51,20 @@ export function InputModal({ title, visible, onSubmit, onCancel, onChangeText, p
               </TouchableOpacity>
             </View>
 
-            <Input
-              placeholder={placeholder}
-              style={styles.textInput}
-              onChangeText={_onChangeText}
-              onSubmitEditing={_onSubmit}
-              autoFocus={true}
-            />
+            <View style={{ paddingVertical: 10 }}>
+              <Input
+                value={value}
+                autoFocus
+                placeholder={placeholder}
+                style={styles.textInput}
+                onChangeText={_onChangeText}
+                onSubmitEditing={_onSubmit}
+              />
+            </View>
             
             <ModalFooter cancelText={'cancel'} submitText={'save'} onSubmit={_onSubmit} onCancel={_onCancel} />
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </View>
     </Modal>
   );
@@ -81,8 +85,11 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
   },
   textInput: {
-		width: "100%",
-		marginBottom: 20,
+		width: "95%",
+    backgroundColor: 'white',
+    borderWidth: 0.5,
+    alignSelf: 'center',
+
 		...Platform.select({
 			ios: {
 				backgroundColor: "rgba(166, 170, 172, 0.9)"
