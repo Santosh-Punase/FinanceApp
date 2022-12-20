@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card } from '../components/Card';
 import { InputModal } from '../components/Modals/InputModal';
 
@@ -16,6 +16,20 @@ export default function SettingScreen() {
   const parsedUser:User = parseObject(user) as User || { name: '', phoneNumber: '' };
  
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const onLogoutClick = () => {
+    Alert.alert(
+      'Are you sure',
+      'Logout ?',
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -37,7 +51,7 @@ export default function SettingScreen() {
       </Card>
       <Text style={styles.sectionHeader}>Application</Text>
       <Card>
-        <TouchableOpacity onPress={() => alert('Work in progress')} style={[{ flexDirection: 'row' }]}>
+        <TouchableOpacity onPress={onLogoutClick} style={[{ flexDirection: 'row' }]}>
           <AntDesign name='logout' color={'black'} size={30} />
           <Text style={styles.label}>Log-out</Text>
         </TouchableOpacity>
