@@ -1,15 +1,21 @@
 import { AntDesign } from '@expo/vector-icons';
+import { useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Card } from '../components/Card';
+import { InputModal } from '../components/Modals/InputModal';
 
 import { Text, View } from '../components/Themed';
+import Layout from '../constants/Layout';
+import useStore from '../hooks/useStore';
+import { User } from '../store/type';
+import { parseObject, stringifyObject } from '../utils';
 
 export default function SettingScreen() {
-  const user = {
-    name: 'Santosh',
-    phoneNumber: '6574839300',
-    email: ''
-  };
+  const [user, setUser] = useStore('user');
+
+  const parsedUser:User = parseObject(user) as User || { name: '', phoneNumber: '' };
+ 
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   return (
     <View style={styles.container}>
@@ -18,11 +24,16 @@ export default function SettingScreen() {
         <View style={styles.profileIcon}>
           <Text style={styles.profileInitial}>s</Text>
         </View>
-        <View style={[{ flexDirection: 'column', marginBottom: 5, justifyContent: 'center' }]}>
-          <Text style={styles.header}>{user.name}</Text>
-          { user.phoneNumber && <Text style={styles.subHeader}>{user.phoneNumber}</Text> }
-          { user.email && <Text style={styles.subHeader}>{user.email}</Text> }
+        <View style={[{ flexDirection: 'column', marginBottom: 5, justifyContent: 'center', width: Layout.window.width - 120 }]}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={styles.header}>{parsedUser.name}</Text>
+            <TouchableOpacity onPress={() => setShowModal(true)}>
+              <AntDesign name="edit" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+          { parsedUser.phoneNumber && <Text style={styles.subHeader}>{parsedUser.phoneNumber}</Text> }
         </View>
+
       </Card>
       <Text style={styles.sectionHeader}>Application</Text>
       <Card>
@@ -31,6 +42,18 @@ export default function SettingScreen() {
           <Text style={styles.label}>Log-out</Text>
         </TouchableOpacity>
       </Card>
+      { showModal && (
+        <InputModal
+          title={'Edit Name'}
+          initialValue={parsedUser.name}
+          placeholder={'Name'}
+          onCancel={() => setShowModal(false)}
+          onSubmit={(name) => {
+            setUser(stringifyObject({ ...parsedUser, name }))
+            setShowModal(false)
+          }}
+        />
+      )}
     </View>
   );
 }

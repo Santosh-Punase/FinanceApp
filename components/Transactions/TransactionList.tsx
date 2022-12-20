@@ -25,7 +25,7 @@ const LIST_HEIGHT = Layout.window.height - 150;
 export default function TransactionList() {
   const [ transactionList, , isLoading , , fetchList ] = useStore('transactionList');
   // @ts-ignore
-  const parsedTransactionList: Transaction[] = transactionList !== '' ? parseObject(transactionList).sort((a,b) => b.createdAt - a.createdAt) : [];
+  const parsedTransactionList: Transaction[] = parseObject(transactionList)?.sort((a,b) => b.createdAt - a.createdAt) || [];
   const [selectedFilters, setSelectedFilters] = useState(filterInitialState)
 
   useFocusEffect(

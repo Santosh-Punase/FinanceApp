@@ -3,5 +3,5 @@ export const stringifyObject = (value: any): string => {
 };
 
 export const parseObject = (value: string): Object => {
-  return value !== null ? JSON.parse(value) : null;
+  return value ? JSON.parse(value) : null;
 }
