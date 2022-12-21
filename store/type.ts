@@ -1,6 +1,11 @@
-export type StoreKey = 'categories' | 'paymentModes' | 'transactionList' | 'user';
+export type StoreKey = 'categories' | 'paymentModes' | 'transactionList' | 'user' | 'theme';
 
 export type DropdownLabel = 'categories' | 'paymentModes';
+
+export enum Theme {
+  LIGHT = 'light',
+  DARK = 'dark',
+}
 
 export type Option = {
   name: string;

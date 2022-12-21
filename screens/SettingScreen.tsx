@@ -1,17 +1,19 @@
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card } from '../components/Card';
 import { InputModal } from '../components/Modals/InputModal';
+import { RadioButton } from '../components/RadioButton';
 
 import { Text, View } from '../components/Themed';
 import Layout from '../constants/Layout';
 import useStore from '../hooks/useStore';
-import { User } from '../store/type';
+import { User, Theme } from '../store/type';
 import { parseObject, stringifyObject } from '../utils';
 
 export default function SettingScreen() {
   const [user, setUser] = useStore('user');
+  const [theme, setTheme] = useStore('theme');
 
   const parsedUser:User = parseObject(user) as User || { name: '', phoneNumber: '' };
  
@@ -34,7 +36,7 @@ export default function SettingScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.sectionHeader}>Profile</Text>
-      <Card style={[ { marginBottom: 10, }]}>
+      <Card>
         <View style={styles.profileIcon}>
           <Text style={styles.profileInitial}>s</Text>
         </View>
@@ -47,10 +49,30 @@ export default function SettingScreen() {
           </View>
           { parsedUser.phoneNumber && <Text style={styles.subHeader}>{parsedUser.phoneNumber}</Text> }
         </View>
-
+      </Card>
+      <Text style={styles.sectionHeader}>Theme</Text>
+      <Card style={{ flexDirection: 'column' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+          <Ionicons name='sunny-outline' color={'black'} size={30} />
+          <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme(Theme.LIGHT)}>
+            <Text style={styles.themeName}>Light</Text>
+            <RadioButton isSelected={theme === Theme.LIGHT} />
+          </TouchableOpacity>
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Ionicons name='moon' color={'black'} size={30} />
+          <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme(Theme.DARK)}>
+            <Text style={styles.themeName}>Dark</Text>
+            <RadioButton isSelected={theme === Theme.DARK} />
+          </TouchableOpacity>
+        </View>
       </Card>
       <Text style={styles.sectionHeader}>Application</Text>
-      <Card>
+      <Card style={{ flexDirection: 'column' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+          <Text>App Version</Text>
+          <Text>0.0.1</Text>
+        </View>
         <TouchableOpacity onPress={onLogoutClick} style={[{ flexDirection: 'row' }]}>
           <AntDesign name='logout' color={'black'} size={30} />
           <Text style={styles.label}>Log-out</Text>
@@ -75,13 +97,13 @@ export default function SettingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    // backgroundColor: '#dadada',
+    paddingHorizontal: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
   sectionHeader: {
     fontSize: 12,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginVertical: 10,
     color: 'gray',
     marginLeft: 10,
     textTransform: 'uppercase',
@@ -111,5 +133,18 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginLeft: 20,
+  },
+  themeName: {
+    fontSize: 16,
+    fontWeight: '400',
+    marginLeft: 10,
+    marginRight: 'auto',
+  },
+  themeWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: Layout.window.width - 70,
+    height: 30,
+    alignItems: 'center',
   },
 });
