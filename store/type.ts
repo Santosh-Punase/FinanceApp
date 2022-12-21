@@ -3,6 +3,7 @@ export type StoreKey = 'categories' | 'paymentModes' | 'transactionList' | 'user
 export type DropdownLabel = 'categories' | 'paymentModes';
 
 export enum Theme {
+  DEFAULT = 'default',
   LIGHT = 'light',
   DARK = 'dark',
 }
@@ -28,4 +29,9 @@ export type Transaction = {
 export type User = {
   name: string;
   phoneNumber: string;
+}
+
+export type ThemeContextType = {
+  theme: Theme
+  setTheme: (theme:Theme) => void
 }

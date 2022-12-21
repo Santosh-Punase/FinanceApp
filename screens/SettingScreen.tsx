@@ -1,19 +1,18 @@
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card } from '../components/Card';
 import { InputModal } from '../components/Modals/InputModal';
-import { RadioButton } from '../components/RadioButton';
 
 import { Text, View } from '../components/Themed';
 import Layout from '../constants/Layout';
 import useStore from '../hooks/useStore';
-import { User, Theme } from '../store/type';
+import { User } from '../store/type';
 import { parseObject, stringifyObject } from '../utils';
+import { ThemeSetting } from '../components/ThemeSetting';
 
 export default function SettingScreen() {
   const [user, setUser] = useStore('user');
-  const [theme, setTheme] = useStore('theme');
 
   const parsedUser:User = parseObject(user) as User || { name: '', phoneNumber: '' };
  
@@ -51,22 +50,7 @@ export default function SettingScreen() {
         </View>
       </Card>
       <Text style={styles.sectionHeader}>Theme</Text>
-      <Card style={{ flexDirection: 'column' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-          <Ionicons name='sunny-outline' color={'black'} size={30} />
-          <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme(Theme.LIGHT)}>
-            <Text style={styles.themeName}>Light</Text>
-            <RadioButton isSelected={theme === Theme.LIGHT} />
-          </TouchableOpacity>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Ionicons name='moon' color={'black'} size={30} />
-          <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme(Theme.DARK)}>
-            <Text style={styles.themeName}>Dark</Text>
-            <RadioButton isSelected={theme === Theme.DARK} />
-          </TouchableOpacity>
-        </View>
-      </Card>
+      <ThemeSetting />
       <Text style={styles.sectionHeader}>Application</Text>
       <Card style={{ flexDirection: 'column' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
@@ -133,18 +117,5 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginLeft: 20,
-  },
-  themeName: {
-    fontSize: 16,
-    fontWeight: '400',
-    marginLeft: 10,
-    marginRight: 'auto',
-  },
-  themeWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: Layout.window.width - 70,
-    height: 30,
-    alignItems: 'center',
   },
 });
