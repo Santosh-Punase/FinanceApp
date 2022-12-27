@@ -7,6 +7,7 @@ import { Option } from "../store/type";
 import { FloatingButton } from "./FloatingButton";
 import { NoRecord } from "./NoRecord";
 import { OverlayModal } from "./OverlayModal";
+import { RadioButton } from "./RadioButton";
 import { View, Text } from "./Themed";
 
 type OptionsListProps = {
@@ -59,10 +60,7 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
               return (
                 <View style={isSelected ? [styles.listItem, { backgroundColor: 'lightblue' }] : styles.listItem} key={i} >
                   <TouchableOpacity onPress={() => onSelect(op)} style={styles.labelWrapper} activeOpacity={1}>
-                    { isSelected
-                      ? <Ionicons name="radio-button-on" size={24} style={styles.radioIcon} color="blue" />
-                      : <Ionicons name="radio-button-off" size={24} style={styles.radioIcon} color="black" />
-                    }
+                    <RadioButton size={24} style={styles.radioIcon} isSelected={isSelected} />
                     <Text style={styles.optionLabel}>{op.name}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => createTwoButtonAlert(op.name)}>

@@ -32,7 +32,7 @@ export function ThemeSetting() {
         <Icon type="Ionicons" name='moon' size={30} />
         <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme(Theme.DARK)}>
           <Text style={styles.themeName}>Dark</Text>
-          <RadioButton isSelected={theme === Theme.DARK} selectedColor={'white'} />
+          <RadioButton isSelected={theme === Theme.DARK} />
         </TouchableOpacity>
       </View>
     </Card>
