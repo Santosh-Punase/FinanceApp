@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Icon } from "./Icon";
 
 interface Props {
   isSelected: boolean,
@@ -7,18 +7,18 @@ interface Props {
   selectedColor?: string
 }
 
-export function RadioButton({ isSelected, size = 24, color = 'black', selectedColor = 'blue' }: Props) {
+export function RadioButton({ isSelected, size = 24, selectedColor = 'blue' }: Props) {
 
   if(isSelected) {
-    return <Ionicons name='radio-button-on' size={size} color={selectedColor} />;
+    return <Icon type="Ionicons" name='radio-button-on' size={size} color={selectedColor} />;
   }
-  return <Ionicons name='radio-button-off' size={size} color={color} />;
+  return <Icon type="Ionicons" name='radio-button-off' size={size} />;
 }
 
 export function Checkbox({ isSelected, size = 24, color = 'black', selectedColor = 'blue' }: Props) {
 
   if(isSelected) {
-    return <Ionicons name='ios-checkbox' size={size} color={selectedColor} />;
+    return <Icon type="Ionicons" name='ios-checkbox' size={size} color={selectedColor} />;
   }
-  return <Ionicons name='ios-checkbox-outline' size={size} color={color} />;
+  return <Icon type="Ionicons" name='ios-checkbox-outline' size={size} />;
 }

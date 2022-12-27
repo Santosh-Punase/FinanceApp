@@ -1,4 +1,3 @@
-import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 
@@ -10,6 +9,7 @@ import useStore from '../../hooks/useStore';
 import { Option } from '../../store/type';
 import { parseObject } from '../../utils';
 import Layout from '../../constants/Layout';
+import { Icon } from '../Icon';
 
 export type FilterType = 'TRANSACTION_TYPE' | 'CATEGORY' | 'PAYMENT_MODE' | 'NONE';
 export type SelectedFilters = {
@@ -79,7 +79,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
   return (
     <ScrollView contentContainerStyle={styles.filterRow} horizontal showsHorizontalScrollIndicator={false}>
       <View style={{ position: 'relative', marginHorizontal: 15 }}>
-        <AntDesign name='filter' size={30} />
+        <Icon type="AntDesign" name='filter' size={30} />
         { isFilterSelected && <View style={styles.filterDot} /> }
       </View>
       <Dropdown

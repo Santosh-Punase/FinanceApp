@@ -1,6 +1,7 @@
-import { AntDesign } from "@expo/vector-icons";
 import { StyleSheet, TouchableOpacity, Pressable } from "react-native";
+
 import Layout from "../constants/Layout";
+import { Icon } from "./Icon";
 import { Input } from "./Input";
 
 type Props = {
@@ -17,7 +18,7 @@ export function HeaderSearchBar({ isSearchBoxOpen, searchString, setIsSearchBoxO
       <>
         <Input value={searchString} autoFocus style={styles.searchInput} onChangeText={(t) => setSearchString(t)} placeholder={'Search'} />
         <TouchableOpacity onPress={() => { setIsSearchBoxOpen(false); setSearchString('') }}>
-          <AntDesign name='close' size={20} style={{ marginRight: 30, padding: 10 }}/>
+          <Icon type="AntDesign" name='close' size={20} style={{ marginRight: 30, padding: 10 }}/>
         </TouchableOpacity>
       </>
     )
@@ -29,7 +30,7 @@ export function HeaderSearchBar({ isSearchBoxOpen, searchString, setIsSearchBoxO
         opacity: pressed ? 0.5 : 1,
         padding: 10,
       })}>
-      <AntDesign name="search1" size={20} />
+      <Icon type="AntDesign" name="search1" size={20} />
     </Pressable>
   )
 }

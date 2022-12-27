@@ -1,4 +1,3 @@
-import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card } from '../components/Card';
@@ -10,6 +9,7 @@ import useStore from '../hooks/useStore';
 import { User } from '../store/type';
 import { parseObject, stringifyObject } from '../utils';
 import { ThemeSetting } from '../components/ThemeSetting';
+import { Icon } from '../components/Icon';
 
 export default function SettingScreen() {
   const [user, setUser] = useStore('user');
@@ -43,7 +43,7 @@ export default function SettingScreen() {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.header}>{parsedUser.name}</Text>
             <TouchableOpacity onPress={() => setShowModal(true)}>
-              <AntDesign name="edit" size={24} color="black" />
+              <Icon type="AntDesign" name="edit" size={24} />
             </TouchableOpacity>
           </View>
           { parsedUser.phoneNumber && <Text style={styles.subHeader}>{parsedUser.phoneNumber}</Text> }
@@ -58,7 +58,7 @@ export default function SettingScreen() {
           <Text>0.0.1</Text>
         </View>
         <TouchableOpacity onPress={onLogoutClick} style={[{ flexDirection: 'row' }]}>
-          <AntDesign name='logout' color={'black'} size={30} />
+          <Icon type="AntDesign" name='logout' size={30} />
           <Text style={styles.label}>Log-out</Text>
         </TouchableOpacity>
       </Card>

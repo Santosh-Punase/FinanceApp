@@ -1,6 +1,7 @@
-import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, TouchableOpacity, Platform } from "react-native";
+
+import { Icon } from "../Icon";
 import { View, Text } from "../Themed";
 
 type Props = {
@@ -20,7 +21,7 @@ export function ModalFooter({ cancelText, submitText, showCancelButtonIcon=false
           style={styles.button}
           onPress={onCancel}>
             { showCancelButtonIcon && (
-              <AntDesign name="close" style={{ marginRight: 10 }} size={18} />
+              <Icon type="AntDesign" name="close" style={{ marginRight: 10 }} size={18} />
             )}
           <Text
             style={styles.cancelButtonText}>

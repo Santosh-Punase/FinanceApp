@@ -1,5 +1,6 @@
-import { AntDesign } from "@expo/vector-icons";
 import { Platform, StyleSheet, TouchableOpacity } from "react-native";
+
+import { Icon } from "./Icon";
 
 import { Text, View } from "./Themed";
 
@@ -20,7 +21,7 @@ export function NoRecord({ header, subHeader, onCancel, cancelText = 'Clear All'
         <TouchableOpacity
           style={styles.button}
           onPress={onCancel}>
-            <AntDesign name="close" style={{ marginRight: 10, color: 'blue' }} size={18} />
+            <Icon type="AntDesign" name="close" style={{ marginRight: 10, color: 'blue' }} size={18} />
           <Text
             style={styles.cancelButtonText}>
             {cancelText}

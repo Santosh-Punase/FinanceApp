@@ -1,6 +1,7 @@
-import { AntDesign } from "@expo/vector-icons";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, Modal, Platform, KeyboardAvoidingView, Animated } from "react-native";
+
+import { Icon } from "../Icon";
 import { Input } from "../Input";
 import { View, Text } from "../Themed";
 import { modalStyles } from "./modal.styles";
@@ -71,7 +72,7 @@ export function InputModal({ title, onSubmit, initialValue = '', onCancel, onCha
                 {title}
               </Text>
               <TouchableOpacity onPress={onCancel}>
-                <AntDesign name="close" size={22} />
+                <Icon type="AntDesign" name="close" size={22} />
               </TouchableOpacity>
             </View>
 

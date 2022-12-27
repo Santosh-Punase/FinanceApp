@@ -1,6 +1,7 @@
-import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, TouchableOpacity, Modal } from "react-native";
+
+import { Icon } from "../Icon";
 import { View, Text } from "../Themed";
 import { modalStyles } from "./modal.styles";
 import { ModalFooter } from "./ModalFooter";
@@ -32,7 +33,7 @@ export function FilterModal({ title, visible, cancelText='Clear All', submitText
                 {title}
               </Text>
               <TouchableOpacity onPress={onClose}>
-                <AntDesign name="close" size={20} />
+                <Icon type="AntDesign" name="close" size={20} />
               </TouchableOpacity>
             </View>
             {React.isValidElement(children) ? children : null}

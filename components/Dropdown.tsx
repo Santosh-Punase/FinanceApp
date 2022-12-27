@@ -1,5 +1,6 @@
-import { AntDesign } from "@expo/vector-icons";
 import { Text, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
+
+import { Icon } from "./Icon";
 
 export function Dropdown({ onPress, disabled, label, style, labelStyles, iconStyle, value, placeholder, ...rest }: TouchableOpacityProps & { label?: string, labelStyles?: {}, iconStyle?: { size?: number, color?: string }, placeholder?: string, value?: string }) {
 
@@ -10,7 +11,7 @@ export function Dropdown({ onPress, disabled, label, style, labelStyles, iconSty
       ? <Text style={[styles.value, { color: 'gray' }]}>{placeholder}</Text>
       : <Text style={styles.value}>{value}</Text>
       }
-      <AntDesign name="caretdown" size={iconStyle?.size || 20} color={iconStyle?.color || 'black'} />
+      <Icon type="AntDesign" name="caretdown" size={iconStyle?.size || 20} color={iconStyle?.color || 'black'} />
     </TouchableOpacity>
   );
 }
