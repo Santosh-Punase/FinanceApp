@@ -11,7 +11,6 @@ import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
 
 import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import AddNewScreen from '../screens/AddNewScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -21,6 +20,7 @@ import SettingScreen from '../screens/SettingScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import OptionsScreen from '../screens/OptionsScreen';
+import { useTheme } from '../theme';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -59,7 +59,7 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
+  const colorScheme:ColorSchemeName = useTheme();
 
   return (
     <BottomTab.Navigator

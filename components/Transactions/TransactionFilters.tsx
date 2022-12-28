@@ -78,7 +78,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
 
   return (
     <ScrollView contentContainerStyle={styles.filterRow} horizontal showsHorizontalScrollIndicator={false}>
-      <View style={{ position: 'relative', marginHorizontal: 15 }}>
+      <View style={{ position: 'relative', marginHorizontal: 15 }} darkColor='rgba(0, 0, 0, 0.08)'>
         <Icon type="AntDesign" name='filter' size={30} />
         { isFilterSelected && <View style={styles.filterDot} /> }
       </View>
@@ -137,16 +137,18 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
         onSubmit={() => onApplyFilter(options)}
         onCancel={onClearAll}
       >
-        <ScrollView style={styles.optionsWrapper}>
-          { isCategoryLoading
-          ? <ActivityIndicator size={'large'} style={{ height: OPTIONS_WRAPPER_HEIGHT }} />
-          : parsedCategories.map((c, i)=> (
-            <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnMultiFilterSelect(c.name)} key={c.name}>
-              <Checkbox isSelected={options.includes(c.name)} />
-              <Text style={styles.filterOption}>{c.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        <View style={styles.optionsWrapper}>
+          <ScrollView>
+            { isCategoryLoading
+            ? <ActivityIndicator size={'large'} style={{ height: OPTIONS_WRAPPER_HEIGHT }} />
+            : parsedCategories.map((c, i)=> (
+              <TouchableOpacity style={styles.filterOptionRow} activeOpacity={1} onPress={() => _OnMultiFilterSelect(c.name)} key={c.name}>
+                <Checkbox isSelected={options.includes(c.name)} />
+                <Text style={styles.filterOption}>{c.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
       </FilterModal>
       <FilterModal
         title='Set Filter For Payment Mode'
@@ -155,16 +157,18 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
         onSubmit={() => onApplyFilter(options)}
         onCancel={onClearAll}
       >
-        <ScrollView style={styles.optionsWrapper}>
-          { isPModeLoading
-          ? <ActivityIndicator size={'large'} style={{ height: OPTIONS_WRAPPER_HEIGHT }} />
-          : parsedPModes.map((p, i)=> (
-            <TouchableOpacity style={styles.filterOptionRow} onPress={() => _OnMultiFilterSelect(p.name)} key={p.name}>
-              <Checkbox isSelected={options.includes(p.name)} />
-              <Text style={styles.filterOption}>{p.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        <View style={styles.optionsWrapper}>
+          <ScrollView>
+            { isPModeLoading
+            ? <ActivityIndicator size={'large'} style={{ height: OPTIONS_WRAPPER_HEIGHT }} />
+            : parsedPModes.map((p, i)=> (
+              <TouchableOpacity style={styles.filterOptionRow} activeOpacity={1} onPress={() => _OnMultiFilterSelect(p.name)} key={p.name}>
+                <Checkbox isSelected={options.includes(p.name)} />
+                <Text style={styles.filterOption}>{p.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
       </FilterModal>
   </ScrollView>
   );
@@ -197,7 +201,7 @@ const styles = StyleSheet.create({
   optionsWrapper: {
     paddingHorizontal: 15,
     paddingBottom: 20,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     height: OPTIONS_WRAPPER_HEIGHT,
   },
   filterOptionRow: {
@@ -208,7 +212,7 @@ const styles = StyleSheet.create({
   filterOption: {
     marginLeft: 15,
     fontSize: 15,
-    color: 'black'
+    // color: 'black'
   },
   filterApplied: {
     backgroundColor: 'rgba(242, 7, 58, 1)',

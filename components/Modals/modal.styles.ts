@@ -16,7 +16,7 @@ export const modalStyles = StyleSheet.create({
 		...Platform.select({
 			ios: {
 				opacity: 0.9,
-				backgroundColor: "white",
+				// backgroundColor: "white",
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
 			},
@@ -24,7 +24,7 @@ export const modalStyles = StyleSheet.create({
         opacity: 1,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
-				backgroundColor: "white"
+				// backgroundColor: "white"
 			}
 		}),
 		padding: 10,

@@ -1,17 +1,20 @@
-import { Text, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
 
 import { Icon } from "./Icon";
+import { Text, View } from "./Themed";
 
 export function Dropdown({ onPress, disabled, label, style, labelStyles, iconStyle, value, placeholder, ...rest }: TouchableOpacityProps & { label?: string, labelStyles?: {}, iconStyle?: { size?: number, color?: string }, placeholder?: string, value?: string }) {
 
   return (
-    <TouchableOpacity style={[styles.dropdown, style]} onPress={onPress} { ...rest }>
-      { label && <Text style={[styles.label, labelStyles]}>{label}</Text> }
-      { !value || value === ''
-      ? <Text style={[styles.value, { color: 'gray' }]}>{placeholder}</Text>
-      : <Text style={styles.value}>{value}</Text>
-      }
-      <Icon type="AntDesign" name="caretdown" size={iconStyle?.size || 20} color={iconStyle?.color || 'black'} />
+    <TouchableOpacity onPress={onPress} { ...rest }>
+      <View style={[styles.dropdown, style]}>
+        { label && <Text style={[styles.label, labelStyles]}>{label}</Text> }
+        { !value || value === ''
+        ? <Text style={[styles.value, { color: 'gray' }]}>{placeholder}</Text>
+        : <Text style={styles.value}>{value}</Text>
+        }
+        <Icon type="AntDesign" name="caretdown" size={iconStyle?.size || 20} color={iconStyle?.color} />
+      </View>
     </TouchableOpacity>
   );
 }

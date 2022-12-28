@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   label: {
     position: 'absolute',
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     top: -11,
     left: 10,
     paddingHorizontal: 6,

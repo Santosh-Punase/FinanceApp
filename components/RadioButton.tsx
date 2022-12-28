@@ -1,3 +1,7 @@
+import { ColorSchemeName } from "react-native";
+
+import { useTheme } from "../theme";
+import Colors from "../constants/Colors";
 import { Icon } from "./Icon";
 
 interface Props {
@@ -8,16 +12,22 @@ interface Props {
 
 export function RadioButton({ isSelected, size = 24, style }: Props) {
 
+  const currentTheme:ColorSchemeName = useTheme();
+  const iconColor = Colors[currentTheme]['tint']
+
   if(isSelected) {
-    return <Icon type="Ionicons" name='radio-button-on' size={size} style={style} color={'blue'} />;
+    return <Icon type="Ionicons" name='radio-button-on' size={size} style={style} color={iconColor} />;
   }
   return <Icon type="Ionicons" name='radio-button-off' size={size} style={style} />;
 }
 
 export function Checkbox({ isSelected, size = 24, style }: Props) {
 
+  const currentTheme:ColorSchemeName = useTheme();
+  const iconColor = Colors[currentTheme]['tint']
+
   if(isSelected) {
-    return <Icon type="Ionicons" name='ios-checkbox' size={size} style={style} color={'blue'} />;
+    return <Icon type="Ionicons" name='ios-checkbox' size={size} style={style} color={iconColor} />;
   }
   return <Icon type="Ionicons" name='ios-checkbox-outline' size={size} style={style} />;
 }

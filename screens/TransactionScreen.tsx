@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native';
 
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 import TransactionList from '../components/Transactions/TransactionList';
 import { RootTabScreenProps } from '../types';
 
 
 export default function TransactionScreen({ navigation }: RootTabScreenProps<'TabTwo'>) {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} darkColor='rgba(255,255,255,0.08)'>
       {/* <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
       {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> */}

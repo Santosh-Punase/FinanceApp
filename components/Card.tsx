@@ -1,4 +1,6 @@
-import { View, StyleSheet, ViewProps } from "react-native";
+import { StyleSheet, ViewProps } from "react-native";
+
+import { View } from '../components/Themed';
 
 export function Card({ style, children }: ViewProps) {
 
@@ -12,7 +14,6 @@ export function Card({ style, children }: ViewProps) {
 const styles = StyleSheet.create({
   card: {
     width: '100%',
-    backgroundColor: '#fff',
     padding: 10,
     borderRadius: 8,
     flexDirection: 'row',

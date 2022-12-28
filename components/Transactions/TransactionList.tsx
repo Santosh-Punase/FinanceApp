@@ -61,8 +61,16 @@ export default function TransactionList() {
                   <View style={styles.transactionDetails}>
                     {item.remark && <Text>{item.remark}</Text>}
                     <View style={styles.listItemRow_1}>
-                      {item.category && <Text style={styles.category}>{item.category}</Text>}
-                      {item.paymentMode && <Text style={styles.paymentMode}>{item.paymentMode}</Text>}
+                      {item.category && (
+                        <View lightColor='rgba(44, 44, 214, 0.2)' darkColor='rgba(199, 10, 130, 0.2)' style={{ marginRight: 10, borderRadius: 8 }}>
+                          <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(199, 10, 130, 1)'>{item.category}</Text>
+                        </View>
+                      )}
+                      {item.paymentMode && (
+                        <View lightColor='rgba(79, 79, 79, 0.2)' darkColor='rgba(212, 112, 10, 0.2)' style={{ borderRadius: 8 }}>
+                          <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(212, 112, 10, 1)'>{item.paymentMode}</Text>
+                        </View>
+                      )}
                     </View>
                     <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text>
                   </View>
@@ -104,7 +112,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 14,
     fontWeight: 'bold',
-    backgroundColor: '#dadada',
+    // backgroundColor: '#dadada',
   },
   list: {
     width: Layout.window.width,
@@ -120,14 +128,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderBottomWidth: 0.5,
-    borderColor: 'rgba(0,0,0, 0.4)',
+    // borderColor: 'rgba(0,0,0, 0.4)',
   },
   transactionDetails: {
     width: '70%',
     flexDirection: 'column',
   },
   transactionTime: {
-    color: 'rgba(0,0,0, 0.6)',
+    // color: 'rgba(0,0,0, 0.6)',
   },
   amount: {
     width: '30%' ,
@@ -140,16 +148,16 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   category: {
-    backgroundColor: 'rgba(235, 128, 47, 0.2)',
-    color: 'rgba(235, 128, 47, 1)',
+    // backgroundColor: 'rgba(235, 128, 47, 0.2)',
+    // color: 'rgba(235, 128, 47, 1)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
-    marginRight: 10, 
+    // marginRight: 10, 
   },
   paymentMode: {
-    backgroundColor: 'rgba(96, 133, 214, 0.2)',
-    color: 'rgba(9, 75, 219, 1)',
+    // backgroundColor: 'rgba(96, 133, 214, 0.2)',
+    // color: 'rgba(9, 75, 219, 1)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,

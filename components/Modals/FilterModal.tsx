@@ -48,7 +48,6 @@ export function FilterModal({ title, visible, cancelText='Clear All', submitText
 const styles = StyleSheet.create({
 	title: {
 		fontSize: 16,
-		color: "black",
 		marginBottom: 20,
 	},
   titleWrapper: {

@@ -17,25 +17,25 @@ export function ModalFooter({ cancelText, submitText, showCancelButtonIcon=false
   return (
     <View style={styles.buttonsOuterView}>
       <View style={styles.buttonsInnerView}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={onCancel}>
-            { showCancelButtonIcon && (
-              <Icon type="AntDesign" name="close" style={{ marginRight: 10 }} size={18} />
-            )}
-          <Text
-            style={styles.cancelButtonText}>
-            {cancelText}
-          </Text>
+        <TouchableOpacity onPress={onCancel}>
+					<View style={styles.button}>
+						{ showCancelButtonIcon && (
+							<Icon type="AntDesign" name="close" style={{ marginRight: 10 }} size={18} />
+						)}
+						<Text
+							style={styles.cancelButtonText}>
+							{cancelText}
+						</Text>
+					</View>
         </TouchableOpacity>
         <View style={styles.buttonsDivider} />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={onSubmit}>
-          <Text
-            style={styles.submitButtonText}>
-            {submitText}
-          </Text>
+        <TouchableOpacity onPress={onSubmit}>
+					<View style={styles.button}>
+						<Text
+							style={styles.submitButtonText}>
+							{submitText}
+						</Text>
+					</View>
         </TouchableOpacity>
       </View>
     </View>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
 		...Platform.select({
 			ios: {
 				width: 1,
-				backgroundColor: "rgba(0,0,0,0.5)"
+				// backgroundColor: "rgba(0,0,0,0.5)"
 			},
 			android: {
 				width: 0
@@ -88,15 +88,15 @@ const styles = StyleSheet.create({
 		margin: 10,
 		paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: '#fff',
-    borderColor: 'blue',
+    // backgroundColor: '#fff',
+    // borderColor: 'blue',
     borderWidth: 1,
     borderRadius: 8,
 	},
 	cancelButtonText: {
 		fontSize: 16,
 		fontWeight: "500",
-		color: "black",
+		// color: "black",
     textTransform: 'uppercase',
 	},
 	submitButtonText: {
