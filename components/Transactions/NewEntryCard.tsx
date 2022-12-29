@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { Text, View } from '../../components/Themed';
+import { View } from '../../components/Themed';
 import useStore from '../../hooks/useStore';
 import { Transaction, TransactionType } from '../../store/type';
 import { AddNewScreenProps } from '../../types';
 import { parseObject, stringifyObject } from '../../utils';
 import { Button } from '../Button';
 import { Card } from '../Card';
+import { Dropdown } from '../Dropdown';
 import { Input } from '../Input';
 
 export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
@@ -89,16 +90,22 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
           <View style={styles.row}>
             <Input showLabel label='Remark' placeholder='Item, Quantity, Person, Place etc' value={entry.remark || ''} onChangeText={(remark) => updateEntry('remark', remark)} />
           </View>
-          <TouchableOpacity style={styles.dropdown} activeOpacity={1} onPress={() => navigation.navigate('Options', { header: 'Choose Category', category: entry.category, paymentMode: entry.paymentMode, dropdownLabel: 'categories' })}>
-            <Text style={styles.label}>Category</Text>
-            <Text style={[entry.category ? {} : { color: 'gray' }]}>{entry.category || 'Category'}</Text>
-            <View style={styles.dropdownIcon} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.dropdown} activeOpacity={1} onPress={() => navigation.navigate('Options', { header: 'Choose Payment Mode', category: entry.category, paymentMode: entry.paymentMode, dropdownLabel: 'paymentModes' })}>
-            <Text style={styles.label}>Payment Mode</Text>
-            <Text style={[entry.paymentMode ? {} : { color: 'gray' }]}>{entry.paymentMode || 'Payment Mode'}</Text>
-            <View style={styles.dropdownIcon} />
-          </TouchableOpacity>
+          <Dropdown
+            key='category'
+            iconStyle={{ size: 18 }}
+            placeholder='Category'
+            label={'Category'}
+            value={entry?.category}
+            onPress={() => navigation.navigate('Options', { header: 'Choose Category', category: entry.category, paymentMode: entry.paymentMode, dropdownLabel: 'categories' })}
+          />
+          <Dropdown
+            key='Payment Mode'
+            iconStyle={{ size: 18 }}
+            placeholder='Payment Mode'
+            label={'Payment Mode'}
+            value={entry?.paymentMode}
+            onPress={() => navigation.navigate('Options', { header: 'Choose Payment Mode', category: entry.category, paymentMode: entry.paymentMode, dropdownLabel: 'paymentModes' })}
+          />
         </>
       )}
       <View style={styles.bottomRow}>
@@ -143,35 +150,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-  },
-  dropdown: {
-    position: 'relative',
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderRadius: 8,
-    height: 50,
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    marginBottom: 30,
-  },
-  label: {
-    position: 'absolute',
-    // backgroundColor: '#fff',
-    top: -11,
-    left: 10,
-    paddingHorizontal: 6,
-  },
-  dropdownIcon: {
-    height: 15,
-    width: 15,
-    position: 'absolute',
-    borderBottomColor: 'black',
-    borderBottomWidth: 2,
-    borderRightColor: 'black',
-    borderRightWidth: 2,
-    right: 15,
-    top: 14,
-    transform: [{ rotateZ: '45deg' }],
   },
   bottomRow: {
     flexDirection: 'row',

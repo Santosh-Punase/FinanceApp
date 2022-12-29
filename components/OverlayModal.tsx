@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { StyleSheet, TouchableOpacity, Modal, Platform } from "react-native";
+import { StyleSheet, TouchableOpacity, Modal, Platform, ColorSchemeName } from "react-native";
+import Colors from "../constants/Colors";
 import Layout from "../constants/Layout";
+import { useTheme } from "../theme";
 import { Input } from "./Input";
 import { View, Text } from "./Themed";
 
@@ -17,6 +19,8 @@ type ModalProps = {
 
 export function OverlayModal({ title, visible, placeholder, cancelText='Cancel', submitText='Submit', onChangeText, onSubmit, onCancel }: ModalProps) {
 
+  const currentTheme:ColorSchemeName = useTheme();
+  const backgroundColor = Colors[currentTheme].background;
   const [value, setValue] = useState<string>('');
 
   const _onChangeText = (value: string) => {
@@ -40,7 +44,7 @@ export function OverlayModal({ title, visible, placeholder, cancelText='Cancel',
       animationType="slide"
       visible={visible}
       onRequestClose={_onCancel}>
-      <View style={styles.modalBackdrop}>
+      <View style={[styles.modalBackdrop, { backgroundColor }]}>
         <View style={styles.screenOverlay}>
           <View style={styles.dialogPrompt}>
             <Text style={styles.title}>
@@ -84,7 +88,6 @@ export function OverlayModal({ title, visible, placeholder, cancelText='Cancel',
 const styles = StyleSheet.create({
   modalBackdrop: {
     height: Layout.window.height,
-    backgroundColor: "black",
     opacity: 0.8,
   },
   screenOverlay: {
@@ -96,13 +99,13 @@ const styles = StyleSheet.create({
 		...Platform.select({
 			ios: {
 				opacity: 0.9,
-				backgroundColor: "white",
+				// backgroundColor: "white",
 				borderRadius: 15
 			},
 			android: {
         opacity: 1,
 				borderRadius: 5,
-				backgroundColor: "white"
+				// backgroundColor: "white"
 			}
 		}),
 		padding: 10,
@@ -117,7 +120,6 @@ const styles = StyleSheet.create({
 	title: {
 		fontWeight: "bold",
 		fontSize: 26,
-		color: "black",
 		marginBottom: 20,
 	},
 	textInput: {
@@ -176,7 +178,6 @@ const styles = StyleSheet.create({
 	cancelButtonText: {
 		fontSize: 16,
 		fontWeight: "600",
-		color: "black"
 	},
 	submitButtonText: {
 		color: "rgb(0, 129, 251)",

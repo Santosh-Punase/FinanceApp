@@ -1,14 +1,18 @@
-import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { ColorSchemeName, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
 
-import { Icon } from "./Icon";
 import { Text, View } from "./Themed";
+import Colors from "../constants/Colors";
+import { useTheme } from "../theme";
+import { Icon } from "./Icon";
 
 export function Dropdown({ onPress, disabled, label, style, labelStyles, iconStyle, value, placeholder, ...rest }: TouchableOpacityProps & { label?: string, labelStyles?: {}, iconStyle?: { size?: number, color?: string }, placeholder?: string, value?: string }) {
+  const currentTheme:ColorSchemeName = useTheme();
+  const backgroundColor = Colors[currentTheme].background;
 
   return (
     <TouchableOpacity onPress={onPress} { ...rest }>
       <View style={[styles.dropdown, style]}>
-        { label && <Text style={[styles.label, labelStyles]}>{label}</Text> }
+        { label && <Text style={[styles.label, { backgroundColor }, labelStyles ]}>{label}</Text> }
         { !value || value === ''
         ? <Text style={[styles.value, { color: 'gray' }]}>{placeholder}</Text>
         : <Text style={styles.value}>{value}</Text>
@@ -29,7 +33,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 30,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   label: {
     position: 'absolute',

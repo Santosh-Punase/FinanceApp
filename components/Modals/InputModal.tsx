@@ -100,7 +100,6 @@ export function InputModal({ title, onSubmit, initialValue = '', onCancel, onCha
 const styles = StyleSheet.create({
 	title: {
 		fontSize: 18,
-		color: "black",
 		marginBottom: 20,
 	},
   titleWrapper: {
@@ -113,7 +112,6 @@ const styles = StyleSheet.create({
   },
   textInput: {
 		width: "95%",
-    backgroundColor: 'white',
     borderWidth: 0.5,
     alignSelf: 'center',
 

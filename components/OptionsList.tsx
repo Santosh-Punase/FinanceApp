@@ -1,9 +1,10 @@
-import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Alert, ColorSchemeName } from "react-native";
+import Colors from "../constants/Colors";
 
 import Layout from "../constants/Layout";
 import { Option } from "../store/type";
+import { useTheme } from "../theme";
 import { FloatingButton } from "./FloatingButton";
 import { NoRecord } from "./NoRecord";
 import { OverlayModal } from "./OverlayModal";
@@ -25,6 +26,9 @@ type OptionsListProps = {
 
 export function OptionsList({ isLoading, selectedOption, searchString, filteredRecords, onSelect, onAddNew, recordPluralName, allRecords, updateOptions, recordType }: OptionsListProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const currentTheme:ColorSchemeName = useTheme();
+  const selectedOptionColor = Colors[currentTheme].selectedOption;
+  const tintButton = Colors[currentTheme].tintButton;
 
   const createTwoButtonAlert = (optionName: string) =>
     Alert.alert(
@@ -58,7 +62,7 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
             {filteredRecords.map((op: Option, i: number) => {
               const isSelected = selectedOption === op.name;
               return (
-                <View style={isSelected ? [styles.listItem, { backgroundColor: 'lightblue' }] : styles.listItem} key={i} >
+                <View style={isSelected ? [styles.listItem, { backgroundColor: selectedOptionColor }] : styles.listItem} key={i} >
                   <TouchableOpacity onPress={() => onSelect(op)} style={styles.labelWrapper} activeOpacity={1}>
                     <RadioButton size={24} style={styles.radioIcon} isSelected={isSelected} />
                     <Text style={styles.optionLabel}>{op.name}</Text>
@@ -71,7 +75,7 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
             )}
             { searchString && (
               <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} onPress={() => onAddNew(searchString)}>
-                <Text style={[styles.optionLabel, { color: 'blue' }]}> + Add {searchString}</Text>
+                <Text style={[styles.optionLabel, { color: tintButton }]}> + Add {searchString}</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -83,7 +87,7 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
           />
         )}
       </ScrollView>
-      <FloatingButton onPress={() => setShowModal(true)} label={'+'} style={{ bottom: 40, right: 20 }}/>
+      <FloatingButton onPress={() => setShowModal(true)} label={'+'} style={{ bottom: 40, right: 20, backgroundColor: tintButton }}/>
       <OverlayModal
         title={`Add New ${recordType}`}
         placeholder={recordType}
