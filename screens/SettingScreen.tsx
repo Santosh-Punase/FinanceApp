@@ -33,7 +33,7 @@ export default function SettingScreen() {
   }
 
   return (
-    <View style={styles.container} lightColor='rgba(255,255,255, 0.5)' darkColor='rgba(255,255,255,0.1)'>
+    <View style={styles.container} lightColor='rgba(255,255,255, 0.5)' darkColor='rgba(255, 255, 255, 0.05)'>
       <Text style={styles.sectionHeader}>Profile</Text>
       <Card>
         <View style={styles.profileIcon}>
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
-    // backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
   sectionHeader: {
     fontSize: 12,
