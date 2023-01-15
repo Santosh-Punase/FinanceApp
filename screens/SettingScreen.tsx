@@ -33,7 +33,7 @@ export default function SettingScreen() {
   }
 
   return (
-    <View style={styles.container} lightColor='rgba(255,255,255, 0.5)' darkColor='rgba(255, 255, 255, 0.05)'>
+    <View style={styles.container} lightColor='rgba(255,255,255, 0.5)' darkColor='rgba(255, 255, 255, 0.1)'>
       <Text style={styles.sectionHeader}>Profile</Text>
       <Card>
         <View style={styles.profileIcon}>

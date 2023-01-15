@@ -32,7 +32,7 @@ export default function App() {
       <SafeAreaProvider>
         <ThemeContext.Provider value={themeData}>
           <Navigation colorScheme={colorScheme} />
-          <StatusBar />
+          <StatusBar style={colorScheme === Theme.DARK ? 'light' : 'dark'} />
         </ThemeContext.Provider>
       </SafeAreaProvider>
     );
