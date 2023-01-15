@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
+import { MenuProvider } from 'react-native-popup-menu';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
@@ -31,8 +32,10 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <ThemeContext.Provider value={themeData}>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar style={colorScheme === Theme.DARK ? 'light' : 'dark'} />
+          <MenuProvider>
+            <Navigation colorScheme={colorScheme} />
+            <StatusBar style={colorScheme === Theme.DARK ? 'light' : 'dark'} />
+          </MenuProvider>
         </ThemeContext.Provider>
       </SafeAreaProvider>
     );

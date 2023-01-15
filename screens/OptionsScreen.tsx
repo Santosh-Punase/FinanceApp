@@ -55,6 +55,11 @@ export default function OptionsScreen({ navigation, route }: OptionsScreenProps)
     setIsSearchBoxOpen(false)
   }
 
+  const editOption = (option: Option) => {
+    const updatedOptions = parsedOptionsArray.map((op) => op.createdAt === option.createdAt ? option : op);
+    mutateOptions(stringifyObject(updatedOptions));
+  }
+
   const sortOptions = (a: Option, b: Option) => {
     if(dropdownLabel === 'categories')
       return a.name.localeCompare(b.name);
@@ -71,6 +76,7 @@ export default function OptionsScreen({ navigation, route }: OptionsScreenProps)
       allRecords={parsedOptionsArray}
       recordType={dropdownLabel === 'categories' ? 'Category' : 'Payment Mode'}
       onAddNew={onAddNew}
+      onEdit={editOption}
       onSelect={onSelect}
       updateOptions={(list) => mutateOptions(stringifyObject(list))}
     />

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Alert, ColorSchemeName } from "react-native";
-import Colors from "../constants/Colors";
+import { Menu, MenuTrigger, MenuOptions, MenuOption } from 'react-native-popup-menu';
 
+import Colors from "../constants/Colors";
 import Layout from "../constants/Layout";
 import { Option } from "../store/type";
 import { useTheme } from "../theme";
 import { FloatingButton } from "./FloatingButton";
+import { Icon } from "./Icon";
 import { InputModal } from "./Modals/InputModal";
 import { NoRecord } from "./NoRecord";
 import { RadioButton } from "./RadioButton";
@@ -18,17 +20,22 @@ type OptionsListProps = {
   allRecords: Option[];
   searchString: string;
   onSelect: (option: Option) => void;
+  onEdit: (option: Option) => void;
   onAddNew: (name: string) => void;
   recordType: string
   recordPluralName: string;
   updateOptions: (options: Option[]) => void
 }
 
-export function OptionsList({ isLoading, selectedOption, searchString, filteredRecords, onSelect, onAddNew, recordPluralName, allRecords, updateOptions, recordType }: OptionsListProps) {
+export function OptionsList({ isLoading, selectedOption, searchString, filteredRecords, onSelect, onAddNew, onEdit, recordPluralName, allRecords, updateOptions, recordType }: OptionsListProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const currentTheme:ColorSchemeName = useTheme();
   const selectedOptionColor = Colors[currentTheme].selectedOption;
   const tintButton = Colors[currentTheme].tintButton;
+  const [optionToEdit, setOptionToEdit] = useState<Option | null>(null);
+
+  const optionsContainerBackgroundColor = Colors[currentTheme].background;
+  const optionsContainerShadowColor = Colors[currentTheme].text;
 
   const createTwoButtonAlert = (optionName: string) =>
     Alert.alert(
@@ -46,6 +53,26 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
       ],
       { cancelable: true, }
     );
+
+  const editOption = (op: Option) => {
+    setOptionToEdit(op);
+    setShowModal(true);
+  }
+
+  const onCancelModal = () => {
+    setShowModal(false);
+    setOptionToEdit(null);
+  }
+
+  const onSubmitModal = (name: string) => {
+    if(optionToEdit) {
+      onEdit({ ...optionToEdit, name, updatedAt: Date.now() })
+      setOptionToEdit(null);
+    } else {
+      onAddNew(name);
+    }
+    setShowModal(false);
+  }
   
   return (
     <View style={styles.container}>
@@ -62,14 +89,24 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
             {filteredRecords.map((op: Option, i: number) => {
               const isSelected = selectedOption === op.name;
               return (
-                <View style={isSelected ? [styles.listItem, { backgroundColor: selectedOptionColor }] : styles.listItem} key={i} >
+                <View style={isSelected ? [styles.listItem, { backgroundColor: selectedOptionColor }] : styles.listItem} key={i} darkColor={'rgba(255, 255, 255, 0.08)'} >
                   <TouchableOpacity onPress={() => onSelect(op)} style={styles.labelWrapper} activeOpacity={1}>
                     <RadioButton size={24} style={styles.radioIcon} isSelected={isSelected} />
                     <Text style={styles.optionLabel}>{op.name}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => createTwoButtonAlert(op.name)}>
-                    <Text style={styles.closeIcon}>+</Text>
-                  </TouchableOpacity>
+                  <Menu style={styles.moreOptions}>
+                    <MenuTrigger>
+                      <Icon name="md-ellipsis-vertical" type='Ionicons' size={20} />
+                    </MenuTrigger>
+                    <MenuOptions optionsContainerStyle={{ padding: 5, shadowColor: optionsContainerShadowColor, backgroundColor: optionsContainerBackgroundColor }}>
+                      <MenuOption onSelect={() => editOption(op)}>
+                        <Text>Edit</Text>
+                      </MenuOption>
+                      <MenuOption onSelect={() => createTwoButtonAlert(op.name)} >
+                        <Text style={{color: 'red'}}>Delete</Text>
+                      </MenuOption>
+                    </MenuOptions>
+                  </Menu>
                 </View>
               )}
             )}
@@ -90,14 +127,11 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
       <FloatingButton onPress={() => setShowModal(true)} label={'+'} style={{ bottom: 40, right: 20, backgroundColor: tintButton }}/>
       { showModal && (
         <InputModal
-          title={`Add New ${recordType}`}
-          initialValue={''}
+          title={optionToEdit ? `Edit ${recordType}`: `Add New ${recordType}`}
+          initialValue={optionToEdit?.name || ''}
           placeholder={recordType}
-          onCancel={() => setShowModal(false)}
-          onSubmit={(text) => {
-            onAddNew(text)
-            setShowModal(false)
-          }}
+          onCancel={onCancelModal}
+          onSubmit={onSubmitModal}
         />
       )}
     </View>
@@ -137,13 +171,11 @@ const styles = StyleSheet.create({
     marginVertical: 'auto',
     paddingLeft: 16,
   },
-  closeIcon: {
-    paddingHorizontal: 10,
+  moreOptions: {
+    width: 30,
     height: 50,
-    textAlignVertical: 'center',
-    fontSize: 30,
-    color: 'red',
-    transform: [{ rotateZ: '45deg' }]
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   optionLabel: {
     paddingHorizontal: 16,
