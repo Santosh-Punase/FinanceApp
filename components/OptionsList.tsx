@@ -6,8 +6,8 @@ import Layout from "../constants/Layout";
 import { Option } from "../store/type";
 import { useTheme } from "../theme";
 import { FloatingButton } from "./FloatingButton";
+import { InputModal } from "./Modals/InputModal";
 import { NoRecord } from "./NoRecord";
-import { OverlayModal } from "./OverlayModal";
 import { RadioButton } from "./RadioButton";
 import { View, Text } from "./Themed";
 
@@ -88,17 +88,18 @@ export function OptionsList({ isLoading, selectedOption, searchString, filteredR
         )}
       </ScrollView>
       <FloatingButton onPress={() => setShowModal(true)} label={'+'} style={{ bottom: 40, right: 20, backgroundColor: tintButton }}/>
-      <OverlayModal
-        title={`Add New ${recordType}`}
-        placeholder={recordType}
-        submitText='Save'
-        visible={showModal}
-        onSubmit={(text) => {
-          onAddNew(text)
-          setShowModal(false)
-        }}
-        onCancel={() => setShowModal(false)}
-      />
+      { showModal && (
+        <InputModal
+          title={`Add New ${recordType}`}
+          initialValue={''}
+          placeholder={recordType}
+          onCancel={() => setShowModal(false)}
+          onSubmit={(text) => {
+            onAddNew(text)
+            setShowModal(false)
+          }}
+        />
+      )}
     </View>
   );
 }
