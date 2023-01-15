@@ -4,7 +4,6 @@ import Layout from "../../constants/Layout";
 export const modalStyles = StyleSheet.create({
   modalBackdrop: {
     height: Layout.window.height,
-    backgroundColor: "black",
     opacity: 0.8,
   },
   screenOverlay: {

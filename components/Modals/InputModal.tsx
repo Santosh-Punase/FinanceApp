@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, Modal, Platform, KeyboardAvoidingView, Animated } from "react-native";
+import Colors from "../../constants/Colors";
 
 import { Icon } from "../Icon";
 import { Input } from "../Input";
@@ -9,6 +10,7 @@ import { ModalFooter } from "./ModalFooter";
 
 type Props = {
   title: string;
+  required?: boolean;
   initialValue?: string;
   onSubmit: (text: string) => void;
   placeholder?: string
@@ -16,7 +18,7 @@ type Props = {
   onChangeText?: (text: string) => void;
 }
 
-export function InputModal({ title, onSubmit, initialValue = '', onCancel, onChangeText, placeholder }: Props) {
+export function InputModal({ title, onSubmit, initialValue = '', required=true, onCancel, onChangeText, placeholder }: Props) {
   const [value, setValue] = useState<string>(initialValue);
   const [errored, setErrored] = useState<boolean>(false);
   const [animation] = useState(new Animated.Value(0));
@@ -48,8 +50,13 @@ export function InputModal({ title, onSubmit, initialValue = '', onCancel, onCha
     if(errored) {
       startShake();
       return;
-    } 
-		onSubmit(value);
+    }
+    if(required && !value) {
+      setErrored(true);
+      startShake();
+      return;
+    }
+    onSubmit(value);
     setValue('');
 	}
 
@@ -64,32 +71,34 @@ export function InputModal({ title, onSubmit, initialValue = '', onCancel, onCha
       animationType="slide"
       visible
       onRequestClose={onCancel}>
-      <View style={modalStyles.modalBackdrop}>
+      <View style={modalStyles.modalBackdrop} lightColor={Colors.dark.background} darkColor={Colors.light.background}>
         <KeyboardAvoidingView style={modalStyles.screenOverlay} behavior={Platform.OS === "android" ? 'position' : 'height'}>
           <View style={modalStyles.dialogPrompt}>
-            <View style={styles.titleWrapper}>
-              <Text style={styles.title}>
-                {title}
-              </Text>
-              <TouchableOpacity onPress={onCancel}>
-                <Icon type="AntDesign" name="close" size={22} />
-              </TouchableOpacity>
-            </View>
+            <View style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10, }} >
+              <View style={styles.titleWrapper}>
+                <Text style={styles.title}>
+                  {title}
+                </Text>
+                <TouchableOpacity onPress={onCancel}>
+                  <Icon type="AntDesign" name="close" size={22} />
+                </TouchableOpacity>
+              </View>
 
-            <View style={{ paddingVertical: 10 }}>
-              <Animated.View style={{ transform: [{ translateX: animation }] }}>
-                <Input
-                  value={value}
-                  autoFocus
-                  placeholder={placeholder}
-                  style={[errored ? { ...styles.textInput, borderColor: 'red' } : styles.textInput]}
-                  onChangeText={_onChangeText}
-                  onSubmitEditing={_onSubmit}
-                />
-              </Animated.View>
+              <View style={{ paddingVertical: 10 }}>
+                <Animated.View style={{ transform: [{ translateX: animation }] }}>
+                  <Input
+                    value={value}
+                    autoFocus
+                    placeholder={placeholder}
+                    style={[errored ? { ...styles.textInput, borderColor: 'red' } : styles.textInput]}
+                    onChangeText={_onChangeText}
+                    onSubmitEditing={_onSubmit}
+                  />
+                </Animated.View>
+              </View>
+              
+              <ModalFooter cancelText={'cancel'} submitText={'save'} onSubmit={_onSubmit} onCancel={_onCancel} />
             </View>
-            
-            <ModalFooter cancelText={'cancel'} submitText={'save'} onSubmit={_onSubmit} onCancel={_onCancel} />
           </View>
         </KeyboardAvoidingView>
       </View>

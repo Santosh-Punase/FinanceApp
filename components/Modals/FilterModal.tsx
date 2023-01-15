@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, Modal } from "react-native";
+import Colors from "../../constants/Colors";
 
 import { Icon } from "../Icon";
 import { View, Text } from "../Themed";
@@ -25,7 +26,7 @@ export function FilterModal({ title, visible, cancelText='Clear All', submitText
       animationType="slide"
       visible={visible}
       onRequestClose={onClose}>
-      <View style={modalStyles.modalBackdrop}>
+      <View style={modalStyles.modalBackdrop} lightColor={Colors.dark.background} darkColor={Colors.light.background}>
         <View style={modalStyles.screenOverlay}>
           <View style={modalStyles.dialogPrompt}>
             <View style={styles.titleWrapper}>
