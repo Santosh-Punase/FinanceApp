@@ -18,14 +18,14 @@ export function NoRecord({ header, subHeader, onCancel, cancelText = 'Clear All'
       <Text style={styles.noResultHeader}>{header}</Text>
       <Text style={styles.noResultSubHeader}>{subHeader}</Text>
       { onCancel && (
-        <TouchableOpacity
-          style={styles.button}
-          onPress={onCancel}>
-            <Icon type="AntDesign" name="close" style={{ marginRight: 10, color: 'blue' }} size={18} />
-          <Text
-            style={styles.cancelButtonText}>
-            {cancelText}
-          </Text>
+        <TouchableOpacity onPress={onCancel}>
+          <View style={styles.button}>
+            <Icon type="AntDesign" name="close" style={{ marginRight: 10, }} size={18} />
+            <Text
+              style={styles.cancelButtonText}>
+              {cancelText}
+            </Text>
+          </View>
         </TouchableOpacity>
       )}
     </View>
@@ -57,15 +57,12 @@ const styles = StyleSheet.create({
 		}),
 		margin: 10,
 		padding: 10,
-    backgroundColor: '#fff',
-    borderColor: 'blue',
     borderWidth: 1,
     borderRadius: 8,
 	},
   cancelButtonText: {
 		fontSize: 16,
 		fontWeight: "500",
-		color: "blue",
     width: 100,
     textTransform: 'uppercase',
 	},
