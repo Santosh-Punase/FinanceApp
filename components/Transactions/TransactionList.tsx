@@ -7,7 +7,7 @@ import { getCalendars } from 'expo-localization';
 import Layout from '../../constants/Layout';
 import { Text, View } from '../Themed';
 import { Card } from '../Card';
-import { dummyData } from './dummyData';
+// import { dummyData } from './dummyData';
 import useStore from '../../hooks/useStore';
 import { Transaction } from '../../store/type';
 import { parseObject } from '../../utils';
@@ -27,6 +27,7 @@ export default function TransactionList() {
   // @ts-ignore
   const parsedTransactionList: Transaction[] = parseObject(transactionList)?.sort((a,b) => b.createdAt - a.createdAt) || [];
   const [selectedFilters, setSelectedFilters] = useState(filterInitialState)
+  const isFilterSelected = selectedFilters.TRANSACTION_TYPE !== '' || selectedFilters.CATEGORY.length || selectedFilters.PAYMENT_MODE.length
 
   useFocusEffect(
     useCallback(() => {
@@ -86,13 +87,19 @@ export default function TransactionList() {
             </React.Fragment>
           )})
         }
-        { filteredList.length === 0 && (
-          <NoRecord
-            header='No Transactions Found'
-            subHeader='Try removing filters'
-            onCancel={() => setSelectedFilters(filterInitialState)}
-          />
-        )}
+        { filteredList.length === 0 ?
+            isFilterSelected ? 
+              <NoRecord
+                header={'No Transactions Found'}
+                subHeader={'Try removing filters'}
+                onCancel={() => setSelectedFilters(filterInitialState)}
+              />
+              : <NoRecord
+                header={'No Transactions Yet'}
+                subHeader={'All your transactions will apear here'}
+              />
+          : null
+        }
       </ScrollView>  
     </>
   );

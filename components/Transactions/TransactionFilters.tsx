@@ -142,7 +142,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
             { isCategoryLoading
             ? <ActivityIndicator size={'large'} style={{ height: OPTIONS_WRAPPER_HEIGHT }} />
             : parsedCategories.map((c, i)=> (
-              <TouchableOpacity style={styles.filterOptionRow} activeOpacity={1} onPress={() => _OnMultiFilterSelect(c.name)} key={c.name}>
+              <TouchableOpacity style={styles.filterOptionRow} activeOpacity={1} onPress={() => _OnMultiFilterSelect(c.name)} key={`${c.name}_${i}`}>
                 <Checkbox isSelected={options.includes(c.name)} />
                 <Text style={styles.filterOption}>{c.name}</Text>
               </TouchableOpacity>
@@ -162,7 +162,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
             { isPModeLoading
             ? <ActivityIndicator size={'large'} style={{ height: OPTIONS_WRAPPER_HEIGHT }} />
             : parsedPModes.map((p, i)=> (
-              <TouchableOpacity style={styles.filterOptionRow} activeOpacity={1} onPress={() => _OnMultiFilterSelect(p.name)} key={p.name}>
+              <TouchableOpacity style={styles.filterOptionRow} activeOpacity={1} onPress={() => _OnMultiFilterSelect(p.name)} key={`${p.name}_${i}`}>
                 <Checkbox isSelected={options.includes(p.name)} />
                 <Text style={styles.filterOption}>{p.name}</Text>
               </TouchableOpacity>

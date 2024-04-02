@@ -36,15 +36,15 @@ const styles = StyleSheet.create({
   noResult: {
     height: 300,
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 80,
   },
   noResultHeader: {
     fontSize: 22,
   },
   noResultSubHeader: {
     fontSize: 14,
-    marginTop: 10,
+    marginVertical: 10,
   },
   button: {
 		flexDirection: "row",
