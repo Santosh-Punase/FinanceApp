@@ -11,7 +11,7 @@ import { defaultCategories, defaultPaymentModes } from './constants/Store';
 import { stringifyObject } from './utils';
 import { Theme } from './store/type';
 import { ThemeContext } from './theme';
-
+import "react-native-gesture-handler";
 
 export default function App() {
   const [theme, setTheme] = useState<Theme>(Theme.DEFAULT);
