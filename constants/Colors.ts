@@ -5,7 +5,9 @@ const primary = 'rgba(17, 60, 214, 1)';
 export default {
   light: {
     text: '#000',
+    invertedText: '#fff',
     background: '#fff',
+    invertedBackground: '#000',
     tint: tintColorLight,
     tabIconDefault: '#ccc',
     tintButton: primary,
@@ -19,7 +21,9 @@ export default {
   },
   dark: {
     text: '#fff',
+    invertedText: '#000',
     background: '#000',
+    invertedBackground: '#fff',
     tint: tintColorDark,
     tabIconDefault: '#ccc',
     tintButton: tintColorLight,
