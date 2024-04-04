@@ -27,7 +27,7 @@ type OptionsListProps<T> = {
   updateOptions: (options: T[]) => void
 }
 
-export function OptionsList<T>({ isLoading, selectedOption, searchString, filteredRecords, onSelect, onAddNew, onEdit, recordPluralName, allRecords, updateOptions, recordType }: OptionsListProps<T>) {
+export function OptionList<T>({ isLoading, selectedOption, searchString, filteredRecords, onSelect, onAddNew, onEdit, recordPluralName, allRecords, updateOptions, recordType }: OptionsListProps<T>) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const currentTheme:ColorSchemeName = useTheme();
   const selectedOptionColor = Colors[currentTheme].selectedOption;

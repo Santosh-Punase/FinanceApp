@@ -14,9 +14,10 @@ import { Input } from '../Input';
 export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
 
   const entryInitialState: Transaction = {
+    id: Math.random(),
     transactionType: route?.params?.transactionType || 'Cash-In',
-    category: '',
-    paymentMode: '',
+    category: undefined,
+    paymentMode: undefined,
     remark: '',
     amount: '',
     createdAt: 0,
@@ -26,16 +27,16 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
   // @ts-ignore
   const parsedTransactionList: Transaction[] = transactionList !== '' ? parseObject(transactionList) : [];
 
-  const updateEntry = (key: keyof Transaction, value: string ) => {
+  const updateEntry = (key: keyof Transaction, value: any ) => {
     setEntry({ ...entry, [key]: value })
   }
 
   useEffect(() => {
-    updateEntry('category', route?.params?.category || '');
+    updateEntry('category', route?.params?.category);
   }, [route?.params?.category]);
 
   useEffect(() => {
-    updateEntry('paymentMode', route?.params?.paymentMode || '');
+    updateEntry('paymentMode', route?.params?.paymentMode);
   }, [route?.params?.paymentMode]);
 
   const changeTransactionType = (transactionType: TransactionType) => {
@@ -55,9 +56,9 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
   }
 
   const onSaveAndAddNewClick = () => {
-    navigation.setParams({ category: '', paymentMode: '' });
     saveEntry();
-    setEntry({ ...entryInitialState, transactionType: entry.transactionType });
+    navigation.setParams({ category: undefined, paymentMode: undefined });
+    setEntry({ ...entryInitialState, id: Math.random(), transactionType: entry.transactionType });
   }
 
   return (
@@ -96,7 +97,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
             placeholder='Category'
             label={'Category'}
             value={entry?.category}
-            onPress={() => navigation.navigate('Options', { header: 'Choose Category', category: entry.category, paymentMode: entry.paymentMode, dropdownLabel: 'categories' })}
+            onPress={() => navigation.navigate('CategoryOptionsScreen', { header: 'Choose Category', category: entry.category, paymentMode: entry.paymentMode })}
           />
           <Dropdown
             key='Payment Mode'
@@ -104,7 +105,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
             placeholder='Payment Mode'
             label={'Payment Mode'}
             value={entry?.paymentMode}
-            onPress={() => navigation.navigate('Options', { header: 'Choose Payment Mode', category: entry.category, paymentMode: entry.paymentMode, dropdownLabel: 'paymentModes' })}
+            onPress={() => navigation.navigate('PaymentOptionsScreen', { header: 'Choose Payment Mode', category: entry.category, paymentMode: entry.paymentMode })}
           />
         </>
       )}
