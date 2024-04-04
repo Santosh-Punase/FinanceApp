@@ -32,3 +32,7 @@ export const initialize = async (key: StoreKey, defaultValue: string) => {
     setValue(key, defaultValue);
   }
 }
+
+export const clearStorage = async () => {
+  await AsyncStorage.clear()
+}
