@@ -2,6 +2,13 @@ export type StoreKey = 'categories' | 'paymentModes' | 'transactionList' | 'user
 
 export type DropdownLabel = 'categories' | 'paymentModes';
 
+export type Category = {
+  name: string,
+  timestamp: Date | null,
+  budget: number,
+  expense: number
+}
+
 export enum Theme {
   DEFAULT = 'default',
   LIGHT = 'light',
