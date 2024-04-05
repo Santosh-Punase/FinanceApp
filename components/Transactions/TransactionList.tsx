@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import dayjs from 'dayjs';
-import { getCalendars } from 'expo-localization';
+// import { getCalendars } from 'expo-localization';
 
 import Layout from '../../constants/Layout';
 import { Text, View } from '../Themed';
@@ -15,9 +15,9 @@ import TransactionFilters, { SelectedFilters } from './TransactionFilters';
 import { NoRecord } from '../NoRecord';
 
 export const filterInitialState: SelectedFilters = {
-  TRANSACTION_TYPE: '',
-  CATEGORY: [],
-  PAYMENT_MODE: [],
+  transactionType: '',
+  category: [],
+  paymentMode: [],
 }
 
 const LIST_HEIGHT = Layout.window.height - 150;
@@ -27,7 +27,7 @@ export default function TransactionList() {
   // @ts-ignore
   const parsedTransactionList: Transaction[] = parseObject(transactionList)?.sort((a,b) => b.createdAt - a.createdAt) || [];
   const [selectedFilters, setSelectedFilters] = useState(filterInitialState)
-  const isFilterSelected = selectedFilters.TRANSACTION_TYPE !== '' || selectedFilters.CATEGORY.length || selectedFilters.PAYMENT_MODE.length
+  const isFilterSelected = selectedFilters.transactionType !== '' || selectedFilters.category.length || selectedFilters.paymentMode.length
 
   useFocusEffect(
     useCallback(() => {
@@ -36,9 +36,9 @@ export default function TransactionList() {
   );
 
   const filteredList = parsedTransactionList.filter((item: Transaction, i: number) => (
-    (selectedFilters.TRANSACTION_TYPE === '' || item.transactionType === selectedFilters.TRANSACTION_TYPE) &&
-    (selectedFilters.CATEGORY.length === 0 || selectedFilters.CATEGORY.includes(item.category)) &&
-    (selectedFilters.PAYMENT_MODE.length === 0 || selectedFilters.PAYMENT_MODE.includes(item.paymentMode))
+    (selectedFilters.transactionType === '' || item.transactionType === selectedFilters.transactionType) &&
+    (selectedFilters.category.length === 0 || selectedFilters.category.includes(item.category?.id || -1)) &&
+    (selectedFilters.paymentMode.length === 0 || selectedFilters.paymentMode.includes(item.paymentMode?.id || -1))
   ));
 
   return (
@@ -64,18 +64,19 @@ export default function TransactionList() {
                     <View style={styles.listItemRow_1}>
                       {item.category && (
                         <View lightColor='rgba(44, 44, 214, 0.2)' darkColor='rgba(199, 10, 130, 0.3)' style={{ marginRight: 10, borderRadius: 8 }}>
-                          <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.category}</Text>
+                          <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.category.name}</Text>
                           {/* <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(199, 10, 130, 1)'>{item.category}</Text> */}
                         </View>
                       )}
                       {item.paymentMode && (
                         <View lightColor='rgba(79, 79, 79, 0.2)' darkColor='rgba(212, 112, 10, 0.3)' style={{ borderRadius: 8 }}>
-                          <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.paymentMode}</Text>
+                          <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.paymentMode.name}</Text>
                           {/* <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(212, 112, 10, 1)'>{item.paymentMode}</Text> */}
                         </View>
                       )}
                     </View>
-                    <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text>
+                    <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | HH:mm`)}`}</Text>
+                    {/* <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text> */}
                   </View>
                   <View style={styles.amount}>
                     {item.transactionType === 'Cash-In' && <Text style={styles.credit}>{item.amount

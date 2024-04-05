@@ -33,9 +33,9 @@ export type PaymentModeOption = {
 }
 
 export type TransactionType = 'Cash-In' | 'Cash-Out';
-export type DropdownOption = { id: number, name: string } | undefined; 
-export type TransactionCategory = DropdownOption; 
-export type TransactionPaymentMode = DropdownOption;
+export type DropdownOption = { id: number, name: string }; 
+export type TransactionCategory = DropdownOption | undefined; 
+export type TransactionPaymentMode = DropdownOption | undefined;
 
 export type Transaction = {
   id: number;

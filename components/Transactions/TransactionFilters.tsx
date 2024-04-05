@@ -6,59 +6,62 @@ import { Text, View } from '../Themed';
 import { FilterModal } from '../Modals/FilterModal';
 import { Checkbox, RadioButton } from '../RadioButton';
 import useStore from '../../hooks/useStore';
-import { Option } from '../../store/type';
+import { CategoryOption, DropdownOption, PaymentModeOption } from '../../store/type';
 import { parseObject } from '../../utils';
 import Layout from '../../constants/Layout';
 import { Icon } from '../Icon';
 
 export type FilterType = 'TRANSACTION_TYPE' | 'CATEGORY' | 'PAYMENT_MODE' | 'NONE';
+type SelectedFilter = 'transactionType' | 'category' | 'paymentMode';
 export type SelectedFilters = {
-  TRANSACTION_TYPE: string,
-  CATEGORY: string[]
-  PAYMENT_MODE: string[]
+  transactionType: string,
+  category: number[]
+  paymentMode: number[]
 }
 
 interface Props {
   selectedFilters : SelectedFilters;
-  setFilter: (filter: FilterType, selectedOptions: string | string[]) => void;
+  setFilter: (filter: SelectedFilter, selectedOptions: string | number[]) => void;
 }
 
 const OPTIONS_WRAPPER_HEIGHT = Layout.window.height * 0.4;
 
 export default function TransactionFilters({ selectedFilters, setFilter }: Props) {
   const [visibleModal, setVisibleModal] = useState<FilterType>('NONE');
-  const [options, setOptions] = useState<string[]>([]);
+  const [options, setOptions] = useState<number[]>([]);
   const [option, setOption] = useState<string>('');
 
   const [availableCategories, , isCategoryLoading] = useStore('categories');
   const [availablePModes, , isPModeLoading] = useStore('paymentModes');
 
   // @ts-ignore
-  const parsedCategories: Option[] = availableCategories !== '' ? parseObject(availableCategories) : [];
+  const parsedCategories: CategoryOption[] = availableCategories !== '' ? parseObject(availableCategories) : [];
 
   // @ts-ignore
-  const parsedPModes: Option[] = availablePModes !== '' ? parseObject(availablePModes) : [];
+  const parsedPModes: PaymentModeOption[] = availablePModes !== '' ? parseObject(availablePModes) : [];
 
   useEffect(()=> {
     if(visibleModal === 'NONE') {
       setOptions([]);
       setOption('');
     } else if(visibleModal === 'TRANSACTION_TYPE') {
-      setOption(selectedFilters.TRANSACTION_TYPE)
-    } else (
-      setOptions(selectedFilters[visibleModal])
-    )
+      setOption(selectedFilters.transactionType)
+    } else if(visibleModal === 'CATEGORY') {
+      setOptions(selectedFilters.category)
+    }else if(visibleModal === 'PAYMENT_MODE') {
+      setOptions(selectedFilters.paymentMode)
+    }
   }, [visibleModal]);
 
   const _OnFilterSelect = (op: string) => {
     setOption(op)
   }
 
-  const _OnMultiFilterSelect = (op: string) => {
-    if(options.includes(op)) {
-      setOptions(options.filter(o => o!== op));
+  const _OnMultiFilterSelect = (op: DropdownOption) => {
+    if(options.includes(op.id)) {
+      setOptions(options.filter(o => o!== op.id));
     } else {
-      setOptions([ ...options, op]);
+      setOptions([ ...options, op.id]);
     }
   }
 
@@ -69,12 +72,12 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
 
   const onCloseModal = () => setVisibleModal('NONE');
 
-  const onApplyFilter = (filters: string | string[]) => {
-    setFilter(visibleModal, filters);
+  const onApplyFilter = (filter: SelectedFilter, filters: string | number[]) => {
+    setFilter(filter, filters);
     setVisibleModal('NONE');
   }
 
-  const isFilterSelected = selectedFilters.CATEGORY.length > 0 || selectedFilters.PAYMENT_MODE.length > 0 || selectedFilters.TRANSACTION_TYPE !== '';
+  const isFilterSelected = selectedFilters.category.length > 0 || selectedFilters.paymentMode.length > 0 || selectedFilters.transactionType !== '';
 
   return (
     <ScrollView contentContainerStyle={styles.filterRow} horizontal showsHorizontalScrollIndicator={false}>
@@ -84,31 +87,31 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
       </View>
       <Dropdown
         key='transaction_type'
-        style={selectedFilters.TRANSACTION_TYPE ? [styles.filterSelect, styles.filterSelected] : styles.filterSelect}
+        style={selectedFilters.transactionType ? [styles.filterSelect, styles.filterSelected] : styles.filterSelect}
         iconStyle={{ size: 15 }}
         placeholder='Transaction Type'
-        label={selectedFilters.TRANSACTION_TYPE ? '1' : ''}
+        label={selectedFilters.transactionType ? '1' : ''}
         labelStyles={styles.filterApplied}
-        value={selectedFilters.TRANSACTION_TYPE}
+        value={selectedFilters.transactionType}
         onPress={() => setVisibleModal('TRANSACTION_TYPE')}
       />
       <Dropdown
         key='category'
-        style={selectedFilters.CATEGORY.length !== 0 ? [styles.filterSelect, styles.filterSelected] : styles.filterSelect}
+        style={selectedFilters.category.length !== 0 ? [styles.filterSelect, styles.filterSelected] : styles.filterSelect}
         iconStyle={{ size: 15 }}
         placeholder='Category'
-        value={selectedFilters.CATEGORY.length !== 0  ? 'Category' : ''}
-        label={selectedFilters.CATEGORY.length !== 0  ? `${selectedFilters.CATEGORY.length}` : ''}
+        value={selectedFilters.category.length !== 0  ? 'Category' : ''}
+        label={selectedFilters.category.length !== 0  ? `${selectedFilters.category.length}` : ''}
         labelStyles={styles.filterApplied}
         onPress={() => setVisibleModal('CATEGORY')}
       />
       <Dropdown
         key='pMode'
-        style={selectedFilters.PAYMENT_MODE.length !== 0 ? [styles.filterSelect, styles.filterSelected] : styles.filterSelect}
+        style={selectedFilters.paymentMode.length !== 0 ? [styles.filterSelect, styles.filterSelected] : styles.filterSelect}
         iconStyle={{ size: 15 }}
         placeholder='Payment Mode'
-        value={selectedFilters.PAYMENT_MODE.length !== 0  ? 'Payment Mode' : ''}
-        label={selectedFilters.PAYMENT_MODE.length !== 0  ? `${selectedFilters.PAYMENT_MODE.length}` : ''}
+        value={selectedFilters.paymentMode.length !== 0  ? 'Payment Mode' : ''}
+        label={selectedFilters.paymentMode.length !== 0  ? `${selectedFilters.paymentMode.length}` : ''}
         labelStyles={styles.filterApplied}
         onPress={() => setVisibleModal('PAYMENT_MODE')}
       />
@@ -116,7 +119,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
         title='Set Filter For Transaction Type'
         visible={visibleModal === 'TRANSACTION_TYPE'}
         onClose={onCloseModal}
-        onSubmit={() => onApplyFilter(option)}
+        onSubmit={() => onApplyFilter('transactionType', option)}
         onCancel={onClearAll}
       >
         <View style={styles.optionsWrapper}>
@@ -134,7 +137,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
         title='Set Filter For Category'
         visible={visibleModal === 'CATEGORY'}
         onClose={onCloseModal}
-        onSubmit={() => onApplyFilter(options)}
+        onSubmit={() => onApplyFilter('category', options)}
         onCancel={onClearAll}
       >
         <View style={styles.optionsWrapper}>
@@ -142,8 +145,8 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
             { isCategoryLoading
             ? <ActivityIndicator size={'large'} style={{ height: OPTIONS_WRAPPER_HEIGHT }} />
             : parsedCategories.map((c, i)=> (
-              <TouchableOpacity style={styles.filterOptionRow} activeOpacity={1} onPress={() => _OnMultiFilterSelect(c.name)} key={`${c.name}_${i}`}>
-                <Checkbox isSelected={options.includes(c.name)} />
+              <TouchableOpacity style={styles.filterOptionRow} activeOpacity={1} onPress={() => _OnMultiFilterSelect(c)} key={`${c.name}_${i}`}>
+                <Checkbox isSelected={options.includes(c.id)} />
                 <Text style={styles.filterOption}>{c.name}</Text>
               </TouchableOpacity>
             ))}
@@ -154,7 +157,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
         title='Set Filter For Payment Mode'
         visible={visibleModal === 'PAYMENT_MODE'}
         onClose={onCloseModal}
-        onSubmit={() => onApplyFilter(options)}
+        onSubmit={() => onApplyFilter('paymentMode', options)}
         onCancel={onClearAll}
       >
         <View style={styles.optionsWrapper}>
@@ -162,8 +165,8 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
             { isPModeLoading
             ? <ActivityIndicator size={'large'} style={{ height: OPTIONS_WRAPPER_HEIGHT }} />
             : parsedPModes.map((p, i)=> (
-              <TouchableOpacity style={styles.filterOptionRow} activeOpacity={1} onPress={() => _OnMultiFilterSelect(p.name)} key={`${p.name}_${i}`}>
-                <Checkbox isSelected={options.includes(p.name)} />
+              <TouchableOpacity style={styles.filterOptionRow} activeOpacity={1} onPress={() => _OnMultiFilterSelect(p)} key={`${p.name}_${i}`}>
+                <Checkbox isSelected={options.includes(p.id)} />
                 <Text style={styles.filterOption}>{p.name}</Text>
               </TouchableOpacity>
             ))}

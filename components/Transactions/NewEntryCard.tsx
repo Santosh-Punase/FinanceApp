@@ -45,7 +45,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
 
   const saveEntry = () => {
     const newEntry: Transaction = {
-      ...entry, createdAt: Date.now()
+      ...entry, id: Math.random(), createdAt: Date.now()
     };
     setTransactionList(stringifyObject([ ...parsedTransactionList, newEntry]));
   }

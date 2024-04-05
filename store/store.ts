@@ -33,6 +33,3 @@ export const initialize = async (key: StoreKey, defaultValue: string) => {
   }
 }
 
-export const clearStorage = async () => {
-  await AsyncStorage.clear()
-}
