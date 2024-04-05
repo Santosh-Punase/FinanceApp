@@ -4,20 +4,25 @@ import EditScreenInfo from '../components/EditScreenInfo';
 import { FloatingButton } from '../components/FloatingButton';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
+import { TransactionType } from '../store/type';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+  const addNewTransaction = (transactionType: TransactionType ) => {
+    navigation.navigate('AddNewTransaction', { category: undefined, paymentMode: undefined, transactionType })
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <EditScreenInfo path="/screens/HomeScreen.tsx" />
       <FloatingButton
-        onPress={() => navigation.navigate('AddNewTransaction', { category: undefined, paymentMode: undefined, transactionType: 'Cash-In' })}
+        onPress={() => addNewTransaction('Cash-In')}
         label={'+'}
         style={{ backgroundColor: 'green', bottom: 100, }}
       />
       <FloatingButton
-        onPress={() => navigation.navigate('AddNewTransaction', { category: undefined, paymentMode: undefined, transactionType: 'Cash-Out' })}
+        onPress={() => addNewTransaction('Cash-Out')}
         label={'+'}
         style={{ backgroundColor: 'red', bottom: 20, }}
       />
