@@ -130,7 +130,8 @@ const styles = StyleSheet.create({
   },
   listItem: {
     borderRadius: 0,
-    paddingVertical: 0,
+    paddingTop: 0,
+    paddingBottom: 1,
   },
   listItemWrapper: {
     flexDirection: 'row',
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   transactionTime: {
-    // color: 'rgba(0,0,0, 0.6)',
+    color: 'rgba(0,0,0, 0.6)',
   },
   amount: {
     width: '30%' ,

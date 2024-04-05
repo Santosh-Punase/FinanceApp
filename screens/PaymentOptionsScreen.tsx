@@ -15,7 +15,7 @@ import { RadioButton } from '../components/RadioButton';
 import Layout from '../constants/Layout';
 import { View, Text } from '../components/Themed';
 import { useTheme } from '../theme';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import Colors from '../constants/Colors';
 
 export default function PaymentOptionsScreen({ navigation, route }: PaymentOptionsScreenProps) {
 
