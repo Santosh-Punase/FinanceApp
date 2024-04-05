@@ -10,6 +10,8 @@ import { User } from '../store/type';
 import { parseObject, stringifyObject } from '../utils';
 import { ThemeSetting } from '../components/ThemeSetting';
 import { Icon } from '../components/Icon';
+import { clearStorage, initialize, removeValue } from '../store/store';
+import { defaultCategories, defaultPaymentModes } from '../constants/Store';
 
 export default function SettingScreen() {
   const [user, setUser] = useStore('user');
@@ -30,6 +32,18 @@ export default function SettingScreen() {
         { text: "OK", onPress: () => console.log("OK Pressed") }
       ]
     )
+  }
+
+  const onResetCategoryAndPaymentModes = async() => {
+    removeValue('categories');
+    removeValue('paymentModes');
+    initialize('categories', stringifyObject(defaultCategories));
+    initialize('paymentModes', stringifyObject(defaultPaymentModes));
+  }
+
+  const onResetTransactionList = async() => {
+    removeValue('transactionList');
+    initialize('transactionList', stringifyObject([]));
   }
 
   return (
@@ -57,6 +71,14 @@ export default function SettingScreen() {
           <Text>App Version</Text>
           <Text>0.0.1</Text>
         </View>
+        <TouchableOpacity onPress={onResetCategoryAndPaymentModes} style={[{ flexDirection: 'row', marginBottom: 10 }]}>
+          <Icon type="Ionicons" name='refresh-circle' size={30} />
+          <Text style={styles.label}>Reset Category and Payment modes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onResetTransactionList} style={[{ flexDirection: 'row', marginBottom: 10 }]}>
+          <Icon type="Ionicons" name='refresh-circle' size={30} />
+          <Text style={styles.label}>Reset transaction list</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={onLogoutClick} style={[{ flexDirection: 'row' }]}>
           <Icon type="AntDesign" name='logout' size={30} />
           <Text style={styles.label}>Log-out</Text>

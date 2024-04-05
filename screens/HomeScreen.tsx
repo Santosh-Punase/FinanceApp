@@ -1,27 +1,28 @@
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { FloatingButton } from '../components/FloatingButton';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import { clearStorage } from '../store/store';
+import { TransactionType } from '../store/type';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+  const addNewTransaction = (transactionType: TransactionType ) => {
+    navigation.navigate('AddNewTransaction', { category: undefined, paymentMode: undefined, transactionType })
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <EditScreenInfo path="/screens/HomeScreen.tsx" />
-      <Pressable onPress={() => clearStorage()}>
-        <Text>clear storage</Text>
-      </Pressable>
       <FloatingButton
-        onPress={() => navigation.navigate('AddNewTransaction', { category: '', paymentMode: '', transactionType: 'Cash-In' })}
+        onPress={() => addNewTransaction('Cash-In')}
         label={'+'}
         style={{ backgroundColor: 'green', bottom: 100, }}
       />
       <FloatingButton
-        onPress={() => navigation.navigate('AddNewTransaction', { category: '', paymentMode: '', transactionType: 'Cash-Out' })}
+        onPress={() => addNewTransaction('Cash-Out')}
         label={'+'}
         style={{ backgroundColor: 'red', bottom: 20, }}
       />

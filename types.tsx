@@ -6,7 +6,7 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { DropdownLabel, TransactionType } from './store/type';
+import { TransactionCategory, TransactionPaymentMode, TransactionType } from './store/type';
 
 declare global {
   namespace ReactNavigation {
@@ -17,8 +17,9 @@ declare global {
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
-  AddNewTransaction: { category: string, paymentMode: string, transactionType?: TransactionType } | undefined;
-  Options: { header: string, category: string, paymentMode: string, dropdownLabel: DropdownLabel };
+  AddNewTransaction: { category: TransactionCategory, paymentMode: TransactionPaymentMode, transactionType?: TransactionType } | undefined;
+  CategoryOptionsScreen: { header: string, category: TransactionCategory, paymentMode: TransactionPaymentMode };
+  PaymentOptionsScreen: { header: string, category: TransactionCategory, paymentMode: TransactionPaymentMode };
   NotFound: undefined;
 };
 
@@ -40,4 +41,5 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 
 export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Root">;
 export type AddNewScreenProps = NativeStackScreenProps<RootStackParamList, "AddNewTransaction">;
-export type OptionsScreenProps = NativeStackScreenProps<RootStackParamList, "Options">;
+export type CategoryOptionsScreenProps = NativeStackScreenProps<RootStackParamList, "CategoryOptionsScreen">;
+export type PaymentOptionsScreenProps = NativeStackScreenProps<RootStackParamList, "PaymentOptionsScreen">;

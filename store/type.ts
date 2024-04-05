@@ -15,13 +15,34 @@ export type Option = {
   lastUsedAt?: any;
 };
 
+export type CategoryOption = {
+  id: number;
+  name: string;
+  createdAt: number | null;
+  updatedAt: number | null;
+  budget: number;
+  expense: number;
+}
+
+export type PaymentModeOption = {
+  id: number;
+  name: string;
+  createdAt: number | null;
+  updatedAt: number | null;
+  lastUsedAt: number;
+}
+
 export type TransactionType = 'Cash-In' | 'Cash-Out';
+export type DropdownOption = { id: number, name: string }; 
+export type TransactionCategory = DropdownOption | undefined; 
+export type TransactionPaymentMode = DropdownOption | undefined;
 
 export type Transaction = {
+  id: number;
   transactionType: TransactionType;
   amount: string;
-  category: string;
-  paymentMode: string;
+  category: TransactionCategory;
+  paymentMode: TransactionPaymentMode;
   remark: string;
   createdAt: number;
 }

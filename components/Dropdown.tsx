@@ -4,8 +4,9 @@ import { Text, View } from "./Themed";
 import Colors from "../constants/Colors";
 import { useTheme } from "../theme";
 import { Icon } from "./Icon";
+import { DropdownOption } from "../store/type";
 
-export function Dropdown({ onPress, disabled, label, style, labelStyles, iconStyle, value, placeholder, ...rest }: TouchableOpacityProps & { label?: string, labelStyles?: {}, iconStyle?: { size?: number, color?: string }, placeholder?: string, value?: string }) {
+export function Dropdown({ onPress, disabled, label, style, labelStyles, iconStyle, value, placeholder, ...rest }: TouchableOpacityProps & { label?: string, labelStyles?: {}, iconStyle?: { size?: number, color?: string }, placeholder?: string, value?: DropdownOption | string }) {
   const currentTheme:ColorSchemeName = useTheme();
   const backgroundColor = Colors[currentTheme].background;
 
@@ -15,7 +16,7 @@ export function Dropdown({ onPress, disabled, label, style, labelStyles, iconSty
         { label && <Text style={[styles.label, { backgroundColor }, labelStyles ]}>{label}</Text> }
         { !value || value === ''
         ? <Text style={[styles.value, { color: 'gray' }]}>{placeholder}</Text>
-        : <Text style={styles.value}>{value}</Text>
+        : <Text style={styles.value}>{ typeof value === 'object' ? value.name : value}</Text>
         }
         <Icon type="AntDesign" name="caretdown" size={iconStyle?.size || 20} color={iconStyle?.color} />
       </View>
