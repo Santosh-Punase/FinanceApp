@@ -10,7 +10,7 @@ import { User } from '../store/type';
 import { parseObject, stringifyObject } from '../utils';
 import { ThemeSetting } from '../components/ThemeSetting';
 import { Icon } from '../components/Icon';
-import { clearStorage, initialize, removeValue } from '../store/store';
+import { initialize, removeValue } from '../store/store';
 import { defaultCategories, defaultPaymentModes } from '../constants/Store';
 
 export default function SettingScreen() {
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     color: 'gray',
     marginLeft: 10,
-    textTransform: 'uppercase',
+    // textTransform: 'uppercase',
     letterSpacing: 1,
   },
   profileIcon: {
