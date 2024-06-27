@@ -27,7 +27,7 @@ export function Checkbox({ isSelected, size = 24, style }: Props) {
   const iconColor = Colors[currentTheme]['tint']
 
   if(isSelected) {
-    return <Icon type="Ionicons" name='ios-checkbox' size={size} style={style} color={iconColor} />;
+    return <Icon type="Ionicons" name='checkbox' size={size} style={style} color={iconColor} />;
   }
-  return <Icon type="Ionicons" name='ios-checkbox-outline' size={size} style={style} />;
+  return <Icon type="Ionicons" name='checkbox-outline' size={size} style={style} />;
 }
