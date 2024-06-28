@@ -54,11 +54,19 @@ export function Button({ onPress, disabled, label, rounded, selected, style, lab
 
 const styles = StyleSheet.create({
   wrapper: {
+    flex: 1,
     backgroundColor: '#dadada',
+    marginVertical: 20,
   },
   buttonLabel: {
-    paddingTop: 4,
-    paddingBottom: 6,
-    paddingHorizontal: 10,
+    flex: 1,
+    alignSelf: 'stretch',
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // paddingTop: 4,
+    // paddingBottom: 6,
+    // paddingHorizontal: 10,
   },
 });

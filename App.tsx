@@ -11,6 +11,7 @@ import { defaultCategories, defaultPaymentModes } from './constants/Store';
 import { stringifyObject } from './utils';
 import { Theme } from './store/type';
 import { ThemeContext } from './theme';
+import { AuthProvider } from './contexts/AuthContext';
 
 
 export default function App() {
@@ -33,7 +34,9 @@ export default function App() {
       <SafeAreaProvider>
         <ThemeContext.Provider value={themeData}>
           <MenuProvider>
-            <Navigation colorScheme={colorScheme} />
+            <AuthProvider>
+              <Navigation colorScheme={colorScheme} />
+            </AuthProvider>
             <StatusBar style={colorScheme === Theme.DARK ? 'light' : 'dark'} />
           </MenuProvider>
         </ThemeContext.Provider>
