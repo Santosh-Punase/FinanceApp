@@ -28,6 +28,17 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
   Screen
 >;
 
+export type AuthStackParamList = {
+  Loading: undefined;
+  Login: undefined;
+  Signup: undefined;
+};
+
+export type AuthStackScreenProps<Screen extends keyof AuthStackParamList> = NativeStackScreenProps<
+  AuthStackParamList,
+  Screen
+>;
+
 export type RootTabParamList = {
   TabOne: { category: string, paymentMode: string } | undefined;
   TabTwo: undefined;

@@ -12,27 +12,29 @@ import { ThemeSetting } from '../components/ThemeSetting';
 import { Icon } from '../components/Icon';
 import { initialize, removeValue } from '../store/store';
 import { defaultCategories, defaultPaymentModes } from '../constants/Store';
+import { useAuthContext } from '../contexts/AuthContext';
 
 export default function SettingScreen() {
   const [user, setUser] = useStore('user');
+  const { onLogout } = useAuthContext();
 
   const parsedUser:User = parseObject(user) as User || { name: '', phoneNumber: '' };
  
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const onLogoutClick = () => {
-    Alert.alert(
-      'Are you sure',
-      'Logout ?',
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") }
-      ]
-    )
-  }
+  // const onLogoutClick = () => {
+  //   Alert.alert(
+  //     'Are you sure',
+  //     'Logout ?',
+  //     [
+  //       {
+  //         text: "Cancel",
+  //         style: "cancel"
+  //       },
+  //       { text: "OK", onPress: () => console.log("OK Pressed") }
+  //     ]
+  //   )
+  // }
 
   const onResetCategoryAndPaymentModes = async() => {
     removeValue('categories');
@@ -79,7 +81,7 @@ export default function SettingScreen() {
           <Icon type="Ionicons" name='refresh-circle' size={30} />
           <Text style={styles.label}>Reset transaction list</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onLogoutClick} style={[{ flexDirection: 'row' }]}>
+        <TouchableOpacity onPress={onLogout} style={[{ flexDirection: 'row' }]}>
           <Icon type="AntDesign" name='logout' size={30} />
           <Text style={styles.label}>Log-out</Text>
         </TouchableOpacity>

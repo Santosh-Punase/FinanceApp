@@ -1,4 +1,4 @@
-export type StoreKey = 'categories' | 'paymentModes' | 'transactionList' | 'user' | 'theme';
+export type StoreKey = 'categories' | 'paymentModes' | 'transactionList' | 'user' | 'theme' | 'at';
 
 export type DropdownLabel = 'categories' | 'paymentModes';
 
@@ -62,4 +62,13 @@ export type User = {
 export type ThemeContextType = {
   theme: Theme
   setTheme: (theme:Theme) => void
+}
+
+
+export type AuthContextType = {
+  isLoading: boolean;
+  user?: any;
+  accessToken: string;  
+  onLogin: (uname: string, pass: string) => void;
+  onLogout: () => void
 }

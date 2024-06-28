@@ -137,7 +137,7 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
                   </TouchableOpacity>
                   <Menu style={styles.moreOptions}>
                     <MenuTrigger>
-                      <Icon name="md-ellipsis-vertical" type='Ionicons' size={20} />
+                      <Icon name="ellipsis-vertical" type='Ionicons' size={20} />
                     </MenuTrigger>
                     <MenuOptions optionsContainerStyle={{ padding: 5, shadowColor: optionsContainerShadowColor, backgroundColor: optionsContainerBackgroundColor }}>
                       <MenuOption onSelect={() => editOption(op)}>
