@@ -103,15 +103,16 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
       {/* <CardsCarousel /> */}
       
       {/* <EditScreenInfo path="/screens/HomeScreen.tsx" /> */}
+      
       <FloatingButton
         onPress={() => addNewTransaction('Cash-In')}
         label={'+'}
-        style={{ borderRadius: 10, backgroundColor: 'green', width: 80, bottom: 10, left: WIDTH / 2 - 90 }}
+        style={{ backgroundColor: 'green', bottom: 10, left: WIDTH / 3 }}
       />
       <FloatingButton
         onPress={() => addNewTransaction('Cash-Out')}
         label={'+'}
-        style={{ borderRadius: 10, backgroundColor: 'red',width: 80, bottom: 10, right: WIDTH / 2 - 90 }}
+        style={{ backgroundColor: 'red', bottom: 10, right: WIDTH / 3 }}
       />
     </View>
   );

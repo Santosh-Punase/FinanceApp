@@ -10,6 +10,7 @@ import { Button } from '../Button';
 import { Card } from '../Card';
 import { Dropdown } from '../Dropdown';
 import { Input } from '../Input';
+import Toggle from '../Toggle';
 
 export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
 
@@ -61,27 +62,12 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
     setEntry({ ...entryInitialState, id: Math.random(), transactionType: entry.transactionType });
   }
 
+  const isInTransaction = entry.transactionType === 'Cash-In'
+
   return (
     <Card style={[styles.wrapperCard, { borderColor: entry.transactionType === 'Cash-In' ? 'green' : 'red' }]}>
-      <View style={[styles.row, { justifyContent: 'center' }]}>
-        <View style={[{ marginLeft: 10, flexDirection: 'row', width: '50%', justifyContent: 'space-between', }]}>
-          <Button
-            // rounded
-            activeOpacity={1}
-            label='CASH IN'
-            selected={entry.transactionType === 'Cash-In'}
-            buttonType='success'
-            onPress={() => changeTransactionType('Cash-In')}
-          />
-          <Button
-            // rounded
-            activeOpacity={1}
-            label='CASH OUT'
-            selected={entry.transactionType === 'Cash-Out'}
-            buttonType='error'
-            onPress={() => changeTransactionType('Cash-Out')}
-          />
-        </View>
+      <View style={{ marginHorizontal: 30, marginBottom: 20 }}>
+        <Toggle width={300} value={!isInTransaction} onPress={() => changeTransactionType(isInTransaction ? 'Cash-Out' : 'Cash-In')} />
       </View>
       <View style={styles.row}>
         <Input showLabel placeholder='Amount' value={entry.amount || ''} keyboardType='numeric' onChangeText={(amount) => updateEntry('amount', amount)} />
@@ -115,7 +101,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
           disabled={!entry.paymentMode || !entry.remark}
           label={'Save & Add New'}
           buttonType='outline'
-          style={[{ width: '65%' }]}
+          style={[{ width: '48%' }]}
           labelStyles={styles.buttonLabel}
           selected
           onPress={onSaveAndAddNewClick}
@@ -124,7 +110,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
           activeOpacity={1}
           disabled={!entry.paymentMode || !entry.remark}
           label={'Save'}
-          style={[{ width: '30%' }]}
+          style={[{ width: '48%' }]}
           labelStyles={styles.buttonLabel}
           selected
           onPress={OnSaveClick}
@@ -153,15 +139,18 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   bottomRow: {
+    // flex: 1,
+    // height: 80,
     flexDirection: 'row',
+    // backgroundColor: 'red',
     marginTop: 'auto',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 20,
+    alignItems: 'flex-end',
+    // paddingVertical: 20,
   },
   buttonLabel: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: 'semibold',
     width: '100%',
     textAlign: 'center',
   },

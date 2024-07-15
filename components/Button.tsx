@@ -54,7 +54,7 @@ export function Button({ onPress, disabled, label, rounded, selected, style, lab
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
+    height: 50,
     backgroundColor: '#dadada',
     marginVertical: 20,
   },
@@ -65,8 +65,5 @@ const styles = StyleSheet.create({
     verticalAlign: 'middle',
     justifyContent: 'center',
     alignItems: 'center',
-    // paddingTop: 4,
-    // paddingBottom: 6,
-    // paddingHorizontal: 10,
   },
 });

@@ -74,9 +74,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footer: {
-   flex: 1,
-   maxHeight: 180,
-   alignSelf: 'stretch',
+    //  flex: 1,
+    maxHeight: 180,
+  //  alignSelf: 'stretch',
+   width: '100%',
   },
   labelStyles: {
     fontSize: 18,
