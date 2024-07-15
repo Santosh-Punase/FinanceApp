@@ -1,7 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { FloatingButton } from '../components/FloatingButton';
+// import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import { CategoryOption, Transaction, TransactionCategory, TransactionType } from '../store/type';
@@ -31,10 +30,6 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
       fetchCategories()
     }, [transactionList])
   );
-
-  const addNewTransaction = (transactionType: TransactionType ) => {
-    navigation.navigate('AddNewTransaction', { category: undefined, paymentMode: undefined, transactionType })
-  }
 
   const categories = parsedCategoriesList;
   // const categories = [...new Array(3).keys()];
@@ -97,23 +92,14 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
       <TransactionList
         list={parsedTransactionList.slice(0,5)}
         isLoading={isLoading}
-        listHeight={HEIGHT - 470}
+        listHeight={HEIGHT - 500}
+        navigation={navigation}
       />
 
       {/* <CardsCarousel /> */}
       
       {/* <EditScreenInfo path="/screens/HomeScreen.tsx" /> */}
       
-      <FloatingButton
-        onPress={() => addNewTransaction('Cash-In')}
-        label={'+'}
-        style={{ backgroundColor: 'green', bottom: 10, left: WIDTH / 3 }}
-      />
-      <FloatingButton
-        onPress={() => addNewTransaction('Cash-Out')}
-        label={'+'}
-        style={{ backgroundColor: 'red', bottom: 10, right: WIDTH / 3 }}
-      />
     </View>
   );
 }

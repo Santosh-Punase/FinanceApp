@@ -45,6 +45,7 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
         isFilterSelected={isFilterSelected}
         clearAllFilters={() => setSelectedFilters(filterInitialState)}
         list={filteredList}
+        navigation={navigation}
       />
     </View>
   );
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
   },
   title: {
     fontSize: 20,

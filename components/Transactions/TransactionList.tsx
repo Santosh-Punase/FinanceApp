@@ -10,6 +10,8 @@ import { Card } from '../Card';
 import { Transaction } from '../../store/type';
 import { SelectedFilters } from './TransactionFilters';
 import { NoRecord } from '../NoRecord';
+import { NativeStackNavigatorProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { AddEntryFooter } from '../AddEntryFooter';
 
 export const filterInitialState: SelectedFilters = {
   transactionType: '',
@@ -17,7 +19,7 @@ export const filterInitialState: SelectedFilters = {
   paymentMode: [],
 }
 
-const LIST_HEIGHT = HEIGHT - 150;
+const LIST_HEIGHT = HEIGHT - 200;
 
 type TransactionListProps = {
   list: Transaction[]
@@ -25,50 +27,54 @@ type TransactionListProps = {
   listHeight?: number;
   isLoading?: boolean;
   clearAllFilters?: () => void;
+  navigation?: NativeStackNavigatorProps;
 }
 
-export default function TransactionList({ isFilterSelected, clearAllFilters, list, isLoading, listHeight } : TransactionListProps) {
-
+export default function TransactionList({ isFilterSelected, clearAllFilters, list, isLoading, listHeight, navigation } : TransactionListProps) {
   return (
-    <ScrollView style={{ width: WIDTH, minHeight: listHeight || LIST_HEIGHT, paddingBottom: 100 }}>
+    <>
+    <ScrollView style={{ width: WIDTH, minHeight: listHeight || LIST_HEIGHT, paddingBottom: 200 }}>
       { isLoading
       ? <ActivityIndicator size={'large'} style={{ height: listHeight || LIST_HEIGHT }} />
-      : list.map((item: Transaction, i: number) => {
-        // const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
-        // const isDifferentDate = currentDate !== date;
-        // currentDate = date;
-        return (
-          <React.Fragment key={item.createdAt}>
-            {/* { isDifferentDate && <Text style={styles.date}>{date}</Text>} */}
-            <Card style={styles.listItem}>
-              <View style={styles.listItemWrapper}>
-                <View style={styles.transactionDetails}>
-                  {item.remark && <Text>{item.remark}</Text>}
-                  <View style={styles.listItemRow_1}>
-                    {item.category && (
-                      <View lightColor='rgba(44, 44, 214, 0.2)' darkColor='rgba(199, 10, 130, 0.3)' style={{ marginRight: 10, borderRadius: 8 }}>
-                        <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.category.name}</Text>
-                        {/* <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(199, 10, 130, 1)'>{item.category}</Text> */}
+      : <View style={{ marginBottom: list.length === 0 ? 0 : 80 }}>
+          {list.map((item: Transaction, i: number) => {
+            // const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
+            // const isDifferentDate = currentDate !== date;
+            // currentDate = date;
+            return (
+              <React.Fragment key={item.createdAt}>
+                {/* { isDifferentDate && <Text style={styles.date}>{date}</Text>} */}
+                <Card style={styles.listItem}>
+                  <View style={styles.listItemWrapper}>
+                    <View style={styles.transactionDetails}>
+                      {item.remark && <Text>{item.remark}</Text>}
+                      <View style={styles.listItemRow_1}>
+                        {item.category && (
+                          <View lightColor='rgba(44, 44, 214, 0.2)' darkColor='rgba(199, 10, 130, 0.3)' style={{ marginRight: 10, borderRadius: 8 }}>
+                            <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.category.name}</Text>
+                            {/* <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(199, 10, 130, 1)'>{item.category}</Text> */}
+                          </View>
+                        )}
+                        {item.paymentMode && (
+                          <View lightColor='rgba(79, 79, 79, 0.2)' darkColor='rgba(212, 112, 10, 0.3)' style={{ borderRadius: 8 }}>
+                            <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.paymentMode.name}</Text>
+                            {/* <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(212, 112, 10, 1)'>{item.paymentMode}</Text> */}
+                          </View>
+                        )}
                       </View>
-                    )}
-                    {item.paymentMode && (
-                      <View lightColor='rgba(79, 79, 79, 0.2)' darkColor='rgba(212, 112, 10, 0.3)' style={{ borderRadius: 8 }}>
-                        <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.paymentMode.name}</Text>
-                        {/* <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(212, 112, 10, 1)'>{item.paymentMode}</Text> */}
-                      </View>
-                    )}
+                      <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | HH:mm`)}`}</Text>
+                      {/* <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text> */}
+                    </View>
+                    <View style={styles.amount}>
+                      {item.transactionType === 'Cash-In' && <Text style={styles.credit}>{item.amount}</Text>}
+                      {item.transactionType === 'Cash-Out' && <Text style={styles.debit}>{item.amount}</Text>}
+                    </View>
                   </View>
-                  <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | HH:mm`)}`}</Text>
-                  {/* <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text> */}
-                </View>
-                <View style={styles.amount}>
-                  {item.transactionType === 'Cash-In' && <Text style={styles.credit}>{item.amount}</Text>}
-                  {item.transactionType === 'Cash-Out' && <Text style={styles.debit}>{item.amount}</Text>}
-                </View>
-              </View>
-            </Card>
-          </React.Fragment>
-        )})
+                </Card>
+              </React.Fragment>
+            )})
+          }
+        </View>
       }
       { list.length === 0 ?
           isFilterSelected ? 
@@ -84,6 +90,8 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
         : null
       }
     </ScrollView>  
+    <AddEntryFooter navigation={navigation} />
+    </>
   );
 }
 
