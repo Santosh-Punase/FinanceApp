@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
 import { parseObject } from '../utils';
 import TransactionList from '../components/Transactions/TransactionList';
+import { Button } from '../components/Button';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
 
@@ -31,7 +32,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
     }, [transactionList])
   );
 
-  const categories = [...parsedCategoriesList, { id: -1, name: '', budget: 0, expense: 0 }];
+  const categories = parsedCategoriesList;
   // const categories = [...new Array(3).keys()];
 
   return (
@@ -54,66 +55,77 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
           <Text>Title 2</Text>
         </View>
       </Card>
-      <HorizontalCardList
-        data={categories}
-        style={{ maxHeight: 200, minHeight: 200 }}
-        renderItem={({ item }) => {
-          if (item.id === -1) {
+      <Card style={[styles.cardStyle, { marginBottom: 10, minHeight: 240 }]}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: WIDTH - 40 , alignItems: 'center', height: 40 }}>
+          <Text style={[styles.header, { marginLeft: 0 }]}>Budget Overview</Text>
+          <Button
+            selected
+            label='+ Add Category'
+            buttonType='link'
+            style={{ backgroundColor: 'transparent' }}
+            onPress={() => navigation.navigate('AddCategoryScreen', { header: 'Add Category', category: undefined, action: 'Add' })}
+          />
+        </View>
+        <HorizontalCardList
+          data={categories}
+          style={{ maxHeight: 200, minHeight: 200 }}
+          renderItem={({ item }) => {
             return (
-              <View style={{
-                flex: 1,
-                height: 150,
-                width: categories.length <= 2
-                  ? (WIDTH / categories.length) - 20
-                  :  WIDTH / 2 - 30,
-                borderRadius: 10,
-                alignSelf: 'center',
-                backgroundColor: '#dadada',
-                justifyContent: 'center',
-                // padding: 10,
-                marginHorizontal: 10
-              }}>
-                <TouchableOpacity onPress={() => navigation.navigate('AddCategoryScreen', { header: 'Add Category', category: undefined, action: 'Add' })}>
-                  <Text style={{ textAlign: 'center', fontSize: 18 }}>
-                    {'Add Category'}
-                  </Text>
-                </TouchableOpacity>
+              <View
+                style={{
+                  flex: 1,
+                  height: 150,
+                  width: categories.length === 1
+                    ? WIDTH * 0.90 - 20 // (WIDTH - 40) / categories.length - 20
+                    :  WIDTH * 0.75 - 10,
+                  borderRadius: 10,
+                  alignSelf: 'center',
+                  backgroundColor: '#dadada',
+                  // justifyContent: 'center',
+                  padding: 10,
+                  marginHorizontal: 10
+                }}
+              >
+                <Text style={{ textAlign: 'left', fontSize: 24 }}>
+                  {item?.name}
+                </Text>
+                <Text style={{ textAlign: 'left', fontSize: 16 }}>
+                  {`Budget: ${item?.budget}`}
+                </Text>
+                <Text style={{ textAlign: 'right', fontSize: 16, marginTop: 20 }}>
+                  {`${item?.expense} Spent`}
+                </Text>
+                <Text style={{ textAlign: 'right', fontSize: 16 }}>
+                  {`${item?.budget - item.expense} Left   `}
+                </Text>
               </View>
-            )
+            )}
           }
-          return (
-            <View
-              style={{
-                flex: 1,
-                height: 150,
-                width: categories.length <= 2
-                  ? WIDTH / categories.length - 20
-                  :  WIDTH / 2 - 30,
-                borderRadius: 10,
-                alignSelf: 'center',
-                backgroundColor: '#dadada',
-                // justifyContent: 'center',
-                padding: 10,
-                marginHorizontal: 10
-              }}
-            >
-              <Text style={{ textAlign: 'left', fontSize: 24 }}>
-                {item?.name}
-              </Text>
-              <Text style={{ textAlign: 'left', fontSize: 16 }}>
-                {`Budget: ${item?.budget}`}
-              </Text>
-              <Text style={{ textAlign: 'right', fontSize: 16, marginTop: 20 }}>
-                {`${item?.expense} Spent`}
-              </Text>
-              <Text style={{ textAlign: 'right', fontSize: 16 }}>
-                {`${item?.budget - item.expense} Left   `}
-              </Text>
-            </View>
-          )}
-        }
-      />
-      <Text style={styles.header}>Recent Transactions</Text>
+        />
+        { categories.length === 0 && (
+          <View
+          style={{
+            flex: 1,
+            maxHeight: 150, minHeight: 150,
+            marginTop: 20, 
+            width: WIDTH - 60,
+            borderRadius: 10,
+            alignSelf: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#dadada',
+            padding: 10,
+            marginHorizontal: 10
+          }}
+        >
+           <Text style={{ textAlign: 'center', fontSize: 24 }}>
+              Add Categories
+            </Text>
+        </View>
+        )}
+      </Card>
+      <View style={{ width: WIDTH }}>
+        <Text style={styles.header}>Recent Transactions</Text>
+      </View>
       <TransactionList
         list={parsedTransactionList.slice(0,5)}
         isLoading={isLoading}
