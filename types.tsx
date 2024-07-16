@@ -19,7 +19,7 @@ export type RootStackParamList = {
   Modal: undefined;
   AddNewTransaction: { category: TransactionCategory, paymentMode: TransactionPaymentMode, transactionType?: TransactionType } | undefined;
   AddCategoryScreen: { header: string, category: { name: string, budget?: number } | undefined, action: 'Add' | 'Edit' };
-  CategoryOptionsScreen: { header: string, category: TransactionCategory, paymentMode: TransactionPaymentMode };
+  CategoryOptionsScreen: { header: string, category: TransactionCategory, paymentMode: TransactionPaymentMode, action: 'select' | 'list' };
   PaymentOptionsScreen: { header: string, category: TransactionCategory, paymentMode: TransactionPaymentMode };
   NotFound: undefined;
 };

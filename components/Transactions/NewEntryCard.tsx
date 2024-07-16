@@ -83,7 +83,7 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
             placeholder='Category'
             label={'Category'}
             value={entry?.category}
-            onPress={() => navigation.navigate('CategoryOptionsScreen', { header: 'Choose Category', category: entry.category, paymentMode: entry.paymentMode })}
+            onPress={() => navigation.navigate('CategoryOptionsScreen', { header: 'Choose Category', category: entry.category, paymentMode: entry.paymentMode, action: 'select' })}
           />
           <Dropdown
             key='Payment Mode'

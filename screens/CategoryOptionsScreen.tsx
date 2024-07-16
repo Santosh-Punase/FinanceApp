@@ -60,7 +60,11 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
   }
 
   const onSelect = (selection: CategoryOption) => {
-    navigation.navigate('AddNewTransaction', { category: { id: selection.id, name: selection.name }, paymentMode: route?.params?.paymentMode })
+    if (route.params?.action === 'select') {
+      navigation.navigate('AddNewTransaction', { category: { id: selection.id, name: selection.name }, paymentMode: route?.params?.paymentMode })
+    } else {
+      editCategory(selection);
+    }
   }
 
   const onAddNew = (name: string) => {
@@ -119,8 +123,14 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
     setIsSearchBoxOpen(false);
     navigation.navigate('AddCategoryScreen', { header: 'Add Category', category: { name: searchString }, action: 'Add' })
   }
+
+  const editCategory = (cat: CategoryOption) => {
+    setSearchString('');
+    setIsSearchBoxOpen(false);
+    navigation.navigate('AddCategoryScreen', { header: 'Edit Category', category: { name: cat.name, budget: cat.budget }, action: 'Edit' })
+  }
     
-  const filteredRecords = parsedOptionsArray.filter((p: Option) => p.name.toLowerCase().includes(searchString.toLowerCase())).sort(sortOptions)
+  const filteredRecords = parsedOptionsArray.filter((p: CategoryOption) => p.name.toLowerCase().includes(searchString.toLowerCase())).sort(sortOptions)
 
   return (
     <View style={styles.container}>
@@ -139,7 +149,9 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
               return (
                 <View style={isSelected ? [styles.listItem, { backgroundColor: selectedOptionColor }] : styles.listItem} key={i} darkColor={'rgba(255, 255, 255, 0.08)'} >
                   <TouchableOpacity onPress={() => onSelect(op)} style={styles.labelWrapper} activeOpacity={1}>
-                    <RadioButton size={24} style={styles.radioIcon} isSelected={isSelected} />
+                    { route.params?.action === 'select' && (
+                      <RadioButton size={24} style={styles.radioIcon} isSelected={isSelected} />
+                    )}
                     <Text style={styles.optionLabel}>{op.name}</Text>
                   </TouchableOpacity>
                   <Menu style={styles.moreOptions}>
@@ -147,7 +159,7 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
                       <Icon name="ellipsis-vertical" type='Ionicons' size={20} />
                     </MenuTrigger>
                     <MenuOptions optionsContainerStyle={{ padding: 5, shadowColor: optionsContainerShadowColor, backgroundColor: optionsContainerBackgroundColor }}>
-                      <MenuOption onSelect={() => editOption(op)}>
+                      <MenuOption onSelect={() => editCategory(op)}>
                         <Text>Edit</Text>
                       </MenuOption>
                       <MenuOption onSelect={() => createTwoButtonAlert(op)} >

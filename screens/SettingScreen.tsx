@@ -71,7 +71,7 @@ export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThr
       <Text style={styles.sectionHeader}>Application</Text>
       <Card style={{ flexDirection: 'column' }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('CategoryOptionsScreen', { header: 'Categories', category: undefined, paymentMode: undefined })}
+          onPress={() => navigation.navigate('CategoryOptionsScreen', { header: 'Categories', category: undefined, paymentMode: undefined, action: 'list' })}
           style={[{ flexDirection: 'row', marginBottom: 10, alignItems: 'center' }]}
         >
           <Icon type="Ionicons" name='list-circle-outline' size={30} />
