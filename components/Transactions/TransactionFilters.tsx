@@ -81,7 +81,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
 
   return (
     <ScrollView contentContainerStyle={styles.filterRow} horizontal showsHorizontalScrollIndicator={false}>
-      <View style={{ position: 'relative', marginHorizontal: 15 }} darkColor='rgba(0, 0, 0, 0.08)'>
+      <View style={{ position: 'relative', marginHorizontal: 15, backgroundColor: 'transparent' }}>
         <Icon type="AntDesign" name='filter' size={30} />
         { isFilterSelected && <View style={styles.filterDot} /> }
       </View>
@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     height: 30,
     marginRight: 15,
+    elevation: 5,
   },
   filterSelected: {
     backgroundColor: 'rgba(96, 133, 214, 0.1)',

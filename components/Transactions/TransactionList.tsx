@@ -19,7 +19,7 @@ export const filterInitialState: SelectedFilters = {
   paymentMode: [],
 }
 
-const LIST_HEIGHT = HEIGHT - 200;
+const DEFAULT_LIST_HEIGHT = HEIGHT - 170;
 
 type TransactionListProps = {
   list: Transaction[]
@@ -33,9 +33,9 @@ type TransactionListProps = {
 export default function TransactionList({ isFilterSelected, clearAllFilters, list, isLoading, listHeight, navigation } : TransactionListProps) {
   return (
     <>
-    <ScrollView style={{ width: WIDTH, minHeight: listHeight || LIST_HEIGHT, paddingBottom: 200 }}>
+    <ScrollView style={{ width: WIDTH, minHeight: listHeight || DEFAULT_LIST_HEIGHT, paddingBottom: 200 }}>
       { isLoading
-      ? <ActivityIndicator size={'large'} style={{ height: listHeight || LIST_HEIGHT }} />
+      ? <ActivityIndicator size={'large'} style={{ height: listHeight || DEFAULT_LIST_HEIGHT }} />
       : <View style={{ marginBottom: list.length === 0 ? 0 : 80 }}>
           {list.map((item: Transaction, i: number) => {
             // const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
@@ -77,7 +77,8 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
         </View>
       }
       { list.length === 0 ?
-          isFilterSelected ? 
+        <View style={{ minHeight: listHeight || DEFAULT_LIST_HEIGHT + 10 }}>
+          { isFilterSelected ? 
             <NoRecord
               header={'No Transactions Found'}
               subHeader={'Try removing filters'}
@@ -85,12 +86,14 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
             />
             : <NoRecord
               header={'No Transactions Yet'}
-              subHeader={'All your transactions will apear here'}
+              subHeader={'Add Transactions to get started'}
             />
+          }
+        </View>
         : null
       }
     </ScrollView>  
-    <AddEntryFooter navigation={navigation} />
+    { !isLoading && <AddEntryFooter navigation={navigation} /> }
     </>
   );
 }
