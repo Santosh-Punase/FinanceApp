@@ -18,6 +18,7 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   AddNewTransaction: { category: TransactionCategory, paymentMode: TransactionPaymentMode, transactionType?: TransactionType } | undefined;
+  AddCategoryScreen: { header: string, category: { name: string, budget?: number } | undefined, action: 'Add' | 'Edit' };
   CategoryOptionsScreen: { header: string, category: TransactionCategory, paymentMode: TransactionPaymentMode };
   PaymentOptionsScreen: { header: string, category: TransactionCategory, paymentMode: TransactionPaymentMode };
   NotFound: undefined;
@@ -52,5 +53,6 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 
 export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Root">;
 export type AddNewScreenProps = NativeStackScreenProps<RootStackParamList, "AddNewTransaction">;
+export type AddCategoryScreenProps = NativeStackScreenProps<RootStackParamList, "AddCategoryScreen">;
 export type CategoryOptionsScreenProps = NativeStackScreenProps<RootStackParamList, "CategoryOptionsScreen">;
 export type PaymentOptionsScreenProps = NativeStackScreenProps<RootStackParamList, "PaymentOptionsScreen">;

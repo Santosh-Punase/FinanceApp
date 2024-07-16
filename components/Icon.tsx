@@ -1,4 +1,4 @@
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
 import { ColorSchemeName } from "react-native";
 import Colors from "../constants/Colors";
 
@@ -20,20 +20,29 @@ interface AntDesignIcon extends IconProps {
   name: React.ComponentProps<typeof AntDesign>['name'];
 }
 
-interface Props {
-  type?: 'Ionicons' | 'AntDesign';
-  name: string;
-  size: number;
-  color?: string;
-  style?: {};
+interface FontAwesomIcon extends IconProps {
+  type: 'FontAwesome';
+  name: React.ComponentProps<typeof FontAwesome>['name'];
 }
 
-export function Icon({ type, size, name, color, style }: AntDesignIcon | IoniconsIcon) {
+// interface Props {
+//   type?: 'Ionicons' | 'AntDesign' | 'FontAwesome';
+//   name: string;
+//   size: number;
+//   color?: string;
+//   style?: {};
+// }
+
+export function Icon({ type, size, name, color, style }: AntDesignIcon | IoniconsIcon | FontAwesomIcon) {
   const currentTheme:ColorSchemeName = useTheme();
   const iconColor = color || Colors[currentTheme]['text']
 
   if(type === 'Ionicons') {
     return <Ionicons name={name} size={size} color={iconColor} style={style} />
+  }
+
+  if (type === 'FontAwesome') {
+    return <FontAwesome name={name} size={size} color={iconColor} style={style} />
   }
 
   return (

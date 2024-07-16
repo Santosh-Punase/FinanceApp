@@ -12,6 +12,7 @@ import { RootStackParamList } from '../../types';
 import CategoryOptionsScreen from '../../screens/CategoryOptionsScreen';
 import PaymentOptionsScreen from '../../screens/PaymentOptionsScreen';
 import { BottomTabNavigator } from '.././BottomTabNavigator';
+import AddCategoryScreen from '../../screens/AddCategoryScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,6 +24,7 @@ export function RootNavigator() {
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
         <Stack.Screen name="AddNewTransaction" component={AddNewScreen} options={{ title: 'Add New Entry' }} />
+        <Stack.Screen name="AddCategoryScreen" component={AddCategoryScreen} options={({ route }) => ({ title: route.params.header }) } />
         <Stack.Screen name="CategoryOptionsScreen" component={CategoryOptionsScreen} options={({ route }) => ({ title: route.params.header }) } />
         <Stack.Screen name="PaymentOptionsScreen" component={PaymentOptionsScreen} options={({ route }) => ({ title: route.params.header }) } />
       </Stack.Group>

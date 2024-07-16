@@ -13,8 +13,9 @@ import { Icon } from '../components/Icon';
 import { initialize, removeValue } from '../store/store';
 import { defaultCategories, defaultPaymentModes } from '../constants/Store';
 import { useAuthContext } from '../contexts/AuthContext';
+import { RootTabScreenProps } from '../types';
 
-export default function SettingScreen() {
+export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThree'>) {
   const [user, setUser] = useStore('user');
   const { onLogout } = useAuthContext();
 
@@ -22,19 +23,19 @@ export default function SettingScreen() {
  
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  // const onLogoutClick = () => {
-  //   Alert.alert(
-  //     'Are you sure',
-  //     'Logout ?',
-  //     [
-  //       {
-  //         text: "Cancel",
-  //         style: "cancel"
-  //       },
-  //       { text: "OK", onPress: () => console.log("OK Pressed") }
-  //     ]
-  //   )
-  // }
+  const onLogoutClick = () => {
+    Alert.alert(
+      'Are you sure',
+      'Logout ?',
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        { text: "OK", onPress: onLogout }
+      ]
+    )
+  }
 
   const onResetCategoryAndPaymentModes = async() => {
     removeValue('categories');
@@ -69,22 +70,29 @@ export default function SettingScreen() {
       <ThemeSetting />
       <Text style={styles.sectionHeader}>Application</Text>
       <Card style={{ flexDirection: 'column' }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
-          <Text>App Version</Text>
-          <Text>0.0.1</Text>
-        </View>
-        <TouchableOpacity onPress={onResetCategoryAndPaymentModes} style={[{ flexDirection: 'row', marginBottom: 10 }]}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('CategoryOptionsScreen', { header: 'Categories', category: undefined, paymentMode: undefined })}
+          style={[{ flexDirection: 'row', marginBottom: 10, alignItems: 'center' }]}
+        >
+          <Icon type="Ionicons" name='list-circle-outline' size={30} />
+          <Text style={styles.label}>Categories</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onResetCategoryAndPaymentModes} style={[{ flexDirection: 'row', marginBottom: 10, alignItems: 'center' }]}>
           <Icon type="Ionicons" name='refresh-circle' size={30} />
           <Text style={styles.label}>Reset Category and Payment modes</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onResetTransactionList} style={[{ flexDirection: 'row', marginBottom: 10 }]}>
+        <TouchableOpacity onPress={onResetTransactionList} style={[{ flexDirection: 'row', marginBottom: 10, alignItems: 'center' }]}>
           <Icon type="Ionicons" name='refresh-circle' size={30} />
           <Text style={styles.label}>Reset transaction list</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onLogout} style={[{ flexDirection: 'row' }]}>
-          <Icon type="AntDesign" name='logout' size={30} />
+        <TouchableOpacity onPress={onLogoutClick} style={[{ flexDirection: 'row', marginBottom: 20, alignItems: 'center', }]}>
+          <Icon type="FontAwesome" name='sign-out' size={30} style={{ marginLeft: 5, marginRight: -3, }}/>
           <Text style={styles.label}>Log-out</Text>
         </TouchableOpacity>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, alignItems: 'center' }}>
+          <Text>App Version</Text>
+          <Text>0.0.1</Text>
+        </View>
       </Card>
       { showModal && (
         <InputModal

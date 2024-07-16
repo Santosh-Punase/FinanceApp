@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 
 // import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -31,7 +31,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
     }, [transactionList])
   );
 
-  const categories = parsedCategoriesList;
+  const categories = [...parsedCategoriesList, { id: -1, name: '', budget: 0, expense: 0 }];
   // const categories = [...new Array(3).keys()];
 
   return (
@@ -57,36 +57,61 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
       <HorizontalCardList
         data={categories}
         style={{ maxHeight: 200, minHeight: 200 }}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              flex: 1,
-              height: 150,
-              width: categories.length <= 2
-                ? WIDTH / categories.length - 20
-                :  WIDTH / 2 - 30,
-              borderRadius: 10,
-              alignSelf: 'center',
-              backgroundColor: '#dadada',
-              // justifyContent: 'center',
-              padding: 10,
-              marginHorizontal: 10
-            }}
-          >
-            <Text style={{ textAlign: 'left', fontSize: 24 }}>
-              {item?.name}
-            </Text>
-            <Text style={{ textAlign: 'left', fontSize: 16 }}>
-              {`Budget: ${item?.budget}`}
-            </Text>
-            <Text style={{ textAlign: 'right', fontSize: 16, marginTop: 20 }}>
-              {`${item?.expense} Spent`}
-            </Text>
-            <Text style={{ textAlign: 'right', fontSize: 16 }}>
-              {`${item?.budget - item.expense} Left   `}
-            </Text>
-          </View> 
-        )}
+        renderItem={({ item }) => {
+          if (item.id === -1) {
+            return (
+              <View style={{
+                flex: 1,
+                height: 150,
+                width: categories.length <= 2
+                  ? (WIDTH / categories.length) - 20
+                  :  WIDTH / 2 - 30,
+                borderRadius: 10,
+                alignSelf: 'center',
+                backgroundColor: '#dadada',
+                justifyContent: 'center',
+                // padding: 10,
+                marginHorizontal: 10
+              }}>
+                <TouchableOpacity onPress={() => navigation.navigate('AddCategoryScreen', { header: 'Add Category', category: undefined, action: 'Add' })}>
+                  <Text style={{ textAlign: 'center', fontSize: 18 }}>
+                    {'Add Category'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )
+          }
+          return (
+            <View
+              style={{
+                flex: 1,
+                height: 150,
+                width: categories.length <= 2
+                  ? WIDTH / categories.length - 20
+                  :  WIDTH / 2 - 30,
+                borderRadius: 10,
+                alignSelf: 'center',
+                backgroundColor: '#dadada',
+                // justifyContent: 'center',
+                padding: 10,
+                marginHorizontal: 10
+              }}
+            >
+              <Text style={{ textAlign: 'left', fontSize: 24 }}>
+                {item?.name}
+              </Text>
+              <Text style={{ textAlign: 'left', fontSize: 16 }}>
+                {`Budget: ${item?.budget}`}
+              </Text>
+              <Text style={{ textAlign: 'right', fontSize: 16, marginTop: 20 }}>
+                {`${item?.expense} Spent`}
+              </Text>
+              <Text style={{ textAlign: 'right', fontSize: 16 }}>
+                {`${item?.budget - item.expense} Left   `}
+              </Text>
+            </View>
+          )}
+        }
       />
       <Text style={styles.header}>Recent Transactions</Text>
       <TransactionList

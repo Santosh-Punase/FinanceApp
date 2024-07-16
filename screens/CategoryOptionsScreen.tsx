@@ -16,13 +16,14 @@ import Layout from '../constants/Layout';
 import { View, Text } from '../components/Themed';
 import { useTheme } from '../theme';
 import Colors from '../constants/Colors';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function CategoryOptionsScreen({ navigation, route }: CategoryOptionsScreenProps) {
 
   const [showAddEditModal, setShowAddEditModal] = useState<boolean>(false);
   const [searchString, setSearchString] = useState<string>('');
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState<boolean>(false);
-  const [availableOptions, mutateOptions, isLoading] = useStore('categories');
+  const [availableOptions, mutateOptions, isLoading, _ , fetchCategories] = useStore('categories');
   const selectedCategory = route?.params?.category || undefined;
 
   const currentTheme:ColorSchemeName = useTheme();
@@ -44,6 +45,10 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
       />
     )});
   }, [navigation, isSearchBoxOpen, searchString]);
+
+  useFocusEffect(() => {
+    fetchCategories();
+  });
 
   // @ts-ignore
   const parsedOptionsArray: CategoryOption[] = availableOptions !== '' ? parseObject(availableOptions) : [];
@@ -93,20 +98,27 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
       ],
       { cancelable: true, }
     );
-    const onCancelModal = () => {
-      setShowAddEditModal(false);
+
+  const onCancelModal = () => {
+    setShowAddEditModal(false);
+    setOptionToEdit(null);
+  }
+
+  const onSubmitModal = (name: string) => {
+    if(optionToEdit) {
+      editOption({ ...optionToEdit, name, updatedAt: Date.now() })
       setOptionToEdit(null);
+    } else {
+      onAddNew(name);
     }
-  
-    const onSubmitModal = (name: string) => {
-      if(optionToEdit) {
-        editOption({ ...optionToEdit, name, updatedAt: Date.now() })
-        setOptionToEdit(null);
-      } else {
-        onAddNew(name);
-      }
-      setShowAddEditModal(false);
-    }
+    setShowAddEditModal(false);
+  }
+
+  const addCategory = () => {
+    setSearchString('');
+    setIsSearchBoxOpen(false);
+    navigation.navigate('AddCategoryScreen', { header: 'Add Category', category: { name: searchString }, action: 'Add' })
+  }
     
   const filteredRecords = parsedOptionsArray.filter((p: Option) => p.name.toLowerCase().includes(searchString.toLowerCase())).sort(sortOptions)
 
@@ -147,7 +159,7 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
               )}
             )}
             { searchString && (
-              <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} onPress={() => onAddNew(searchString)}>
+              <TouchableOpacity style={[styles.row, { borderRadius: 8, }]} onPress={addCategory}>
                 <Text style={[styles.optionLabel, { color: tintButton }]}> + Add {searchString}</Text>
               </TouchableOpacity>
             )}
@@ -160,7 +172,11 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
           />
         )}
       </ScrollView>
-      <FloatingButton onPress={() => setShowAddEditModal(true)} label={'+'} style={{ bottom: 40, right: 20, backgroundColor: tintButton }}/>
+      <FloatingButton
+        onPress={addCategory}
+        label={'+'}
+        style={{ bottom: 40, right: 20, backgroundColor: tintButton }}
+      />
       { showAddEditModal && (
         <InputModal
           title={optionToEdit ? `Edit Category`: `Add New Category`}

@@ -1,10 +1,30 @@
-import { Text, StyleSheet, TouchableOpacity, TouchableOpacityProps, ColorSchemeName } from "react-native";
+import { Text, StyleSheet, TouchableOpacity, TouchableOpacityProps, ColorSchemeName, ActivityIndicator } from "react-native";
 import Colors from "../constants/Colors";
 import { useTheme } from "../theme";
 
 type ButtonType = 'success' | 'error' | 'primary' | 'link' | 'outline';
 
-export function Button({ onPress, disabled, label, rounded, selected, style, labelStyles, buttonType = "primary", ...rest }: TouchableOpacityProps & { label: string, rounded?: boolean, buttonType?: ButtonType, selected: boolean, labelStyles?: {} }) {
+interface ButtonProps extends TouchableOpacityProps {
+  label: string,
+  rounded?: boolean,
+  isLoading?: boolean,
+  buttonType?: ButtonType,
+  selected: boolean,
+  labelStyles?: {}
+}
+
+export function Button({
+  onPress,
+  disabled,
+  label,
+  rounded,
+  isLoading,
+  selected,
+  style,
+  labelStyles,
+  buttonType = "primary",
+  ...rest
+}: ButtonProps) {
 
   const currentTheme:ColorSchemeName = useTheme();
   const borderRadius = rounded ? 14 : 4;
@@ -47,7 +67,9 @@ export function Button({ onPress, disabled, label, rounded, selected, style, lab
       style={[styles.wrapper, style, { borderRadius, opacity }]}
       { ...rest }
     >
-      <Text style={[styles.buttonLabel, { borderRadius }, labelStyles, selected ? buttonStyles[buttonType] : {}]}>{label}</Text>
+      <Text style={[styles.buttonLabel, { borderRadius }, labelStyles, selected ? buttonStyles[buttonType] : {}]}>
+        {isLoading ? <ActivityIndicator color={Colors[currentTheme].invertedText} /> : label}
+      </Text>
     </TouchableOpacity>
   );
 }
