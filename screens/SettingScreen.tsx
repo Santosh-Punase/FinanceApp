@@ -86,7 +86,7 @@ export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThr
           <Text style={styles.label}>Reset transaction list</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={onLogoutClick} style={[{ flexDirection: 'row', marginBottom: 20, alignItems: 'center', }]}>
-          <Icon type="FontAwesome" name='sign-out' size={30} style={{ marginLeft: 5, marginRight: -3, }}/>
+          <Icon type="Ionicons" name='log-out-outline' size={30} style={{ marginLeft: 3, marginRight: -3, }}/>
           <Text style={styles.label}>Log-out</Text>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, alignItems: 'center' }}>

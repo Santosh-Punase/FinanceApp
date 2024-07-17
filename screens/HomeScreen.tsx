@@ -1,19 +1,22 @@
-import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, ColorSchemeName } from 'react-native';
 
-// import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import { CategoryOption, Transaction, TransactionCategory, TransactionType } from '../store/type';
-// import { CardsCarousel } from '../components/CardsCarousel';
+import { CategoryOption, Transaction } from '../store/type';
 import { Card } from '../components/Card';
 import { HEIGHT, WIDTH } from '../constants/Layout';
 import { HorizontalCardList } from '../components/HorizontalCardList';
 import useStore from '../hooks/useStore';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
-import { parseObject } from '../utils';
+import { getProgressColor, parseObject } from '../utils';
 import TransactionList from '../components/Transactions/TransactionList';
 import { Button } from '../components/Button';
+import Colors from '../constants/Colors';
+import { useTheme } from '../theme';
+// import LinearGradient from 'react-native-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Icon } from '../components/Icon';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
 
@@ -21,6 +24,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
   const [ categoriesList, , isCategoriesLoading , , fetchCategories ] = useStore('categories');
   // @ts-ignore
   const parsedTransactionList: Transaction[] = parseObject(transactionList)?.sort((a,b) => b.createdAt - a.createdAt) || [];
+  const currentTheme:ColorSchemeName = useTheme();
 
   // @ts-ignore
   const parsedCategoriesList: CategoryOption[] = parseObject(categoriesList) || [];
@@ -41,8 +45,8 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
       {/* <Text style={styles.title}>Tab One</Text> */}
       <Card style={styles.cardStyle}>
         <View style={styles.cardItem}>
-          <Text>Title 2</Text>
-          <Text>Title 2</Text>
+          <Text style={{ fontSize: 18 }}>Net Balance</Text>
+          <Text style={{ fontSize: 16 }}>0</Text>
         </View>
       </Card>
       <Card style={styles.cardStyle}>
@@ -69,7 +73,11 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
         <HorizontalCardList
           data={categories}
           style={{ maxHeight: 200, minHeight: 200 }}
-          renderItem={({ item }) => {
+          renderItem={({ item: { name, budget, expense } }) => {
+            const expenseMultiple = expense/budget;
+            const spentPercent = (expenseMultiple * 100).toFixed(0);
+            const progressBarColor = getProgressColor(expenseMultiple);
+
             return (
               <View
                 style={{
@@ -80,47 +88,61 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
                     :  WIDTH * 0.75 - 10,
                   borderRadius: 10,
                   alignSelf: 'center',
-                  backgroundColor: '#dadada',
-                  // justifyContent: 'center',
-                  padding: 10,
                   marginHorizontal: 10
                 }}
               >
-                <Text style={{ textAlign: 'left', fontSize: 24 }}>
-                  {item?.name}
-                </Text>
-                <Text style={{ textAlign: 'left', fontSize: 16 }}>
-                  {`Budget: ${item?.budget}`}
-                </Text>
-                <Text style={{ textAlign: 'right', fontSize: 16, marginTop: 20 }}>
-                  {`${item?.expense} Spent`}
-                </Text>
-                <Text style={{ textAlign: 'right', fontSize: 16 }}>
-                  {`${item?.budget - item.expense} Left   `}
-                </Text>
+                <LinearGradient colors={['#5c50ff', '#2c8bd6']} style={{ height: '100%', width: '100%', borderRadius: 10, padding: 20, position: 'relative' }}>
+                  <Text style={{ textAlign: 'left', fontSize: 24, color: '#fff' }}>
+                    {name}
+                  </Text>
+                  <Icon type='FontAwesome' name='money-bill-wave' size={100} color='white' style={{ position: 'absolute', left: '40%', top: '20%', opacity: 0.1 }}/>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, backgroundColor: 'transparent' }}>
+                    <Text style={{ marginBottom: 5, fontSize: 16, color: '#fff' }}>
+                      {expense}
+                    </Text>
+                    <Text style={{ marginBottom: 5, fontSize: 16, color: '#fff' }}>
+                      {budget}
+                    </Text>
+                  </View>
+                  <View style={{ height: 10, borderRadius: 8, marginBottom: 5, backgroundColor: Colors[currentTheme].progressBG }}>
+                    <View style={{ height: 10, borderRadius: 8, opacity: 0.8, backgroundColor: progressBarColor, width: `${expenseMultiple < 1 ? expenseMultiple * 100 : 100}%` }} />
+                  </View>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'transparent' }}>
+                    <Text style={{ marginBottom: 5, fontSize: 12, color: '#fff' }}>
+                      {`${spentPercent}% Spent`}
+                    </Text>
+                    <Text style={{ marginBottom: 5, fontSize: 12, color: '#fff' }}>
+                      Budget
+                    </Text>
+                  </View>
+                </LinearGradient>
               </View>
             )}
           }
         />
         { categories.length === 0 && (
           <View
-          style={{
-            flex: 1,
-            maxHeight: 150, minHeight: 150,
-            marginTop: 20, 
-            width: WIDTH - 60,
-            borderRadius: 10,
-            alignSelf: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#dadada',
-            padding: 10,
-            marginHorizontal: 10
-          }}
-        >
-           <Text style={{ textAlign: 'center', fontSize: 24 }}>
-              Add Categories
-            </Text>
-        </View>
+            style={{
+              flex: 1,
+              maxHeight: 150, minHeight: 150,
+              marginTop: 20, 
+              width: WIDTH - 60,
+              borderRadius: 10,
+              alignSelf: 'center',
+              justifyContent: 'center',
+              // padding: 10,
+              marginHorizontal: 10
+            }}
+          >
+            <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={{ height: '100%', width: '100%', borderRadius: 10, justifyContent: 'center' }}>
+              <Text style={{ textAlign: 'center', fontSize: 18, color: '#fff' }}>
+                Categorise your expenses
+              </Text>
+              <Text style={{ textAlign: 'center', fontSize: 14, color: '#fff' }}>
+                Set budget to get started.
+              </Text>
+            </LinearGradient>
+          </View>
         )}
       </Card>
       <View style={{ width: WIDTH }}>
