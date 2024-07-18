@@ -1,28 +1,26 @@
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, View as DefaultView } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
 import { AuthStackScreenProps } from '../../types';
 import { Button } from '../../components/Button';
+import { Images } from '../../assets/images/index';
 
-const dummyImage = 'https://img.freepik.com/free-vector/letter-n-d-colorful-icon-logo-design_474888-3460.jpg?w=826&t=st=1719559646~exp=1719560246~hmac=2dbcffec17f2ee44e4136a2dc49b6cdc6e2257d7b588e98d5093fe252d952470';
-
-export default function LoadingScreen(props: AuthStackScreenProps<'Loading'>) {
+export default function InfoScreen(props: AuthStackScreenProps<'Loading'>) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleWrapper}>
-        <Text style={styles.title}>App</Text>
-      </View>
-      <View style={styles.logoWrapper}>
+      <DefaultView style={styles.titleWrapper}>
+        <Text style={styles.title}>FinoVue</Text>
+      </DefaultView>
+      <DefaultView style={styles.logoWrapper}>
         <Image
           alt='logo' 
-          source={{ uri: dummyImage }}
-          height={200}
-          width={200}
+          source={Images.logo}
+          style={{ width: 150, height: 150 }}
         />
-        <Text style={styles.subTitle}>Say hello to your new app</Text>
-      </View>
-      <View style={styles.footer}>
+        <Text style={styles.subTitle}>Take control of your finance!</Text>
+      </DefaultView>
+      <DefaultView style={styles.footer}>
         <Button
           selected
           rounded
@@ -37,7 +35,7 @@ export default function LoadingScreen(props: AuthStackScreenProps<'Loading'>) {
           label='Sign Up'
           onPress={() => props.navigation?.navigate('Signup')}
         />
-      </View>
+      </DefaultView>
     </View>
   );
 }
@@ -50,7 +48,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     paddingBottom: 20,
     paddingTop: 40,
-
+    backgroundColor: '#010817'
   },
   titleWrapper: {
     alignSelf: 'stretch',
@@ -61,11 +59,13 @@ const styles = StyleSheet.create({
     fontSize: 34,
     fontWeight: 'bold',
     marginTop: 40,
+    color: '#fff',
   },
   subTitle: {
     marginTop: 10,
     fontSize: 20,
     fontWeight: 'bold',
+    color: '#fff',
   },
   logoWrapper: {
     flex: 2,
