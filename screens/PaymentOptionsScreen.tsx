@@ -27,7 +27,7 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
 
   const currentTheme:ColorSchemeName = useTheme();
   const selectedOptionColor = Colors[currentTheme].selectedOption;
-  const tintButton = Colors[currentTheme].tintButton;
+  const tintButton = '#2f95dc';
   const [optionToEdit, setOptionToEdit] = useState<PaymentModeOption | null>(null);
 
   const optionsContainerBackgroundColor = Colors[currentTheme].background;

@@ -15,12 +15,14 @@ export function AddEntryFooter({ navigation }: { navigation : NativeStackNavigat
       <FloatingButton
         onPress={() => addNewTransaction('Cash-In')}
         label={'+'}
-        style={{ backgroundColor: 'green', bottom: 10, left: WIDTH / 3 }}
+        labelStyles={{ color: 'green' }}
+        style={{ backgroundColor: '#c0f0cd', bottom: 10, left: WIDTH / 3 }}
       />
       <FloatingButton
         onPress={() => addNewTransaction('Cash-Out')}
         label={'+'}
-        style={{ backgroundColor: 'red', bottom: 10, right: WIDTH / 3 }}
+        labelStyles={{ color: 'red' }}
+        style={{ backgroundColor: '#f2b6b6', bottom: 10, right: WIDTH / 3 }}
       />
     </View>
   );

@@ -6,7 +6,7 @@ import useStore from '../../hooks/useStore';
 import { Transaction, TransactionType } from '../../store/type';
 import { AddNewScreenProps } from '../../types';
 import { parseObject, stringifyObject } from '../../utils';
-import { Button } from '../Button';
+import { ButtonOutline, ButtonPrimary } from '../Button';
 import { Card } from '../Card';
 import { Dropdown } from '../Dropdown';
 import { Input } from '../Input';
@@ -96,23 +96,18 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
         </>
       )}
       <View style={styles.bottomRow}>
-        <Button
-          activeOpacity={1}
+        <ButtonOutline
           disabled={!entry.paymentMode || !entry.remark}
           label={'Save & Add New'}
-          buttonType='outline'
           style={[{ width: '48%' }]}
           labelStyles={styles.buttonLabel}
-          selected
           onPress={onSaveAndAddNewClick}
         />
-        <Button
-          activeOpacity={1}
+        <ButtonPrimary
           disabled={!entry.paymentMode || !entry.remark}
           label={'Save'}
           style={[{ width: '48%' }]}
           labelStyles={styles.buttonLabel}
-          selected
           onPress={OnSaveClick}
         />
       </View>

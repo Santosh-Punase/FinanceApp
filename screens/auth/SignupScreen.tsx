@@ -2,7 +2,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
 import { AuthStackScreenProps } from '../../types';
-import { Button } from '../../components/Button';
+import { ButtonPrimary, ButtonLink } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { useState } from 'react';
 
@@ -46,10 +46,8 @@ export default function SignupScreen(props: AuthStackScreenProps<'Signup'>) {
           />
       </View>
       <View style={styles.buttonWrapper}>
-        <Button
-          selected
+        <ButtonPrimary
           rounded
-          labelStyles={styles.labelStyles}
           label='Sign Up'
           onPress={onSignup}
         />
@@ -57,9 +55,12 @@ export default function SignupScreen(props: AuthStackScreenProps<'Signup'>) {
       <View style={styles.footer}>
         
         <Text style={styles.subTitle}>Don't have an account? </Text>
-        <TouchableOpacity onPress={() => props.navigation.replace('Login')}>
-          <Text style={[styles.subTitle, styles.linkText]}>Log In</Text>
-        </TouchableOpacity>
+        <ButtonLink
+          label='Log In'
+          activeOpacity={1}
+          onPress={() => props.navigation.replace('Login')}
+          labelStyles={styles.subTitle}
+        />
       </View>
     </View>
   );
@@ -102,11 +103,5 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     alignSelf: 'flex-start',
-  },
-  labelStyles: {
-    fontSize: 18,
-  },
-  linkText: {
-    color: '#2e78b7',
   },
 });

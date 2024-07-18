@@ -5,7 +5,7 @@ import { View } from '../components/Themed';
 import { AddCategoryScreenProps } from '../types';
 import { Card } from '../components/Card';
 import { Input } from '../components/Input';
-import { Button } from '../components/Button';
+import { ButtonOutline, ButtonPrimary } from '../components/Button';
 import { useState } from 'react';
 import useStore from '../hooks/useStore';
 import { parseObject, stringifyObject } from '../utils';
@@ -55,22 +55,19 @@ export default function AddCategoryScreen({ navigation, route }: AddCategoryScre
           />
         </View>
         <View style={styles.bottomRow}>
-          <Button
-            activeOpacity={1}
+          <ButtonOutline
+            // activeOpacity={1}
             label={'Cancel'}
-            buttonType='outline'
+            // buttonType='outline'
             style={[{ width: '48%' }]}
             labelStyles={styles.buttonLabel}
-            selected
             onPress={goBack}
           />
-          <Button
-            activeOpacity={1}
+          <ButtonPrimary
             disabled={!categoryName || !budget}
             label={'Save'}
             style={[{ width: '48%' }]}
             labelStyles={styles.buttonLabel}
-            selected
             isLoading={isLoading}
             onPress={saveCategory}
           />

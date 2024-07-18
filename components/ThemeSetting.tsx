@@ -15,7 +15,7 @@ export function ThemeSetting() {
   return (
     <Card style={{ flexDirection: 'column' }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-        <Icon type="Ionicons" name='md-sync-circle-outline' size={30} />
+        <Icon type="Ionicons" name='sync-circle-outline' size={30} />
         <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme(Theme.DEFAULT)}>
           <Text style={styles.themeName}>Automatic</Text>
           <RadioButton isSelected={theme === Theme.DEFAULT} />

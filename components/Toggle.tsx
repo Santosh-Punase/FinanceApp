@@ -32,8 +32,8 @@ export default function Toggle({ width, value, onPress }: { width: number, value
 
   const positionNewValue = positionButton.interpolate({inputRange:[0,1],outputRange:[1, 0]})
   const positionInterPol = positionButton.interpolate({inputRange:[0,1],outputRange:[0, width / 2 - (2 * TOGGLE_MARGIN) - (2 * TOGGLE_BORDER)]})
-  const colorLink = Colors[currentTheme].tint;
-  const colorButton = Colors[currentTheme].invertedText;
+  const colorLink = '#2f95dc';
+  const colorButton = '#fff';
 
   const onChange = () => {
     onPress();
@@ -42,6 +42,7 @@ export default function Toggle({ width, value, onPress }: { width: number, value
 
   return (
     <View style={styles.container}>
+      {/* <View style={{ position: 'absolute', top: 0, left: 0, height: TOGGLE_HEIGHT, width: '50%', zIndex: 99, backgroundColor: 'rgba(0,0,0,0.2)'}}></View> */}
       <TouchableOpacity style={{ height:TOGGLE_HEIGHT, width:'100%' }}  activeOpacity={0.9} onPress={onChange} >
         <Animated.View style={[styles.mainStyes,{
           // backgroundColor:backgroundColorAnim,
@@ -71,6 +72,7 @@ export default function Toggle({ width, value, onPress }: { width: number, value
             Expense
           </Animated.Text>
           <Animated.View style={[styles.basicStyle,{
+            // width: (width / 2), // - (2 * TOGGLE_MARGIN)- (2 * TOGGLE_BORDER),
             backgroundColor: Colors[currentTheme].buttonPrimaryBG,
             transform:[{
               translateX:positionInterPol
@@ -87,10 +89,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     justifyContent: 'center',
+    // position: 'relative'
   },
   basicStyle: {
     height: TOGGLE_HEIGHT - (2 * TOGGLE_MARGIN) - (2 * TOGGLE_BORDER),
-    width: '49%',
+    width: '48%',//WIDTH / 2 - 25 - (2 * TOGGLE_MARGIN)- (2 * TOGGLE_BORDER) - 10,
     borderRadius: TOGGLE_BORDER_RADIUS,
     marginTop: TOGGLE_MARGIN,
     marginLeft: TOGGLE_MARGIN,
@@ -102,7 +105,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignSelf: 'center',
-    top: TOGGLE_HEIGHT / 2 - 12,
+    top: TOGGLE_HEIGHT / 2 - 14,
     textAlign: 'center',
   },
   mainStyes: {

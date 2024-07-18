@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import { AuthStackScreenProps } from '../../types';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { Button } from '../../components/Button';
+import { ButtonLink, ButtonPrimary } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { useState } from 'react';
 import { Icon } from '../../components/Icon';
@@ -47,22 +47,21 @@ export default function LoginScreen(props: AuthStackScreenProps<'Login'>) {
           </TouchableOpacity>
       </View>
       <View style={styles.buttonWrapper}>
-        <Button
-          selected
+        <ButtonPrimary
           disabled={isDisabled}
           rounded
-          labelStyles={styles.labelStyles}
           label='Log In'
           onPress={() => onLogin(email, password)}
         />
       </View>
       <View style={styles.footer}>
         <Text style={styles.subTitle}>Don't have an account? </Text>
-        <TouchableOpacity
+        <ButtonLink
+          label='Sign up'
+          activeOpacity={1}
           onPress={() => props.navigation.replace('Signup')}
-        >
-          <Text style={[styles.subTitle, styles.linkText]}>Sign up</Text>
-        </TouchableOpacity>
+          labelStyles={styles.subTitle}
+        />
       </View>
     </View>
   );
@@ -106,12 +105,6 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     alignSelf: 'flex-start',
-  },
-  labelStyles: {
-    fontSize: 18,
-  },
-  linkText: {
-    color: '#2e78b7',
   },
   eyeIcon: {
     position: 'absolute',

@@ -28,7 +28,7 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
 
   const currentTheme:ColorSchemeName = useTheme();
   const selectedOptionColor = Colors[currentTheme].selectedOption;
-  const tintButton = Colors[currentTheme].tintButton;
+  const tintButton = '#2f95dc';
   const [optionToEdit, setOptionToEdit] = useState<Option | null>(null);
 
   const optionsContainerBackgroundColor = Colors[currentTheme].background;

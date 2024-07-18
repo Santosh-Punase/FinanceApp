@@ -11,7 +11,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
 import { getProgressColor, parseObject } from '../utils';
 import TransactionList from '../components/Transactions/TransactionList';
-import { Button } from '../components/Button';
+import { ButtonLink } from '../components/Button';
 import Colors from '../constants/Colors';
 import { useTheme } from '../theme';
 // import LinearGradient from 'react-native-linear-gradient';
@@ -62,11 +62,8 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'TabOne'>)
       <Card style={[styles.cardStyle, { marginBottom: 10, minHeight: 240 }]}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: WIDTH - 40 , alignItems: 'center', height: 40 }}>
           <Text style={[styles.header, { marginLeft: 0 }]}>Budget Overview</Text>
-          <Button
-            selected
+          <ButtonLink
             label='+ Add Category'
-            buttonType='link'
-            style={{ backgroundColor: 'transparent' }}
             onPress={() => navigation.navigate('AddCategoryScreen', { header: 'Add Category', category: undefined, action: 'Add' })}
           />
         </View>
