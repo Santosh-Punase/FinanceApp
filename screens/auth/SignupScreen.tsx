@@ -5,15 +5,23 @@ import { AuthStackScreenProps } from '../../types';
 import { ButtonPrimary, ButtonLink } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { useState } from 'react';
+import { signup } from '../../api/api';
+import Toast from 'react-native-toast-message';
 
-export default function SignupScreen(props: AuthStackScreenProps<'Signup'>) {
+export default function SignupScreen({ navigation }: AuthStackScreenProps<'Signup'>) {
   
   const [userName, setUserName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
 
-  const onSignup = () => {
-
+  const onSignup = async () => {
+    try {
+      const token = await signup(userName, email, password, password);
+      Toast.show({ type: 'info', text1: 'Signup successful', text2: 'Login to continue' });
+      navigation.replace('Login');
+    } catch (e) {
+      // silent catch
+    }
   }
 
   return (
@@ -58,7 +66,7 @@ export default function SignupScreen(props: AuthStackScreenProps<'Signup'>) {
         <ButtonLink
           label='Log In'
           activeOpacity={1}
-          onPress={() => props.navigation.replace('Login')}
+          onPress={() => navigation.replace('Login')}
           labelStyles={styles.subTitle}
         />
       </View>

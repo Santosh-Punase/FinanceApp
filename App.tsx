@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import { MenuProvider } from 'react-native-popup-menu';
+import Toast from 'react-native-toast-message';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
@@ -39,6 +40,7 @@ export default function App() {
             </AuthProvider>
             <StatusBar style={colorScheme === Theme.DARK ? 'light' : 'dark'} />
           </MenuProvider>
+            <Toast />
         </ThemeContext.Provider>
       </SafeAreaProvider>
     );
