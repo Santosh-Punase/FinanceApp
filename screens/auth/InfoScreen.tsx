@@ -1,17 +1,17 @@
 import { StyleSheet, Image, View as DefaultView } from 'react-native';
 
-import { Text, View } from '../../components/Themed';
+import { LinearGradient, Text, View } from '../../components/Themed';
 import { AuthStackScreenProps } from '../../types';
 import { ButtonPrimary } from '../../components/Button';
 import { Images } from '../../assets/images/index';
-import { LinearGradient } from 'expo-linear-gradient';
+import Colors from '../../constants/Colors';
 
 export default function InfoScreen(props: AuthStackScreenProps<'Loading'>) {
 
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#10223E', '#0D2D61', '#0D2D61', '#10223E']}
+        colors={Colors.screenGadiant}
         style={{ height: '100%', width: '100%', padding: 40 }}
         locations={[0.2, 0.4, 0.5, 0.7]}
       >

@@ -3,39 +3,46 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { ButtonProps } from "./Button";
 import { Button } from "./Button";
 import Colors from "../../constants/Colors";
+import { useTheme } from "../../theme";
+import { StyleTheme } from "../../store/type";
 
 export function ButtonPrimary({ labelStyles, ...rest }: ButtonProps) {
+  const theme: StyleTheme = useTheme();
   return (
-    <Button labelStyles={{ ...styles.primaryLabel, labelStyles }} { ...rest } />
+    <Button labelStyles={{ ...styles(theme).primaryLabel, labelStyles }} { ...rest } />
   );
 }
 
 export function ButtonLink({ labelStyles, label, onPress, activeOpacity }: ButtonProps) {
+  const theme: StyleTheme = useTheme();
+
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={activeOpacity}>
-      <Text style={[styles.linkLabel, labelStyles]}>{label}</Text>
+      <Text style={[styles(theme).linkLabel, labelStyles]}>{label}</Text>
     </TouchableOpacity>
   );
 }
 
 export function ButtonOutline({ labelStyles, ...rest }: ButtonProps) {
+  const theme: StyleTheme = useTheme();
+
   return (
-    <Button labelStyles={{ ...styles.outlineLabel, labelStyles }} { ...rest } />
+    <Button labelStyles={{ ...styles(theme).outlineLabel, labelStyles }} { ...rest } />
   );
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: StyleTheme) => StyleSheet.create({
   primaryLabel: {
     color: '#fff',
-    backgroundColor: Colors.light.buttonPrimaryBG,
+    backgroundColor: Colors[theme].buttonPrimaryBG,
     fontSize: 18,
   },
   linkLabel: {
-    color: '#2f95dc',
+    color: Colors[theme].buttonPrimaryBG,
   },
   outlineLabel: {
-    color: '#2f95dc',
-    borderColor: '#2f95dc',
+    color: Colors[theme].buttonPrimaryBG,
+    borderColor: Colors[theme].buttonPrimaryBG,
     borderWidth: 1,
   }
 });

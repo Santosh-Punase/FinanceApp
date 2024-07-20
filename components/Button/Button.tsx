@@ -1,4 +1,4 @@
-import { Text, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { Text, StyleSheet, TouchableOpacity, TouchableOpacityProps, ActivityIndicator } from "react-native";
 
 export interface ButtonProps extends TouchableOpacityProps {
   label: string,
@@ -26,9 +26,10 @@ export function Button({
       style={[styles.wrapper, style, { borderRadius, opacity: disabled ? 0.6 : 1 }]}
       { ...rest }
     >
-      <Text style={[styles.buttonLabel, { borderRadius }, labelStyles]}>
-        {label}
-      </Text>
+      { isLoading
+      ? <ActivityIndicator size={"small"} color={"#fff"} style={[styles.buttonLabel, { borderRadius }, labelStyles]} />
+      : <Text style={[styles.buttonLabel, { borderRadius }, labelStyles]}>{label}</Text>
+      }
     </TouchableOpacity>
   );
 }

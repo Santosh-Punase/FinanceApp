@@ -6,6 +6,7 @@
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
 import LinkingConfiguration from './LinkingConfiguration';
 import { RootNavigator as AppStack } from './AppStack';
@@ -21,6 +22,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       { accessToken ? <AppStack /> : <AuthStack /> }
+      <StatusBar style={accessToken ? colorScheme === 'dark' ? 'light' : 'dark' : 'light'} />
     </NavigationContainer>
   );
 }

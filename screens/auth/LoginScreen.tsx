@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
 import { AuthStackScreenProps } from '../../types';
@@ -6,7 +6,9 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { ButtonLink, ButtonPrimary } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { useState } from 'react';
-import { Icon } from '../../components/Icon';
+import HeaderView from '../../components/HeaderView';
+import { PasswordInput } from '../../components/PasswordInput';
+import { EMAIL_REGEX } from '../../constants';
 
 export default function LoginScreen(props: AuthStackScreenProps<'Login'>) {
 
@@ -14,56 +16,45 @@ export default function LoginScreen(props: AuthStackScreenProps<'Login'>) {
 
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const isDisabled = !email || !password;
+  const emailError = EMAIL_REGEX.test(email) ? '' : 'Enter Valid Email';
+  const passwordError =  !!password ? '' : 'Enter Your Password';
+
+  const isDisabled = !(!emailError && !passwordError);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.row}>
-        <Text style={styles.title}>Login</Text>
-      </View>
-      <View style={styles.row}>
-        <Input
-          placeholder='E-mail'
-          value={email}
-          style={styles.inputStyle}
-          keyboardType='email-address'
-          onChangeText={(val) => setEmail(val)}
-        />
-        <Input
-          placeholder='Password'
-          value={password}
-            style={styles.inputStyle}
-            secureTextEntry={!showPassword}
-            keyboardType='default'
-            onChangeText={(val) => setPassword(val)}
+    <HeaderView title='Login'>
+      <View style={styles.container}>
+        <View style={styles.row}>
+          <Input
+            placeholder='E-mail'
+            value={email}
+            error={emailError}
+            onBlur={() => setEmail(email.trim())}
+            keyboardType='email-address'
+            onChangeText={(val) => setEmail(val)}
           />
-          <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)}
-            disabled={!password}
-            style={styles.eyeIcon}
-          >
-            <Icon type='Ionicons' name={`${showPassword ? 'eye': 'eye-off'}`} size={20} />
-          </TouchableOpacity>
+          <PasswordInput password={password} passwordError={passwordError} setPassword={setPassword} />
+        </View>
+        <View style={styles.buttonWrapper}>
+          <ButtonPrimary
+            disabled={isDisabled}
+            rounded
+            label='Log In'
+            onPress={() => onLogin(email, password)}
+          />
+        </View>
+        <View style={styles.footer}>
+          <Text style={styles.subTitle}>Don't have an account? </Text>
+          <ButtonLink
+            label='Sign up'
+            activeOpacity={1}
+            onPress={() => props.navigation.replace('Signup')}
+            labelStyles={styles.subTitle}
+          />
+        </View>
       </View>
-      <View style={styles.buttonWrapper}>
-        <ButtonPrimary
-          disabled={isDisabled}
-          rounded
-          label='Log In'
-          onPress={() => onLogin(email, password)}
-        />
-      </View>
-      <View style={styles.footer}>
-        <Text style={styles.subTitle}>Don't have an account? </Text>
-        <ButtonLink
-          label='Sign up'
-          activeOpacity={1}
-          onPress={() => props.navigation.replace('Signup')}
-          labelStyles={styles.subTitle}
-        />
-      </View>
-    </View>
+    </HeaderView>
   );
 }
 
@@ -72,25 +63,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingHorizontal: 50,
+    paddingHorizontal: 40,
     paddingBottom: 20,
     paddingTop: 40,
 
   },
   row: {
     alignSelf: 'stretch',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    marginBottom: 20,
-    position: 'relative',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginTop: 40,
-  },
-  inputStyle: {
     marginVertical: 20,
+    position: 'relative',
   },
   subTitle: {
     marginTop: 10,
@@ -106,13 +89,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'flex-start',
   },
-  eyeIcon: {
-    position: 'absolute',
-    right: 0,
-    bottom: 20,
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
 });

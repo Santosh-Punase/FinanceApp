@@ -18,7 +18,7 @@ export default {
     buttonSuccessBG: '#51ed51',
     buttonWarningBG: '#eaed51',
     buttonErrorBG: '#ed5151',
-    buttonPrimaryBG: tintColorLight,
+    buttonPrimaryBG: '#4681f4',
     tabIconSelected: tintColorLight,
   },
   dark: {
@@ -34,9 +34,11 @@ export default {
     buttonSuccessBG: '#51ed51',
     buttonWarningBG: '#eaed51',
     buttonErrorBG: '#ed5151',
-    buttonPrimaryBG: tintColorLight,
+    buttonPrimaryBG: '#4681f4',
     selectedOption: 'rgba(255, 255, 255, 0.2)',
     border: 'rgba(255, 255, 255, 0.4)',
     tabIconSelected: tintColorDark,
   },
+  screenGadiant: ['#10223E', '#0D2D61', '#0D2D61', '#10223E'],
+  headerGradiant: ['#10223E', '#4681f4']
 };

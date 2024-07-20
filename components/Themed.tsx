@@ -7,6 +7,7 @@ import { ColorSchemeName, Text as DefaultText, View as DefaultView } from 'react
 
 import Colors from '../constants/Colors';
 import { useTheme } from '../theme';
+import { LinearGradient as DefaultGradiant, LinearGradientProps } from 'expo-linear-gradient';
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -44,4 +45,8 @@ export function View(props: ViewProps) {
   const borderColor = useThemeColor({ }, 'border');
 
   return <DefaultView style={[{ backgroundColor, borderColor }, style]} {...otherProps} />;
+}
+
+export function LinearGradient(props: LinearGradientProps) {
+  return <DefaultGradiant {...props} dither={false} />;
 }

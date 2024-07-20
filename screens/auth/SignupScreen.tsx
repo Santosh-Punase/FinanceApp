@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
 import { AuthStackScreenProps } from '../../types';
@@ -7,6 +7,10 @@ import { Input } from '../../components/Input';
 import { useState } from 'react';
 import { signup } from '../../api/api';
 import Toast from 'react-native-toast-message';
+import HeaderView from '../../components/HeaderView';
+import { EMAIL_REGEX } from '../../constants';
+import { PasswordInput } from '../../components/PasswordInput';
+import useApiCall from '../../hooks/useApiCall';
 
 export default function SignupScreen({ navigation }: AuthStackScreenProps<'Signup'>) {
   
@@ -14,63 +18,61 @@ export default function SignupScreen({ navigation }: AuthStackScreenProps<'Signu
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
 
-  const onSignup = async () => {
-    try {
-      const token = await signup(userName, email, password, password);
+  const userNameError =  !!userName ? '' : 'Enter Username';
+  const emailError = EMAIL_REGEX.test(email) ? '' : 'Enter Valid Email';
+  const passwordError =  !!password ? '' : 'Enter Your Password';
+  const isDisabled = !(!userNameError && !emailError && !passwordError);
+
+  const { isLoading, doApiCall } = useApiCall({
+    apiCall: () => signup(userName, email, password, password),
+    onSuccess: () => {
       Toast.show({ type: 'info', text1: 'Signup successful', text2: 'Login to continue' });
       navigation.replace('Login');
-    } catch (e) {
-      // silent catch
     }
-  }
+  });
 
   return (
-    <View style={styles.container}>
-      <View style={styles.row}>
-        <Text style={styles.title}>Create new account</Text>
-      </View>
-      <View style={styles.row}>
-        <Input
-          placeholder='Username'
-          value={userName}
-          style={styles.inputStyle}
-          keyboardType='default'
-          onChangeText={(val) => setUserName(val)}
-        />
-         <Input
-          placeholder='E-mail'
-          value={email}
-          style={styles.inputStyle}
-          keyboardType='email-address'
-          onChangeText={(val) => setEmail(val)}
-        />
-        <Input
-          placeholder='Password'
-          value={password}
-            style={styles.inputStyle}
-            secureTextEntry
+    <HeaderView title='Register'>
+      <View style={styles.container}>
+        <View style={styles.row}>
+          <Input
+            placeholder='Username'
+            value={userName}
+            error={userNameError}
             keyboardType='default'
-            onChangeText={(val) => setPassword(val)}
+            onBlur={() => setUserName(userName.trim())}
+            onChangeText={(val) => setUserName(val)}
           />
+          <Input
+            placeholder='E-mail'
+            value={email}
+            error={emailError}
+            keyboardType='email-address'
+            onBlur={() => setEmail(email.trim())}
+            onChangeText={(val) => setEmail(val)}
+          />
+          <PasswordInput password={password} passwordError={passwordError} setPassword={setPassword} />
+        </View>
+        <View style={styles.buttonWrapper}>
+          <ButtonPrimary
+            rounded
+            label='Create Account'
+            isLoading={isLoading}
+            disabled={isLoading || isDisabled}
+            onPress={doApiCall}
+          />
+        </View>
+        <View style={styles.footer}>
+          <Text style={styles.subTitle}>Already have an account? </Text>
+          <ButtonLink
+            label='Log In'
+            activeOpacity={1}
+            onPress={() => navigation.replace('Login')}
+            labelStyles={styles.subTitle}
+          />
+        </View>
       </View>
-      <View style={styles.buttonWrapper}>
-        <ButtonPrimary
-          rounded
-          label='Sign Up'
-          onPress={onSignup}
-        />
-      </View>
-      <View style={styles.footer}>
-        
-        <Text style={styles.subTitle}>Don't have an account? </Text>
-        <ButtonLink
-          label='Log In'
-          activeOpacity={1}
-          onPress={() => navigation.replace('Login')}
-          labelStyles={styles.subTitle}
-        />
-      </View>
-    </View>
+    </HeaderView>
   );
 }
 
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingHorizontal: 50,
+    paddingHorizontal: 40,
     paddingBottom: 20,
     paddingTop: 40,
 
@@ -95,9 +97,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     marginTop: 40,
-  },
-  inputStyle: {
-    marginVertical: 20,
   },
   subTitle: {
     marginTop: 10,
