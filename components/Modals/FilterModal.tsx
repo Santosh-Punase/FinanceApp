@@ -24,6 +24,7 @@ export function FilterModal({ title, visible, cancelText='Clear All', submitText
     <Modal
       transparent={true}
       animationType="slide"
+      statusBarTranslucent
       visible={visible}
       onRequestClose={onClose}>
       <View style={modalStyles.modalBackdrop} lightColor={Colors.dark.background} darkColor={Colors.light.background}>

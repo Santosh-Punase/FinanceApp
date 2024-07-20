@@ -24,7 +24,7 @@ interface Props {
   setFilter: (filter: SelectedFilter, selectedOptions: string | number[]) => void;
 }
 
-const OPTIONS_WRAPPER_HEIGHT = Layout.window.height * 0.4;
+const OPTIONS_WRAPPER_HEIGHT = 300 // Layout.window.height * 0.4;
 
 export default function TransactionFilters({ selectedFilters, setFilter }: Props) {
   const [visibleModal, setVisibleModal] = useState<FilterType>('NONE');
@@ -180,7 +180,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
 const styles = StyleSheet.create({
   filterRow: {
     flexDirection: 'row',
-    height: 60,
+    height: 40,
     alignItems: 'center',
     // backgroundColor: '#dadada', // 'rgba(96, 133, 214, 0.6)'
   },

@@ -54,11 +54,12 @@ export const AuthProvider: React.FC<{ children: React.ReactElement }> = ({ child
 
   return (
     <AuthContext.Provider value={{ isLoading, accessToken, onLogin, onLogout }}>
-      { isLoading
+      {children}
+      {/* { isLoading
       ? <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size={"large"} />
         </View>
-      : children}
+      : children} */}
     </AuthContext.Provider>
   )
 }

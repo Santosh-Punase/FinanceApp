@@ -69,14 +69,10 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
       <View style={{ marginHorizontal: 30, marginBottom: 20 }}>
         <Toggle width={300} value={!isInTransaction} onPress={() => changeTransactionType(isInTransaction ? 'Cash-Out' : 'Cash-In')} />
       </View>
-      <View style={styles.row}>
-        <Input showLabel placeholder='Amount' value={entry.amount || ''} keyboardType='numeric' onChangeText={(amount) => updateEntry('amount', amount)} />
-      </View>
+      <Input showLabel placeholder='Amount' value={entry.amount || ''} keyboardType='numeric' onChangeText={(amount) => updateEntry('amount', amount)} />
       { entry.amount && (
         <>
-          <View style={styles.row}>
-            <Input showLabel label='Remark' placeholder='Item, Quantity, Person, Place etc' value={entry.remark || ''} onChangeText={(remark) => updateEntry('remark', remark)} />
-          </View>
+          <Input showLabel label='Remark' placeholder='Item, Quantity, Person, Place etc' value={entry.remark || ''} onChangeText={(remark) => updateEntry('remark', remark)} />
           <Dropdown
             key='category'
             iconStyle={{ size: 18 }}
@@ -97,14 +93,14 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
       )}
       <View style={styles.bottomRow}>
         <ButtonOutline
-          disabled={!entry.paymentMode || !entry.remark}
+          disabled={!entry.category || !entry.paymentMode || !entry.remark}
           label={'Save & Add New'}
           style={[{ width: '48%' }]}
           labelStyles={styles.buttonLabel}
           onPress={onSaveAndAddNewClick}
         />
         <ButtonPrimary
-          disabled={!entry.paymentMode || !entry.remark}
+          disabled={!entry.category || !entry.paymentMode || !entry.remark}
           label={'Save'}
           style={[{ width: '48%' }]}
           labelStyles={styles.buttonLabel}
@@ -121,11 +117,6 @@ const styles = StyleSheet.create({
     height: '100%',
     paddingBottom: 0,
     borderTopWidth: 4,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 30,
   },
   centeredRow: {
     flexDirection: 'row',

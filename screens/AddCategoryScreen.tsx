@@ -34,26 +34,22 @@ export default function AddCategoryScreen({ navigation, route }: AddCategoryScre
     <View style={styles.container}>
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
       <Card style={[styles.wrapperCard]}>
-        <View style={styles.row}>
-          <Input
-            showLabel
-            label='Name'
-            placeholder='Category Name'
-            value={categoryName}
-            onChangeText={(category) => setCategoryName(category)}
-          />
-        </View>
-        <View style={styles.row}>
-          <Input
-            showLabel
-            placeholder='Budget'
-            value={budget.toString()}
-            keyboardType='numeric'
-            onChangeText={(budget) => {
-              setBudget(budget)
-            }}
-          />
-        </View>
+        <Input
+          showLabel
+          label='Name'
+          placeholder='Category Name'
+          value={categoryName}
+          onChangeText={(category) => setCategoryName(category)}
+        />
+        <Input
+          showLabel
+          placeholder='Budget'
+          value={budget.toString()}
+          keyboardType='numeric'
+          onChangeText={(budget) => {
+            setBudget(budget)
+          }}
+        />
         <View style={styles.bottomRow}>
           <ButtonOutline
             // activeOpacity={1}
@@ -90,11 +86,6 @@ const styles = StyleSheet.create({
     height: '100%',
     paddingBottom: 0,
     paddingTop: 20,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 30,
   },
   bottomRow: {
     flexDirection: 'row',

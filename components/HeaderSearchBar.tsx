@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   searchInput: {
     position: 'absolute',
     right: 20,
-    top: -20,
+    top: -5,
     height: 40,
     width: Layout.window.width - 120,
     borderWidth: 0,

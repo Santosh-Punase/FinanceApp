@@ -11,7 +11,7 @@ export default function AddNewScreen({ navigation, route }: AddNewScreenProps) {
     <View style={styles.container}>
       <NewEntryCard navigation={navigation} route={route} />
       {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+      {/* <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} /> */}
     </View>
   );
 }

@@ -118,7 +118,7 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <Text style={styles.heading}>{'categories'}</Text>
+        <Text style={styles.heading}>{'Payment Modes'}</Text>
       </View>
       <ScrollView style={[{ width: '100%' }]}>
         { isLoading ? (

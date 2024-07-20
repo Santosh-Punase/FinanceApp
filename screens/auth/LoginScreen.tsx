@@ -12,7 +12,7 @@ import { EMAIL_REGEX } from '../../constants';
 
 export default function LoginScreen(props: AuthStackScreenProps<'Login'>) {
 
-  const { onLogin } = useAuthContext();
+  const { isLoading, onLogin } = useAuthContext();
 
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -38,7 +38,8 @@ export default function LoginScreen(props: AuthStackScreenProps<'Login'>) {
         </View>
         <View style={styles.buttonWrapper}>
           <ButtonPrimary
-            disabled={isDisabled}
+            disabled={isLoading || isDisabled}
+            isLoading={isLoading}
             rounded
             label='Log In'
             onPress={() => onLogin(email, password)}

@@ -11,7 +11,7 @@ export function Dropdown({ onPress, disabled, label, style, labelStyles, iconSty
   const backgroundColor = Colors[currentTheme].background;
 
   return (
-    <TouchableOpacity onPress={onPress} { ...rest }>
+    <TouchableOpacity onPress={onPress} { ...rest } activeOpacity={1}>
       <View style={[styles.dropdown, style]}>
         { label && <Text style={[styles.label, { backgroundColor }, labelStyles ]}>{label}</Text> }
         { !value || value === ''
