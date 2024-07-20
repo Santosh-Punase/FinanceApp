@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+// import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import { MenuProvider } from 'react-native-popup-menu';
@@ -16,12 +16,12 @@ import { AuthProvider } from './contexts/AuthContext';
 
 
 export default function App() {
-  const [theme, setTheme] = useState<Theme>(Theme.DEFAULT);
+  const [theme, setTheme] = useState<Theme>('default');
   const themeData = { theme, setTheme };
 
   const isLoadingComplete = useCachedResources();
   const defaultTheme = useColorScheme();
-  const colorScheme = theme === Theme.DEFAULT ? defaultTheme : theme;
+  const colorScheme = theme === 'default' ? defaultTheme : theme;
 
   useEffect(() => {
     initialize('categories', stringifyObject(defaultCategories));
@@ -38,7 +38,7 @@ export default function App() {
             <AuthProvider>
               <Navigation colorScheme={colorScheme} />
             </AuthProvider>
-            <StatusBar style={colorScheme === Theme.DARK ? 'light' : 'dark'} />
+            {/* <StatusBar style={colorScheme === Theme.DARK ? 'light' : 'dark'} /> */}
           </MenuProvider>
             <Toast />
         </ThemeContext.Provider>

@@ -16,23 +16,23 @@ export function ThemeSetting() {
     <Card style={{ flexDirection: 'column' }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
         <Icon type="Ionicons" name='sync-circle-outline' size={30} />
-        <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme(Theme.DEFAULT)}>
+        <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme('default')}>
           <Text style={styles.themeName}>Automatic</Text>
-          <RadioButton isSelected={theme === Theme.DEFAULT} />
+          <RadioButton isSelected={theme === 'default'} />
         </TouchableOpacity>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
         <Icon type="Ionicons" name='sunny-outline' size={30} />
-        <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme(Theme.LIGHT)}>
+        <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme('light')}>
           <Text style={styles.themeName}>Light</Text>
-          <RadioButton isSelected={theme === Theme.LIGHT} />
+          <RadioButton isSelected={theme === 'light'} />
         </TouchableOpacity>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Icon type="Ionicons" name='moon' size={30} />
-        <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme(Theme.DARK)}>
+        <TouchableOpacity style={styles.themeWrapper} activeOpacity={1} onPress={() => setTheme('dark')}>
           <Text style={styles.themeName}>Dark</Text>
-          <RadioButton isSelected={theme === Theme.DARK} />
+          <RadioButton isSelected={theme === 'dark'} />
         </TouchableOpacity>
       </View>
     </Card>

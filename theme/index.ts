@@ -1,15 +1,15 @@
 
 import { createContext, useContext } from 'react';
-import { useColorScheme } from 'react-native';
-import { Theme, ThemeContextType } from '../store/type';
+import { ColorSchemeName, useColorScheme } from 'react-native';
+import { StyleTheme, ThemeContextType } from '../store/type';
 
 export const ThemeContext = createContext<ThemeContextType | null>(null);
 
-export function useTheme() {
+export function useTheme(): StyleTheme {
 
-  const defaultTheme = useColorScheme();
+  const defaultTheme: ColorSchemeName = useColorScheme();
   const { theme } = useContext(ThemeContext) as ThemeContextType;
-  const currentTheme = theme === Theme.DEFAULT ? defaultTheme : theme;
+  const currentTheme = theme === 'default' ? defaultTheme ? defaultTheme : "light" : theme;
 
-  return currentTheme || 'light';
+  return currentTheme;
 }

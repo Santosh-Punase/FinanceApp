@@ -1,3 +1,5 @@
+import { ColorSchemeName } from "react-native";
+
 export type StoreKey = 'categories' | 'paymentModes' | 'transactionList' | 'user' | 'theme' | 'at';
 
 export type DropdownLabel = 'categories' | 'paymentModes';
@@ -9,11 +11,8 @@ export type Category = {
   expense: number
 }
 
-export enum Theme {
-  DEFAULT = 'default',
-  LIGHT = 'light',
-  DARK = 'dark',
-}
+export type Theme = Exclude<ColorSchemeName, null | undefined> | 'default'
+export type StyleTheme = Exclude<Theme, 'default'>
 
 export type Option = {
   name: string;
