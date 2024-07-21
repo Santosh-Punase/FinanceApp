@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, View as DefaultView } from 'react-native';
 
 import { Dropdown } from '../Dropdown';
 import { Text, View } from '../Themed';
@@ -8,7 +8,7 @@ import { Checkbox, RadioButton } from '../RadioButton';
 import useStore from '../../hooks/useStore';
 import { CategoryOption, DropdownOption, PaymentModeOption } from '../../store/type';
 import { parseObject } from '../../utils';
-import Layout from '../../constants/Layout';
+import { LoadingSkeleton } from '../LoadingSkeleton';
 import { Icon } from '../Icon';
 
 export type FilterType = 'TRANSACTION_TYPE' | 'CATEGORY' | 'PAYMENT_MODE' | 'NONE';
@@ -20,13 +20,14 @@ export type SelectedFilters = {
 }
 
 interface Props {
+  isLoading: boolean;
   selectedFilters : SelectedFilters;
   setFilter: (filter: SelectedFilter, selectedOptions: string | number[]) => void;
 }
 
 const OPTIONS_WRAPPER_HEIGHT = 300 // Layout.window.height * 0.4;
 
-export default function TransactionFilters({ selectedFilters, setFilter }: Props) {
+export default function TransactionFilters({ selectedFilters, setFilter, isLoading }: Props) {
   const [visibleModal, setVisibleModal] = useState<FilterType>('NONE');
   const [options, setOptions] = useState<number[]>([]);
   const [option, setOption] = useState<string>('');
@@ -79,6 +80,16 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
 
   const isFilterSelected = selectedFilters.category.length > 0 || selectedFilters.paymentMode.length > 0 || selectedFilters.transactionType !== '';
 
+  if (isLoading) {
+    return (
+      <LoadingSkeleton style={[styles.filterRow, { width: '100%' }]} itemStyle={{  marginLeft: 20 }}>
+        <DefaultView style={{ width: 40, height: 30 }} />
+        <DefaultView style={{ width: 100, height: 30 }} />
+        <DefaultView style={{ width: 100, height: 30 }} />
+        <DefaultView style={{ width: 100, height: 30 }} />
+      </LoadingSkeleton>
+    )
+  }
   return (
     <ScrollView contentContainerStyle={styles.filterRow} horizontal showsHorizontalScrollIndicator={false}>
       <View style={{ position: 'relative', marginHorizontal: 15, backgroundColor: 'transparent' }}>
@@ -180,7 +191,7 @@ export default function TransactionFilters({ selectedFilters, setFilter }: Props
 const styles = StyleSheet.create({
   filterRow: {
     flexDirection: 'row',
-    height: 40,
+    height: 60,
     alignItems: 'center',
     // backgroundColor: '#dadada', // 'rgba(96, 133, 214, 0.6)'
   },

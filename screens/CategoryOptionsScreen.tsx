@@ -6,17 +6,17 @@ import { parseObject, stringifyObject } from '../utils';
 import { HeaderSearchBar } from '../components/HeaderSearchBar';
 import { CategoryOptionsScreenProps } from '../types';
 import { InputModal } from '../components/Modals/InputModal';
-import { ScrollView, ActivityIndicator, TouchableOpacity, StyleSheet, ColorSchemeName, Alert } from 'react-native';
+import { ScrollView, TouchableOpacity, StyleSheet, ColorSchemeName, Alert } from 'react-native';
 import { Menu, MenuTrigger, MenuOptions, MenuOption } from 'react-native-popup-menu';
 import { FloatingButton } from '../components/FloatingButton';
 import { Icon } from '../components/Icon';
 import { NoRecord } from '../components/NoRecord';
 import { RadioButton } from '../components/RadioButton';
-import Layout from '../constants/Layout';
 import { View, Text } from '../components/Themed';
 import { useTheme } from '../theme';
 import Colors from '../constants/Colors';
 import { useFocusEffect } from '@react-navigation/native';
+import { ListLoading } from '../components/LoadingSkeleton';
 
 export default function CategoryOptionsScreen({ navigation, route }: CategoryOptionsScreenProps) {
 
@@ -139,9 +139,7 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
       </View>
       <ScrollView style={[{ width: '100%' }]}>
         { isLoading ? (
-          <View style={{ height: Layout.window.height - 200, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size={'large'} />
-          </View>
+          <ListLoading />
         ) : (
           <View style={[{ width: '100%', paddingTop: 10, }]}>
             {filteredRecords.map((op, i) => {

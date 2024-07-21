@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import dayjs from 'dayjs';
 // import { getCalendars } from 'expo-localization';
 
@@ -12,6 +12,7 @@ import { SelectedFilters } from './TransactionFilters';
 import { NoRecord } from '../NoRecord';
 import { NativeStackNavigatorProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { AddEntryFooter } from '../AddEntryFooter';
+import { ListLoading } from '../LoadingSkeleton';
 
 export const filterInitialState: SelectedFilters = {
   transactionType: '',
@@ -19,7 +20,7 @@ export const filterInitialState: SelectedFilters = {
   paymentMode: [],
 }
 
-const DEFAULT_LIST_HEIGHT = HEIGHT - 170;
+const DEFAULT_LIST_HEIGHT = HEIGHT - 190;
 
 type TransactionListProps = {
   list: Transaction[]
@@ -35,7 +36,7 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
     <>
     <ScrollView style={{ width: WIDTH, minHeight: listHeight || DEFAULT_LIST_HEIGHT, paddingBottom: 200 }}>
       { isLoading
-      ? <ActivityIndicator size={'large'} style={{ height: listHeight || DEFAULT_LIST_HEIGHT }} />
+      ? <ListLoading />
       : <View style={{ marginBottom: list.length === 0 ? 0 : 80 }}>
           {list.map((item: Transaction, i: number) => {
             // const date = dayjs(item.createdAt).format('DD-MMM-YYYY');
@@ -76,7 +77,7 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
           }
         </View>
       }
-      { list.length === 0 ?
+      { !isLoading && list.length === 0 ?
         <View style={{ minHeight: listHeight || DEFAULT_LIST_HEIGHT + 10 }}>
           { isFilterSelected ? 
             <NoRecord

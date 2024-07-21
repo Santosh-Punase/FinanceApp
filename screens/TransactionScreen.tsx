@@ -37,6 +37,7 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
   return (
     <View style={styles.container} darkColor='rgba(255,255,255,0.08)' lightColor='rgba(0,0,0, 0.02)'>
       <TransactionFilters
+        isLoading={false}
         selectedFilters={selectedFilters}
         setFilter={(filter, selectedOptions) => setSelectedFilters({ ...selectedFilters, [filter]: selectedOptions})}
       />
