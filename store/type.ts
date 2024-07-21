@@ -4,13 +4,6 @@ export type StoreKey = 'categories' | 'paymentModes' | 'transactionList' | 'user
 
 export type DropdownLabel = 'categories' | 'paymentModes';
 
-export type Category = {
-  name: string,
-  timestamp: Date | null,
-  budget: number,
-  expense: number
-}
-
 export type Theme = Exclude<ColorSchemeName, null | undefined> | 'default'
 export type StyleTheme = Exclude<Theme, 'default'>
 
@@ -22,12 +15,12 @@ export type Option = {
 };
 
 export type CategoryOption = {
-  id: number;
+  _id: string;
   name: string;
-  createdAt: number | null;
-  updatedAt: number | null;
+  createdAt?: number | null;
+  updatedAt?: number | null;
   budget: number;
-  expense: number;
+  expenditure: number;
 }
 
 export type PaymentModeOption = {
@@ -39,7 +32,7 @@ export type PaymentModeOption = {
 }
 
 export type TransactionType = 'Cash-In' | 'Cash-Out';
-export type DropdownOption = { id: number, name: string }; 
+export type DropdownOption = { id: number | string, name: string }; 
 export type TransactionCategory = DropdownOption | undefined; 
 export type TransactionPaymentMode = DropdownOption | undefined;
 

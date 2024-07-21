@@ -40,7 +40,7 @@ export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThr
   const onResetCategoryAndPaymentModes = async() => {
     removeValue('categories');
     removeValue('paymentModes');
-    initialize('categories', stringifyObject(defaultCategories));
+    // initialize('categories', stringifyObject(defaultCategories));
     initialize('paymentModes', stringifyObject(defaultPaymentModes));
   }
 

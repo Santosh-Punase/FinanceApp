@@ -8,7 +8,7 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { initialize } from './store/store';
-import { defaultCategories, defaultPaymentModes } from './constants/Store';
+import { /* defaultCategories, */ defaultPaymentModes } from './constants/Store';
 import { stringifyObject } from './utils';
 import { Theme } from './store/type';
 import { ThemeContext } from './theme';
@@ -24,7 +24,7 @@ export default function App() {
   const colorScheme = theme === 'default' ? defaultTheme : theme;
 
   useEffect(() => {
-    initialize('categories', stringifyObject(defaultCategories));
+    // initialize('categories', stringifyObject(defaultCategories));
     initialize('paymentModes', stringifyObject(defaultPaymentModes));
   }, [])
 

@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import { View } from '../components/Themed';
 import { AddCategoryScreenProps } from '../types';
@@ -7,32 +7,39 @@ import { Card } from '../components/Card';
 import { Input } from '../components/Input';
 import { ButtonOutline, ButtonPrimary } from '../components/Button';
 import { useState } from 'react';
-import useStore from '../hooks/useStore';
-import { parseObject, stringifyObject } from '../utils';
+import useApiCall from '../hooks/useApiCall';
+import { saveCategory, updateCategory } from '../api/api';
 
 export default function AddCategoryScreen({ navigation, route }: AddCategoryScreenProps) {
 
   const [categoryName, setCategoryName] = useState<string>(route.params.category?.name || '');
   const [budget, setBudget] = useState<string>(`${route.params.category?.budget || ''}`);
-  const [availableOptions, mutateOptions, isLoading] = useStore('categories');
-
-  // @ts-ignore
-  const parsedOptionsArray: CategoryOption[] = availableOptions !== '' ? parseObject(availableOptions) : [];
+  const action = route.params.action;
 
   const goBack = () => {
     navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Root')
   }
 
-  const saveCategory = async () => {
-    const category = { name: categoryName, id: Math.random(), createdAt: Date.now(), updatedAt: Date.now(), budget, expense: 0 }
-    const updatedOptions = [ ...parsedOptionsArray, category];
-    await mutateOptions(stringifyObject(updatedOptions));
-    goBack();
-  };
+  const showToastAndGoBack = (msg: string) => {
+    Toast.show({
+      type: 'success',
+      text1: msg,
+    });
+    goBack()
+  }
+
+  const { isLoading: isSaveLoading, doApiCall: save } = useApiCall({
+    apiCall: () => saveCategory({ name: categoryName, budget: parseFloat(budget) }),
+    onSuccess: () => showToastAndGoBack('Category created successfully'),
+  })
+
+  const { isLoading: isUpdateLoading, doApiCall: update } = useApiCall({
+    apiCall: () => updateCategory(route.params.category?.id!, { name: categoryName, budget: parseFloat(budget) }),
+    onSuccess: () => showToastAndGoBack('Category updated successfully'),
+  })
 
   return (
     <View style={styles.container}>
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
       <Card style={[styles.wrapperCard]}>
         <Input
           showLabel
@@ -54,7 +61,6 @@ export default function AddCategoryScreen({ navigation, route }: AddCategoryScre
           <ButtonOutline
             // activeOpacity={1}
             label={'Cancel'}
-            // buttonType='outline'
             style={[{ width: '48%' }]}
             labelStyles={styles.buttonLabel}
             onPress={goBack}
@@ -64,8 +70,8 @@ export default function AddCategoryScreen({ navigation, route }: AddCategoryScre
             label={'Save'}
             style={[{ width: '48%' }]}
             labelStyles={styles.buttonLabel}
-            isLoading={isLoading}
-            onPress={saveCategory}
+            isLoading={action === 'Add' ? isSaveLoading : isUpdateLoading}
+            onPress={action === 'Add' ? save : update}
           />
         </View>
       </Card>

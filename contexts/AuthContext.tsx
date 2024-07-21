@@ -2,6 +2,7 @@ import React, { Context, createContext, useContext, useEffect, useState } from "
 
 import { AuthContextType } from "../store/type";
 import { getValue, removeValue, setValue } from "../store/store";
+import { setAuthToken } from "../api/apiConfig";
 
 const authContextInitialValues: AuthContextType = {
   isLoading: false,
@@ -19,7 +20,8 @@ export const AuthProvider: React.FC<{ children: React.ReactElement }> = ({ child
 
   const onLogin = async (token: string) => {
     if(token) {
-      setAccessToken(token)
+      setAccessToken(token);
+      setAuthToken(token);
       await setValue('at', token);
     }
   }

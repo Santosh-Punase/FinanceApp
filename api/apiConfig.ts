@@ -26,6 +26,7 @@ function axiosRequest(options: AxiosRequestConfig) {
   }
 
   function onFailure(error: AxiosError<{ error: { message: string }}, any>) {
+    console.log('err', error.response)
     Toast.show({
       type: 'error',
       text1: error.response?.data?.error?.message || 'Oops Somehing went wrong'

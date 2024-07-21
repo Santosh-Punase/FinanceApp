@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import useStore from '../hooks/useStore';
-import { CategoryOption, Option } from '../store/type';
-import { parseObject, stringifyObject } from '../utils';
+import { CategoryOption } from '../store/type';
 import { HeaderSearchBar } from '../components/HeaderSearchBar';
 import { CategoryOptionsScreenProps } from '../types';
-import { InputModal } from '../components/Modals/InputModal';
 import { ScrollView, TouchableOpacity, StyleSheet, ColorSchemeName, Alert } from 'react-native';
 import { Menu, MenuTrigger, MenuOptions, MenuOption } from 'react-native-popup-menu';
 import { FloatingButton } from '../components/FloatingButton';
@@ -17,19 +14,20 @@ import { useTheme } from '../theme';
 import Colors from '../constants/Colors';
 import { useFocusEffect } from '@react-navigation/native';
 import { ListLoading } from '../components/LoadingSkeleton';
+import useApiCall from '../hooks/useApiCall';
+import { deleteCategory, getCategories } from '../api/api';
+import Toast from 'react-native-toast-message';
 
 export default function CategoryOptionsScreen({ navigation, route }: CategoryOptionsScreenProps) {
 
-  const [showAddEditModal, setShowAddEditModal] = useState<boolean>(false);
   const [searchString, setSearchString] = useState<string>('');
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState<boolean>(false);
-  const [availableOptions, mutateOptions, isLoading, _ , fetchCategories] = useStore('categories');
+  const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
   const selectedCategory = route?.params?.category || undefined;
 
   const currentTheme:ColorSchemeName = useTheme();
   const selectedOptionColor = Colors[currentTheme].selectedOption;
   const tintButton = Colors[currentTheme].buttonPrimaryBG;
-  const [optionToEdit, setOptionToEdit] = useState<Option | null>(null);
 
   const optionsContainerBackgroundColor = Colors[currentTheme].background;
   const optionsContainerShadowColor = Colors[currentTheme].text;
@@ -46,43 +44,41 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
     )});
   }, [navigation, isSearchBoxOpen, searchString]);
 
-  useFocusEffect(() => {
-    fetchCategories();
+  const [categories, setCategories] = useState<CategoryOption[]>([]);
+  const { isLoading: isFetchLoading, doApiCall: fetchCategories } = useApiCall({
+    apiCall: () => getCategories(),
+    onSuccess: (data) => {
+      setCategories(data);
+    }
   });
 
-  // @ts-ignore
-  const parsedOptionsArray: CategoryOption[] = availableOptions !== '' ? parseObject(availableOptions) : [];
+  useFocusEffect(
+    useCallback(() => {
+      fetchCategories();
+    }, [])
+  );
 
-
-  const addNewOption = (op: CategoryOption) => {
-    const updatedOptions = [ ...parsedOptionsArray, op];
-    mutateOptions(stringifyObject(updatedOptions));
+  const addCategory = () => {
+    setSearchString('');
+    setIsSearchBoxOpen(false);
+    navigation.navigate('AddCategoryScreen', { header: 'Add Category', category: { name: searchString }, action: 'Add' })
   }
 
+  const editCategory = (cat: CategoryOption) => {
+    setSearchString('');
+    setIsSearchBoxOpen(false);
+    navigation.navigate('AddCategoryScreen', { header: 'Edit Category', category: { name: cat.name, budget: cat.budget, id: cat._id }, action: 'Edit' })
+  }
+    
   const onSelect = (selection: CategoryOption) => {
     if (route.params?.action === 'select') {
-      navigation.navigate('AddNewTransaction', { category: { id: selection.id, name: selection.name }, paymentMode: route?.params?.paymentMode })
+      navigation.navigate('AddNewTransaction', { category: { id: selection._id, name: selection.name }, paymentMode: route?.params?.paymentMode })
     } else {
       editCategory(selection);
     }
   }
 
-  const onAddNew = (name: string) => {
-    addNewOption({ name, id: Math.random(), createdAt: Date.now(), updatedAt: Date.now(), budget: 0, expense: 0 })
-    setSearchString('');
-    setIsSearchBoxOpen(false)
-  }
-
-  const updateOptions = (list: CategoryOption[]) => {
-    mutateOptions(stringifyObject(list));
-  }
-
-  const editOption = (option: Option) => {
-    const updatedOptions = parsedOptionsArray.map((op) => op.createdAt === option.createdAt ? option : op);
-    mutateOptions(stringifyObject(updatedOptions));
-  }
-
-  const sortOptions = (a: Option, b: Option) => {
+  const sortOptions = (a: CategoryOption, b: CategoryOption) => {
     return a.name.localeCompare(b.name);
   }
 
@@ -97,41 +93,24 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
         },
         { text: "YES",
           style: 'destructive',
-          onPress: () => updateOptions(parsedOptionsArray.filter(op => op.id !== option.id))
+          onPress: () => {
+            setIsDeleteLoading(true);
+            deleteCategory(`${option._id}`)
+              .then(() => {
+                setCategories(categories.filter(op => op._id !== option._id));
+                Toast.show({ type: 'success', text1: `Category ${option.name} deleted` })
+              }).finally(() => {
+                setIsDeleteLoading(false);
+              })
+          }
         }
       ],
       { cancelable: true, }
     );
 
-  const onCancelModal = () => {
-    setShowAddEditModal(false);
-    setOptionToEdit(null);
-  }
+  const filteredRecords: CategoryOption[] = categories.filter((p: CategoryOption) => p.name.toLowerCase().includes(searchString.toLowerCase())).sort(sortOptions);
 
-  const onSubmitModal = (name: string) => {
-    if(optionToEdit) {
-      editOption({ ...optionToEdit, name, updatedAt: Date.now() })
-      setOptionToEdit(null);
-    } else {
-      onAddNew(name);
-    }
-    setShowAddEditModal(false);
-  }
-
-  const addCategory = () => {
-    setSearchString('');
-    setIsSearchBoxOpen(false);
-    navigation.navigate('AddCategoryScreen', { header: 'Add Category', category: { name: searchString }, action: 'Add' })
-  }
-
-  const editCategory = (cat: CategoryOption) => {
-    setSearchString('');
-    setIsSearchBoxOpen(false);
-    navigation.navigate('AddCategoryScreen', { header: 'Edit Category', category: { name: cat.name, budget: cat.budget }, action: 'Edit' })
-  }
-    
-  const filteredRecords = parsedOptionsArray.filter((p: CategoryOption) => p.name.toLowerCase().includes(searchString.toLowerCase())).sort(sortOptions)
-
+  const isLoading = isFetchLoading || isDeleteLoading
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -143,7 +122,7 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
         ) : (
           <View style={[{ width: '100%', paddingTop: 10, }]}>
             {filteredRecords.map((op, i) => {
-              const isSelected = selectedCategory?.id === op.id;
+              const isSelected = selectedCategory?.id === op._id;
               return (
                 <View style={isSelected ? [styles.listItem, { backgroundColor: selectedOptionColor }] : styles.listItem} key={i} darkColor={'rgba(255, 255, 255, 0.08)'} >
                   <TouchableOpacity onPress={() => onSelect(op)} style={styles.labelWrapper} activeOpacity={1}>
@@ -175,7 +154,7 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
             )}
           </View>
         )}
-        { filteredRecords.length === 0 && (
+        { !isLoading && filteredRecords.length === 0 && (
           <NoRecord
             header={`No Category Found`}
             subHeader="Try searching with different name or add new"
@@ -187,15 +166,6 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
         label={'+'}
         style={{ bottom: 40, right: 20, backgroundColor: tintButton }}
       />
-      { showAddEditModal && (
-        <InputModal
-          title={optionToEdit ? `Edit Category`: `Add New Category`}
-          initialValue={optionToEdit?.name || ''}
-          placeholder={'Category'}
-          onCancel={onCancelModal}
-          onSubmit={onSubmitModal}
-        />
-      )}
     </View>
   );
 }

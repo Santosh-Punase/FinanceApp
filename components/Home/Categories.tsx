@@ -1,12 +1,11 @@
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { View as DefaultView } from 'react-native';
 
 import Colors from "../../constants/Colors";
 import { WIDTH } from "../../constants/Layout";
-import useStore from "../../hooks/useStore";
-import { CategoryOption, StyleTheme } from "../../store/type";
-import { getProgressColor, parseObject } from "../../utils";
+import { StyleTheme } from "../../store/type";
+import { getProgressColor } from "../../utils";
 import { ButtonLink } from "../Button";
 import { Card } from "../Card";
 import { HorizontalCardList } from "../HorizontalCardList";
@@ -15,27 +14,28 @@ import { LinearGradient, Text, View } from "../Themed";
 import { styles } from "./styles";
 import { HomeScreenNavigation } from "../../types";
 import { LoadingSkeleton } from "../LoadingSkeleton";
-
+import useApiCall from "../../hooks/useApiCall";
+import { getCategories } from "../../api/api";
 interface Props {
   navigation: HomeScreenNavigation;
   currentTheme: StyleTheme
 }
 
 export function Categories({ navigation, currentTheme }: Props) {
-  const [ categoriesList, , isCategoriesLoading , , fetchCategories ] = useStore('categories');
-  
-  // @ts-ignore
-  const parsedCategoriesList: CategoryOption[] = parseObject(categoriesList) || [];
-  
-  const categories = parsedCategoriesList;
-  
+  const [categories, setCategories] = useState([]);
+  const { isLoading, doApiCall: fetchCategories } = useApiCall({
+    apiCall: () => getCategories(),
+    onSuccess: (data) => {
+      setCategories(data);
+    }
+  });
+
   useFocusEffect(
     useCallback(() => {
-      fetchCategories()
-    }, [categoriesList])
+      fetchCategories();
+    }, [])
   );
 
-  const isLoading = isCategoriesLoading;
   if (isLoading) {
     return (
       <Card style={[styles.cardStyle, { marginBottom: 10, minHeight: 240, justifyContent: 'center' }]}>
@@ -63,8 +63,8 @@ export function Categories({ navigation, currentTheme }: Props) {
       <HorizontalCardList
         data={categories}
         style={{ maxHeight: 200, minHeight: 200 }}
-        renderItem={({ item: { name, budget, expense } }) => {
-          const expenseMultiple = expense/budget;
+        renderItem={({ item: { name, budget, expenditure } }) => {
+          const expenseMultiple = expenditure/budget;
           const spentPercent = (expenseMultiple * 100).toFixed(0);
           const progressBarColor = getProgressColor(expenseMultiple);
 
@@ -88,7 +88,7 @@ export function Categories({ navigation, currentTheme }: Props) {
                 {/* <Icon type='FontAwesome' name='money-bill-wave' size={100} color='white' style={{ position: 'absolute', left: '40%', top: '20%', opacity: 0.1 }}/> */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, backgroundColor: 'transparent' }}>
                   <Text style={{ marginBottom: 5, fontSize: 16, color: '#fff' }}>
-                    {expense}
+                    {expenditure}
                   </Text>
                   <Text style={{ marginBottom: 5, fontSize: 16, color: '#fff' }}>
                     {budget}

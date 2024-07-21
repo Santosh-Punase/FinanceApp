@@ -17,3 +17,12 @@ export const getProgressColor = (value: number) => {
   }
   return Colors.dark.buttonErrorBG;
 }
+
+export function replaceUrlParams(url: string, params: Record<string, string>) {
+  return url.replace(/:([a-zA-Z0-9_]+)/g, (match, paramName) => {
+    if (params.hasOwnProperty(paramName)) {
+      return params[paramName];
+    }
+    return match;
+  });
+}

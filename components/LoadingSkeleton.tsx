@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     borderRadius: 4, 
   },
   listItem: {
-    height: 40,
+    height: 20,
     marginBottom: 20, 
   }
 });
