@@ -3,9 +3,9 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { CompositeNavigationProp, CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { TransactionCategory, TransactionPaymentMode, TransactionType } from './store/type';
 
 declare global {
@@ -56,3 +56,5 @@ export type AddNewScreenProps = NativeStackScreenProps<RootStackParamList, "AddN
 export type AddCategoryScreenProps = NativeStackScreenProps<RootStackParamList, "AddCategoryScreen">;
 export type CategoryOptionsScreenProps = NativeStackScreenProps<RootStackParamList, "CategoryOptionsScreen">;
 export type PaymentOptionsScreenProps = NativeStackScreenProps<RootStackParamList, "PaymentOptionsScreen">;
+
+export type HomeScreenNavigation = CompositeNavigationProp<BottomTabNavigationProp<RootTabParamList, 'TabOne', undefined>, NativeStackNavigationProp<RootStackParamList, 'Root', undefined>>;

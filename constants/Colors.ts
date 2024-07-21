@@ -40,5 +40,6 @@ export default {
     tabIconSelected: tintColorDark,
   },
   screenGadiant: ['#10223E', '#0D2D61', '#0D2D61', '#10223E'],
-  headerGradiant: ['#10223E', '#4681f4']
+  headerGradiant: ['#10223E', '#4681f4'],
+  categoryCardGradiant: ['#5c50ff', '#2c8bd6'],
 };
