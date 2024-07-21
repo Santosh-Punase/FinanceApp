@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 interface Props {
   apiCall: () => void;
-  onSuccess: () => void;
+  onSuccess: (data: any) => void;
   onFailure?: () => void;
 }
 
@@ -12,9 +12,9 @@ export default function useApiCall({ apiCall, onSuccess, onFailure }: Props) {
   const doApiCall = async () => {
     try {
       setIsLoading(true);
-      await apiCall();
+      const data = await apiCall();
       setIsLoading(false);
-      onSuccess();
+      onSuccess(data);
     } catch (e) {
       setIsLoading(false);
       onFailure?.();

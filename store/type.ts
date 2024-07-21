@@ -68,6 +68,6 @@ export type AuthContextType = {
   isLoading: boolean;
   user?: any;
   accessToken: string;  
-  onLogin: (uname: string, pass: string) => void;
+  onLogin: (token: string) => void;
   onLogout: () => void
 }

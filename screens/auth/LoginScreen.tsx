@@ -9,10 +9,12 @@ import { useState } from 'react';
 import HeaderView from '../../components/HeaderView';
 import { PasswordInput } from '../../components/PasswordInput';
 import { EMAIL_REGEX } from '../../constants';
+import useApiCall from '../../hooks/useApiCall';
+import { login } from '../../api/api';
 
-export default function LoginScreen(props: AuthStackScreenProps<'Login'>) {
+export default function LoginScreen({ navigation }: AuthStackScreenProps<'Login'>) {
 
-  const { isLoading, onLogin } = useAuthContext();
+  const { onLogin: contextLogin } = useAuthContext();
 
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -21,6 +23,15 @@ export default function LoginScreen(props: AuthStackScreenProps<'Login'>) {
   const passwordError =  !!password ? '' : 'Enter Your Password';
 
   const isDisabled = !(!emailError && !passwordError);
+
+  const { isLoading, doApiCall } = useApiCall({
+    apiCall: () => login(email, password),
+    onSuccess: (data) => {
+      // @ts-ignore
+      const accessToken = data?.token
+      contextLogin(accessToken)
+    }
+  });
 
   return (
     <HeaderView title='Login'>
@@ -42,7 +53,7 @@ export default function LoginScreen(props: AuthStackScreenProps<'Login'>) {
             isLoading={isLoading}
             rounded
             label='Log In'
-            onPress={() => onLogin(email, password)}
+            onPress={doApiCall}
           />
         </View>
         <View style={styles.footer}>
@@ -50,7 +61,7 @@ export default function LoginScreen(props: AuthStackScreenProps<'Login'>) {
           <ButtonLink
             label='Sign up'
             activeOpacity={1}
-            onPress={() => props.navigation.replace('Signup')}
+            onPress={() => navigation.replace('Signup')}
             labelStyles={styles.subTitle}
           />
         </View>
