@@ -24,6 +24,7 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState<boolean>(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
   const selectedCategory = route?.params?.category || undefined;
+  const routeAction = route.params?.action;
 
   const currentTheme:ColorSchemeName = useTheme();
   const selectedOptionColor = Colors[currentTheme].selectedOption;
@@ -71,7 +72,7 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
   }
     
   const onSelect = (selection: CategoryOption) => {
-    if (route.params?.action === 'select') {
+    if (routeAction === 'select') {
       navigation.navigate('AddNewTransaction', { category: { id: selection._id, name: selection.name }, paymentMode: route?.params?.paymentMode })
     } else {
       editCategory(selection);
@@ -126,7 +127,7 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
               return (
                 <View style={isSelected ? [styles.listItem, { backgroundColor: selectedOptionColor }] : styles.listItem} key={i} darkColor={'rgba(255, 255, 255, 0.08)'} >
                   <TouchableOpacity onPress={() => onSelect(op)} style={styles.labelWrapper} activeOpacity={1}>
-                    { route.params?.action === 'select' && (
+                    { routeAction === 'select' && (
                       <RadioButton size={24} style={styles.radioIcon} isSelected={isSelected} />
                     )}
                     <Text style={styles.optionLabel}>{op.name}</Text>

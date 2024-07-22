@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import useStore from '../hooks/useStore';
 import { Option, PaymentModeOption } from '../store/type';
@@ -16,18 +16,24 @@ import { View, Text } from '../components/Themed';
 import { useTheme } from '../theme';
 import Colors from '../constants/Colors';
 import { ListLoading } from '../components/LoadingSkeleton';
+import useApiCall from '../hooks/useApiCall';
+import { deletePaymentMode, getPaymentModes, savePaymentMode, updatePaymentMode } from '../api/api';
+import { useFocusEffect } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 export default function PaymentOptionsScreen({ navigation, route }: PaymentOptionsScreenProps) {
 
   const [showAddEditModal, setShowAddEditModal] = useState<boolean>(false);
   const [searchString, setSearchString] = useState<string>('');
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState<boolean>(false);
-  const [availableOptions, mutateOptions, isLoading] = useStore('paymentModes');
+  const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
+  // const [availableOptions, mutateOptions, isLoading] = useStore('paymentModes');
   const selectedPaymentMode = route?.params?.paymentMode || undefined;
+  const routeAction = route.params?.action;
 
   const currentTheme:ColorSchemeName = useTheme();
   const selectedOptionColor = Colors[currentTheme].selectedOption;
-  const tintButton = '#2f95dc';
+  const tintButton = Colors[currentTheme].buttonPrimaryBG;
   const [optionToEdit, setOptionToEdit] = useState<PaymentModeOption | null>(null);
 
   const optionsContainerBackgroundColor = Colors[currentTheme].background;
@@ -46,40 +52,72 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
   }, [navigation, isSearchBoxOpen, searchString]);
 
   // @ts-ignore
-  const parsedOptionsArray: PaymentModeOption[] = availableOptions !== '' ? parseObject(availableOptions) : [];
+  // const parsedOptionsArray: PaymentModeOption[] = availableOptions !== '' ? parseObject(availableOptions) : [];
 
-  const updateTimestamp = (record: PaymentModeOption) => {
-    const updatedOptions = parsedOptionsArray.map(op => op.id === record.id ? record : op);
-    mutateOptions(stringifyObject(updatedOptions));
-  }
+  // const updateTimestamp = (record: PaymentModeOption) => {
+  //   const updatedOptions = parsedOptionsArray.map(op => op.id === record.id ? record : op);
+  //   mutateOptions(stringifyObject(updatedOptions));
+  // }
 
-  const addNewOption = (op: PaymentModeOption) => {
-    const updatedOptions = [ ...parsedOptionsArray, op];
-    mutateOptions(stringifyObject(updatedOptions));
-  }
+  // const addNewOption = (op: PaymentModeOption) => {
+  //   const updatedOptions = [ ...parsedOptionsArray, op];
+  //   mutateOptions(stringifyObject(updatedOptions));
+  // }
+  const [paymentModes, setPaymentModes] = useState<PaymentModeOption[]>([]);
+  const { isLoading: isFetchLoading, doApiCall: fetchPaymentModes } = useApiCall({
+    apiCall: () => getPaymentModes(),
+    onSuccess: (data) => {
+      setPaymentModes(data);
+    }
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchPaymentModes();
+    }, [])
+  );
 
   const onSelect = (selection: PaymentModeOption) => {
-    updateTimestamp({ ...selection, lastUsedAt: Date.now() });
-    navigation.navigate('AddNewTransaction', { category: route?.params?.category, paymentMode:  { id: selection.id, name: selection.name } })
+  //   updateTimestamp({ ...selection, lastUsedAt: Date.now() });
+    if (routeAction === 'select') {
+      navigation.navigate('AddNewTransaction', { category: route?.params?.category, paymentMode:  { id: selection._id, name: selection.name } });
+    } else {
+      editOption(selection);
+    }
   }
 
   const onAddNew = (name: string) => {
-    addNewOption({ name, id: Math.random(), createdAt: Date.now(), updatedAt: Date.now(), lastUsedAt: Date.now() })
+    // addNewOption({ name, id: Math.random(), createdAt: Date.now(), updatedAt: Date.now(), lastUsedAt: Date.now() })
     setSearchString('');
     setIsSearchBoxOpen(false)
+    setOptionToEdit({ name, _id: '' })
+    setShowAddEditModal(true);
   }
 
-  const updateOptions = (list: PaymentModeOption[]) => {
-    mutateOptions(stringifyObject(list));
-  }
+  // const updateOptions = (list: PaymentModeOption[]) => {
+  //   mutateOptions(stringifyObject(list));
+  // }
 
   const editOption = (option: PaymentModeOption) => {
-    const updatedOptions = parsedOptionsArray.map((op) => op.createdAt === option.createdAt ? option : op);
-    mutateOptions(stringifyObject(updatedOptions));
+    setOptionToEdit(option);
+    setShowAddEditModal(true);
+  //   const updatedOptions = parsedOptionsArray.map((op) => op.createdAt === option.createdAt ? option : op);
+  //   mutateOptions(stringifyObject(updatedOptions));
   }
 
   const sortOptions = (a: PaymentModeOption, b: PaymentModeOption) => {
-    return b.lastUsedAt - a.lastUsedAt;
+    return a.name.localeCompare(b.name);
+  }
+
+  const onDelete = (option: PaymentModeOption) => {
+    deletePaymentMode(option._id)
+    .then(() => {
+      Toast.show({
+        type: 'success',
+        text1: `${option.name} deleted!`,
+      });
+      setPaymentModes(paymentModes.filter(p => p._id !== option._id));
+    })
   }
 
   const createTwoButtonAlert = (option: PaymentModeOption) =>
@@ -93,7 +131,7 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
         },
         { text: "YES",
           style: 'destructive',
-          onPress: () => updateOptions(parsedOptionsArray.filter(op => op.id !== option.id))
+          onPress: () => onDelete(option) // updateOptions(parsedOptionsArray.filter(op => op._id !== option._id))
         }
       ],
       { cancelable: true, }
@@ -103,17 +141,38 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
       setOptionToEdit(null);
     }
   
+    
+  const showToastAndClose = (msg: string) => {
+    Toast.show({
+      type: 'success',
+      text1: msg,
+    });
+    setIsSaveLoading(false);
+    setShowAddEditModal(false);
+    setOptionToEdit(null);
+    fetchPaymentModes();
+  }
     const onSubmitModal = (name: string) => {
-      if(optionToEdit) {
-        editOption({ ...optionToEdit, name, updatedAt: Date.now() })
-        setOptionToEdit(null);
+      setIsSaveLoading(true);
+      if(optionToEdit?._id) {
+        // editOption({ ...optionToEdit, name, updatedAt: Date.now() })
+        updatePaymentMode(optionToEdit._id, { name })
+        .then(() => showToastAndClose(`Updated successfully!`))
+        .catch(() => {
+          setIsSaveLoading(false);
+        });
       } else {
-        onAddNew(name);
+        // onAddNew(name);
+        savePaymentMode({ name })
+        .then(() => showToastAndClose('Payment mode created!'))
+        .catch(() => {
+          setIsSaveLoading(false);
+        });
       }
-      setShowAddEditModal(false);
     }
     
-  const filteredRecords = parsedOptionsArray.filter((p: Option) => p.name.toLowerCase().includes(searchString.toLowerCase())).sort(sortOptions)
+  const filteredRecords = paymentModes.filter((p: PaymentModeOption) => p.name.toLowerCase().includes(searchString.toLowerCase())).sort(sortOptions)
+  const isLoading = isFetchLoading;
 
   return (
     <View style={styles.container}>
@@ -126,11 +185,13 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
         ) : (
           <View style={[{ width: '100%', paddingTop: 10, }]}>
             {filteredRecords.map((op, i) => {
-              const isSelected = selectedPaymentMode?.id === op.id;
+              const isSelected = selectedPaymentMode?.id === op._id;
               return (
                 <View style={isSelected ? [styles.listItem, { backgroundColor: selectedOptionColor }] : styles.listItem} key={i} darkColor={'rgba(255, 255, 255, 0.08)'} >
                   <TouchableOpacity onPress={() => onSelect(op)} style={styles.labelWrapper} activeOpacity={1}>
-                    <RadioButton size={24} style={styles.radioIcon} isSelected={isSelected} />
+                    { routeAction === 'select' && (
+                      <RadioButton size={24} style={styles.radioIcon} isSelected={isSelected} />
+                    )}
                     <Text style={styles.optionLabel}>{op.name}</Text>
                   </TouchableOpacity>
                   <Menu style={styles.moreOptions}>
@@ -156,7 +217,7 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
             )}
           </View>
         )}
-        { filteredRecords.length === 0 && (
+        { !isLoading && filteredRecords.length === 0 && (
           <NoRecord
             header={`No Category Found`}
             subHeader="Try searching with different name or add new"
@@ -166,10 +227,11 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
       <FloatingButton onPress={() => setShowAddEditModal(true)} label={'+'} style={{ bottom: 40, right: 20, backgroundColor: tintButton }}/>
       { showAddEditModal && (
         <InputModal
-          title={optionToEdit ? `Edit Category`: `Add New Category`}
+          title={optionToEdit?._id ? `Edit Payment Mode`: `Add New Payment Mode`}
           initialValue={optionToEdit?.name || ''}
-          placeholder={'Category'}
+          placeholder={'Payment Mode'}
           onCancel={onCancelModal}
+          isLoading={isSaveLoading}
           onSubmit={onSubmitModal}
         />
       )}

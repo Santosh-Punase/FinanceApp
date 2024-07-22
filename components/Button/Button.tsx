@@ -17,7 +17,7 @@ export function Button({
   labelStyles,
   ...rest
 }: ButtonProps) {
-  const borderRadius = rounded ? 14 : 4;
+  const borderRadius = rounded ? 14 : 8;
 
   return (
     <TouchableOpacity

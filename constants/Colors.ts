@@ -1,6 +1,6 @@
 const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
-const primary = 'rgba(17, 60, 214, 1)';
+const primary = '#4681f4';
 
 export default {
   light: {
@@ -8,7 +8,7 @@ export default {
     invertedText: '#fff',
     background: '#fff',
     invertedBackground: '#000',
-    tint: tintColorLight,
+    tint: primary,
     tabIconDefault: '#ccc',
     tintButton: primary,
     selectedOption: 'rgba(47, 148, 220, 0.1)',
@@ -18,7 +18,7 @@ export default {
     buttonSuccessBG: '#51ed51',
     buttonWarningBG: '#eaed51',
     buttonErrorBG: '#ed5151',
-    buttonPrimaryBG: '#4681f4',
+    buttonPrimaryBG: primary,
     tabIconSelected: tintColorLight,
   },
   dark: {
@@ -26,7 +26,7 @@ export default {
     invertedText: '#000',
     background: '#000',
     invertedBackground: '#fff',
-    tint: tintColorDark,
+    tint: primary,
     tabIconDefault: '#ccc',
     tintButton: tintColorLight,
     buttonColor: '#000',
@@ -34,7 +34,7 @@ export default {
     buttonSuccessBG: '#51ed51',
     buttonWarningBG: '#eaed51',
     buttonErrorBG: '#ed5151',
-    buttonPrimaryBG: '#4681f4',
+    buttonPrimaryBG: primary,
     selectedOption: 'rgba(255, 255, 255, 0.2)',
     border: 'rgba(255, 255, 255, 0.4)',
     tabIconSelected: tintColorDark,

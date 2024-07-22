@@ -11,6 +11,7 @@ import { ModalFooter } from "./ModalFooter";
 type Props = {
   title: string;
   required?: boolean;
+  isLoading?: boolean;
   initialValue?: string;
   onSubmit: (text: string) => void;
   placeholder?: string
@@ -18,7 +19,7 @@ type Props = {
   onChangeText?: (text: string) => void;
 }
 
-export function InputModal({ title, onSubmit, initialValue = '', required=true, onCancel, onChangeText, placeholder }: Props) {
+export function InputModal({ title, onSubmit, initialValue = '', required=true, onCancel, onChangeText, placeholder, isLoading }: Props) {
   const [value, setValue] = useState<string>(initialValue);
   const [errored, setErrored] = useState<boolean>(false);
   const [animation] = useState(new Animated.Value(0));
@@ -57,12 +58,12 @@ export function InputModal({ title, onSubmit, initialValue = '', required=true, 
       return;
     }
     onSubmit(value);
-    setValue('');
+    // setValue('');
 	}
 
 	const _onCancel = () => {
 		onCancel();
-    setValue('');
+    // setValue('');
 	}
 
   return (
@@ -70,6 +71,7 @@ export function InputModal({ title, onSubmit, initialValue = '', required=true, 
       transparent={true}
       animationType="slide"
       visible
+      statusBarTranslucent
       onRequestClose={onCancel}>
       <View style={modalStyles.modalBackdrop} lightColor={Colors.dark.background} darkColor={Colors.light.background}>
         <KeyboardAvoidingView style={modalStyles.screenOverlay} behavior={Platform.OS === "android" ? 'position' : 'height'}>
@@ -84,7 +86,7 @@ export function InputModal({ title, onSubmit, initialValue = '', required=true, 
                 </TouchableOpacity>
               </View>
 
-              <View style={{ paddingVertical: 10 }}>
+              <View>
                 <Animated.View style={{ transform: [{ translateX: animation }] }}>
                   <Input
                     value={value}
@@ -96,8 +98,7 @@ export function InputModal({ title, onSubmit, initialValue = '', required=true, 
                   />
                 </Animated.View>
               </View>
-              
-              <ModalFooter cancelText={'cancel'} submitText={'save'} onSubmit={_onSubmit} onCancel={_onCancel} />
+              <ModalFooter cancelText={'Cancel'} submitText={'Save'} onSubmit={_onSubmit} onCancel={_onCancel} isLoading={isLoading} />
             </View>
           </View>
         </KeyboardAvoidingView>

@@ -24,11 +24,11 @@ export type CategoryOption = {
 }
 
 export type PaymentModeOption = {
-  id: number;
+  _id: string;
   name: string;
-  createdAt: number | null;
-  updatedAt: number | null;
-  lastUsedAt: number;
+  createdAt?: number | null;
+  updatedAt?: number | null;
+  lastUsedAt?: number;
 }
 
 export type TransactionType = 'Cash-In' | 'Cash-Out';

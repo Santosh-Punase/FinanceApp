@@ -3,16 +3,19 @@ import { StyleSheet, TouchableOpacity, Platform } from "react-native";
 
 import { Icon } from "../Icon";
 import { View, Text } from "../Themed";
+import Colors from "../../constants/Colors";
+import { ButtonPrimary } from "../Button";
 
 type Props = {
   cancelText: string;
   submitText: string;
+  isLoading?: boolean;
   onSubmit: () => void;
   onCancel: () => void;
   showCancelButtonIcon?: boolean;
 }
 
-export function ModalFooter({ cancelText, submitText, showCancelButtonIcon=false, onSubmit, onCancel }: Props) {
+export function ModalFooter({ cancelText, submitText, showCancelButtonIcon=false, onSubmit, onCancel, isLoading }: Props) {
 
   return (
     <View style={styles.buttonsOuterView}>
@@ -29,14 +32,18 @@ export function ModalFooter({ cancelText, submitText, showCancelButtonIcon=false
 					</View>
         </TouchableOpacity>
         <View style={styles.buttonsDivider} />
-        <TouchableOpacity onPress={onSubmit}>
+        {/* <TouchableOpacity onPress={onSubmit}>
 					<View style={styles.button}>
 						<Text
 							style={styles.submitButtonText}>
 							{submitText}
 						</Text>
 					</View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+				<View style={{ width: 100, marginRight: 20, backgroundColor: 'transparent' }}>
+					<ButtonPrimary label={submitText} style={{ height: 40 }} onPress={onSubmit} isLoading={isLoading} />
+				</View>
       </View>
     </View>
   );
@@ -52,8 +59,6 @@ const styles = StyleSheet.create({
 			}
 		}),
 		width: "100%",
-    paddingTop: 10,
-		paddingBottom: 10,
 	},
 	buttonsDivider: {
 		...Platform.select({
@@ -68,6 +73,7 @@ const styles = StyleSheet.create({
 	},
 	buttonsInnerView: {
 		flexDirection: "row",
+		alignItems: 'center',
 		...Platform.select({
 			ios: {
 				borderTopWidth: 0.5,
@@ -86,7 +92,7 @@ const styles = StyleSheet.create({
 			android: {}
 		}),
 		margin: 10,
-		paddingVertical: 10,
+		paddingVertical: 7,
     paddingHorizontal: 20,
     // backgroundColor: '#fff',
     // borderColor: 'blue',
@@ -94,10 +100,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
 	},
 	cancelButtonText: {
-		fontSize: 16,
-		fontWeight: "500",
-		// color: "black",
-    textTransform: 'uppercase',
+		fontSize: 18,
+		// fontWeight: "500",
+		color: Colors.light.buttonPrimaryBG,
+    // textTransform: 'uppercase',
 	},
 	submitButtonText: {
 		color: "rgb(0, 129, 251)",

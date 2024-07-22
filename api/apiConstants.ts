@@ -7,6 +7,10 @@ export const API_CONSTANT = {
   UPDATE_TRANSACTION: '/api/transactions/:id',
   DELETE_TRANSACTION: '/api/transactions/:id',
 
+  SAVE_PAYMENT_MODE: '/api/payment-modes/',
+  GET_PAYMENT_MODES: '/api/payment-modes/',
+  UPDATE_PAYMENT_MODE: '/api/payment-modes/:id',
+  DELETE_PAYMENT_MODE: '/api/payment-modes/:id',
 
   SAVE_CATEGORY: '/api/categories/',
   GET_CATEGORIES: '/api/categories/',

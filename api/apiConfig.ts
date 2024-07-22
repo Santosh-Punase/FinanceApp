@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import Toast from 'react-native-toast-message'
+import { replaceUrlParams } from '../utils';
 
 
 const API_BASE_URL = 'https://finoveu.onrender.com';
@@ -48,10 +49,10 @@ export const doPost = (url: string, data: Record<string, any>, options?: any): P
   return axiosRequest({ url, method: 'POST', data, ...options })
 }
 
-export const doPut = (url: string, data?: Record<string, any>): Promise<void | AxiosResponse> => {
-  return axiosRequest({ url, method: 'PUT', data })
+export const doPut = (url: string, data?: Record<string, any>, params: Record<string, string>): Promise<void | AxiosResponse> => {
+  return axiosRequest({ url: replaceUrlParams(url, params), method: 'PUT', data })
 }
 
-export const doDelete = (url: string): Promise<void | AxiosResponse> => {
-  return axiosRequest({ url, method: 'DELETE' })
+export const doDelete = (url: string, params: Record<string, string>): Promise<void | AxiosResponse> => {
+  return axiosRequest({ url: replaceUrlParams(url, params), method: 'DELETE' })
 }

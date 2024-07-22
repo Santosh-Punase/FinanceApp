@@ -77,6 +77,13 @@ export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThr
           <Icon type="Ionicons" name='list-circle-outline' size={30} />
           <Text style={styles.label}>Categories</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('PaymentOptionsScreen', { header: 'Payment Modes', category: undefined, paymentMode: undefined, action: 'list' })}
+          style={[{ flexDirection: 'row', marginBottom: 10, alignItems: 'center' }]}
+        >
+          <Icon type="Ionicons" name='card-outline' size={30} />
+          <Text style={styles.label}>Payment Modes</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={onResetCategoryAndPaymentModes} style={[{ flexDirection: 'row', marginBottom: 10, alignItems: 'center' }]}>
           <Icon type="Ionicons" name='refresh-circle' size={30} />
           <Text style={styles.label}>Reset Category and Payment modes</Text>
