@@ -41,15 +41,16 @@ function axiosRequest(options: AxiosRequestConfig) {
 }
 
 
-export const doGet = (url: string): Promise<void | AxiosResponse> => {
-  return axiosRequest({url, method: 'GET' })
+export const doGet = (uri: string, params?: Record<string, string>): Promise<void | AxiosResponse> => {
+  const url = params ? replaceUrlParams(uri, params) : uri;
+  return axiosRequest({ url, method: 'GET' })
 }
 
 export const doPost = (url: string, data: Record<string, any>, options?: any): Promise<void | AxiosResponse> => {
   return axiosRequest({ url, method: 'POST', data, ...options })
 }
 
-export const doPut = (url: string, data?: Record<string, any>, params: Record<string, string>): Promise<void | AxiosResponse> => {
+export const doPut = (url: string, data: Record<string, any>, params: Record<string, string>): Promise<void | AxiosResponse> => {
   return axiosRequest({ url: replaceUrlParams(url, params), method: 'PUT', data })
 }
 

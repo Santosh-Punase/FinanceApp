@@ -7,12 +7,22 @@ import { HEIGHT, WIDTH } from '../../constants/Layout';
 import { Text, View } from '../Themed';
 import { Card } from '../Card';
 // import { dummyData } from './dummyData';
-import { Transaction } from '../../store/type';
+import { DropdownOption, TRANSACTION_TYPE } from '../../store/type';
 import { SelectedFilters } from './TransactionFilters';
 import { NoRecord } from '../NoRecord';
 import { NativeStackNavigatorProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { AddEntryFooter } from '../AddEntryFooter';
 import { ListLoading } from '../LoadingSkeleton';
+
+type Transaction = {
+  id?: number;
+  type: TRANSACTION_TYPE;
+  amount: string;
+  category?: DropdownOption;
+  paymentMode?: DropdownOption;
+  remark: string;
+  date: string;
+}
 
 export const filterInitialState: SelectedFilters = {
   transactionType: '',
@@ -43,7 +53,7 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
             // const isDifferentDate = currentDate !== date;
             // currentDate = date;
             return (
-              <React.Fragment key={item.createdAt}>
+              <React.Fragment key={`${item.date}_${i}`}>
                 {/* { isDifferentDate && <Text style={styles.date}>{date}</Text>} */}
                 <Card style={styles.listItem}>
                   <View style={styles.listItemWrapper}>
@@ -63,12 +73,12 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
                           </View>
                         )}
                       </View>
-                      <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | HH:mm`)}`}</Text>
+                      <Text style={styles.transactionTime}>{`${dayjs(item.date).format(`DD-MMM-YYYY | HH:mm`)}`}</Text>
                       {/* <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text> */}
                     </View>
                     <View style={styles.amount}>
-                      {item.transactionType === 'Cash-In' && <Text style={styles.credit}>{item.amount}</Text>}
-                      {item.transactionType === 'Cash-Out' && <Text style={styles.debit}>{item.amount}</Text>}
+                      {item.type === TRANSACTION_TYPE.INCOME && <Text style={styles.credit}>{item.amount}</Text>}
+                      {item.type === TRANSACTION_TYPE.EXPENSE && <Text style={styles.debit}>{item.amount}</Text>}
                     </View>
                   </View>
                 </Card>

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { View } from '../../components/Themed';
-import useStore from '../../hooks/useStore';
+// import useStore from '../../hooks/useStore';
 import { /* Transaction, */ DropdownOption, TRANSACTION_TYPE } from '../../store/type';
 import { AddNewScreenProps } from '../../types';
-import { parseObject, stringifyObject } from '../../utils';
+// import { parseObject, stringifyObject } from '../../utils';
 import { ButtonOutline, ButtonPrimary } from '../Button';
 import { Card } from '../Card';
 import { Dropdown } from '../Dropdown';
@@ -15,7 +15,7 @@ import Toast from 'react-native-toast-message';
 import { saveTransaction } from '../../api/api';
 
 export type Transaction = {
-  _id?: number;
+  id?: number;
   type: TRANSACTION_TYPE;
   amount: string;
   category?: DropdownOption;

@@ -43,7 +43,7 @@ export type TransactionPaymentMode = DropdownOption | undefined;
 
 export type Transaction = {
   id: number;
-  transactionType: TransactionType;
+  transactionType: TRANSACTION_TYPE;
   amount: string;
   category: TransactionCategory;
   paymentMode: TransactionPaymentMode;

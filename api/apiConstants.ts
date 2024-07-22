@@ -3,7 +3,7 @@ export const API_CONSTANT = {
   REGISTER: '/api/auth/register',
 
   SAVE_TRANSACTION: '/api/transactions/',
-  GET_TRANSACTIONS: '/api/transactions/',
+  GET_TRANSACTIONS: '/api/transactions?page=:page&limit=:limit',
   UPDATE_TRANSACTION: '/api/transactions/:id',
   DELETE_TRANSACTION: '/api/transactions/:id',
 

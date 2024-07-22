@@ -64,6 +64,7 @@ export function Categories({ navigation, currentTheme }: Props) {
         data={categories}
         style={{ maxHeight: 200, minHeight: 200 }}
         renderItem={({ item: { name, budget, expenditure } }) => {
+          // console.log('item', name,expenditure, budget)
           const expenseMultiple = expenditure/budget;
           const spentPercent = (expenseMultiple * 100).toFixed(0);
           const progressBarColor = getProgressColor(expenseMultiple);

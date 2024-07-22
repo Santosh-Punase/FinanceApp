@@ -4,11 +4,24 @@ import { View } from '../components/Themed';
 import TransactionList from '../components/Transactions/TransactionList';
 import { RootTabScreenProps } from '../types';
 import TransactionFilters, { SelectedFilters } from '../components/Transactions/TransactionFilters';
-import { Transaction } from '../store/type';
+import { DropdownOption, TRANSACTION_TYPE } from '../store/type';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
-import useStore from '../hooks/useStore';
-import { parseObject } from '../utils';
+// import useStore from '../hooks/useStore';
+// import { parseObject } from '../utils';
+import { getTransactions } from '../api/api';
+import useApiCall from '../hooks/useApiCall';
+
+
+type Transaction = {
+  id?: number;
+  type: TRANSACTION_TYPE;
+  amount: string;
+  category?: DropdownOption;
+  paymentMode?: DropdownOption;
+  remark: string;
+  date: string;
+}
 
 export const filterInitialState: SelectedFilters = {
   transactionType: '',
@@ -16,28 +29,43 @@ export const filterInitialState: SelectedFilters = {
   paymentMode: [],
 }
 export default function TransactionScreen({ navigation }: RootTabScreenProps<'TabTwo'>) {
-  const [ transactionList, , isLoading , , fetchList ] = useStore('transactionList');
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  // const [ transactionList, , isLoading , , fetchList ] = useStore('transactionList');
   // @ts-ignore
-  const parsedTransactionList: Transaction[] = parseObject(transactionList)?.sort((a,b) => b.createdAt - a.createdAt) || [];
+  // const parsedTransactionList: Transaction[] = parseObject(transactionList)?.sort((a,b) => b.createdAt - a.createdAt) || [];
   const [selectedFilters, setSelectedFilters] = useState(filterInitialState)
   const isFilterSelected = selectedFilters.transactionType !== '' || selectedFilters.category.length > 0 || selectedFilters.paymentMode.length > 0
 
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     fetchList();
+  //   }, [transactionList])
+  // );
+  const { isLoading, doApiCall: fetchTransactions } = useApiCall({
+    apiCall: () => getTransactions(1, 10),
+    onSuccess: (data) => {
+      setTransactions(data.transactions);
+    }
+  });
+
   useFocusEffect(
     useCallback(() => {
-      fetchList();
-    }, [transactionList])
+      fetchTransactions();
+    }, [])
   );
 
-  const filteredList = parsedTransactionList.filter((item: Transaction, i: number) => (
-    (selectedFilters.transactionType === '' || item.transactionType === selectedFilters.transactionType) &&
-    (selectedFilters.category.length === 0 || selectedFilters.category.includes(item.category?.id || -1)) &&
-    (selectedFilters.paymentMode.length === 0 || selectedFilters.paymentMode.includes(item.paymentMode?.id || -1))
-  ));
+  
+  // const filteredList = parsedTransactionList.filter((item: Transaction, i: number) => (
+  //   (selectedFilters.transactionType === '' || item.transactionType === selectedFilters.transactionType) &&
+  //   (selectedFilters.category.length === 0 || selectedFilters.category.includes(item.category?.id || -1)) &&
+  //   (selectedFilters.paymentMode.length === 0 || selectedFilters.paymentMode.includes(item.paymentMode?.id || -1))
+  // ));
 
   return (
     <View style={styles.container} darkColor='rgba(255,255,255,0.08)' lightColor='rgba(0,0,0, 0.02)'>
       <TransactionFilters
-        isLoading={false}
+        isLoading={isLoading}
         selectedFilters={selectedFilters}
         setFilter={(filter, selectedOptions) => setSelectedFilters({ ...selectedFilters, [filter]: selectedOptions})}
       />
@@ -45,7 +73,7 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
         isLoading={isLoading}
         isFilterSelected={isFilterSelected}
         clearAllFilters={() => setSelectedFilters(filterInitialState)}
-        list={filteredList}
+        list={transactions}
         navigation={navigation}
       />
     </View>

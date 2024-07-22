@@ -42,8 +42,8 @@ export const deletePaymentMode = (id: string) => {
   return doDelete(API_CONSTANT.DELETE_PAYMENT_MODE, { id });
 };
 
-export const getTransactions = () => {
-  return doGet(API_CONSTANT.GET_TRANSACTIONS);
+export const getTransactions = (page: number, limit: number) => {
+  return doGet(API_CONSTANT.GET_TRANSACTIONS, { page: `${page}`, limit: `${limit}` });
 };
 
 export const saveTransaction = (data: { amount: number; remark: string; type: TRANSACTION_TYPE; category: string; paymentMode: string }) => {
