@@ -27,7 +27,7 @@ export function ButtonOutline({ labelStyles, ...rest }: ButtonProps) {
   const theme: StyleTheme = useTheme();
 
   return (
-    <Button labelStyles={{ ...styles(theme).outlineLabel, labelStyles }} { ...rest } />
+    <Button labelStyles={{ ...styles(theme).outlineLabel, labelStyles }} loaderColor={Colors[theme].buttonPrimaryBG} { ...rest } />
   );
 }
 

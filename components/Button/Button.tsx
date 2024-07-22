@@ -4,7 +4,8 @@ export interface ButtonProps extends TouchableOpacityProps {
   label: string,
   rounded?: boolean,
   isLoading?: boolean,
-  labelStyles?: {}
+  labelStyles?: {},
+  loaderColor?: string,
 }
 
 export function Button({
@@ -14,6 +15,7 @@ export function Button({
   rounded,
   isLoading,
   style,
+  loaderColor,
   labelStyles,
   ...rest
 }: ButtonProps) {
@@ -27,7 +29,7 @@ export function Button({
       { ...rest }
     >
       { isLoading
-      ? <ActivityIndicator size={"small"} color={"#fff"} style={[styles.buttonLabel, { borderRadius }, labelStyles]} />
+      ? <ActivityIndicator size={"small"} color={loaderColor || "#fff"} style={[styles.buttonLabel, { borderRadius }, labelStyles]} />
       : <Text style={[styles.buttonLabel, { borderRadius }, labelStyles]}>{label}</Text>
       }
     </TouchableOpacity>

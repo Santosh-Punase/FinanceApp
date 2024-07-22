@@ -1,5 +1,6 @@
 import { API_CONSTANT } from "./apiConstants";
 import { doDelete, doGet, doPost, doPut } from "./apiConfig";
+import { TRANSACTION_TYPE } from "../store/type";
 
 export const login = (email: string, password: string) => {
   return doPost(API_CONSTANT.LOGIN, { email, password });
@@ -43,4 +44,13 @@ export const deletePaymentMode = (id: string) => {
 
 export const getTransactions = () => {
   return doGet(API_CONSTANT.GET_TRANSACTIONS);
+};
+
+export const saveTransaction = (data: { amount: number; remark: string; type: TRANSACTION_TYPE; category: string; paymentMode: string }) => {
+  // return new Promise(resolve => {
+  //   setTimeout(() => {
+  //     resolve(true)
+  //   }, 500);
+  // })
+  return doPost(API_CONSTANT.SAVE_TRANSACTION, data);
 };

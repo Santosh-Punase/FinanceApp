@@ -31,8 +31,13 @@ export type PaymentModeOption = {
   lastUsedAt?: number;
 }
 
+export enum TRANSACTION_TYPE {
+  INCOME = 'income',
+  EXPENSE = 'expense',
+};
+
 export type TransactionType = 'Cash-In' | 'Cash-Out';
-export type DropdownOption = { id: number | string, name: string }; 
+export type DropdownOption = { id: string, name: string }; 
 export type TransactionCategory = DropdownOption | undefined; 
 export type TransactionPaymentMode = DropdownOption | undefined;
 

@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import { View } from '../../components/Themed';
 import useStore from '../../hooks/useStore';
-import { Transaction, TransactionType } from '../../store/type';
+import { /* Transaction, */ DropdownOption, TRANSACTION_TYPE } from '../../store/type';
 import { AddNewScreenProps } from '../../types';
 import { parseObject, stringifyObject } from '../../utils';
 import { ButtonOutline, ButtonPrimary } from '../Button';
@@ -11,22 +11,41 @@ import { Card } from '../Card';
 import { Dropdown } from '../Dropdown';
 import { Input } from '../Input';
 import Toggle from '../Toggle';
+import Toast from 'react-native-toast-message';
+import { saveTransaction } from '../../api/api';
+
+export type Transaction = {
+  _id?: number;
+  type: TRANSACTION_TYPE;
+  amount: string;
+  category?: DropdownOption;
+  paymentMode?: DropdownOption;
+  remark: string;
+}
+const getTransactionEntry = (entry: Transaction) => ({
+  amount: parseFloat(entry.amount),
+  type: entry.type,
+  remark: entry.remark,
+  category: entry.category?.id!,
+  paymentMode: entry.paymentMode?.id!,
+});
 
 export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
 
   const entryInitialState: Transaction = {
-    id: Math.random(),
-    transactionType: route?.params?.transactionType || 'Cash-In',
+    type: route?.params?.transactionType || TRANSACTION_TYPE.INCOME,
     category: undefined,
     paymentMode: undefined,
     remark: '',
     amount: '',
-    createdAt: 0,
   }
   const [entry, setEntry] = useState<Transaction>(entryInitialState);
-  const [ transactionList, setTransactionList ] = useStore('transactionList');
+  const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
+  const [isSaveAndAddNewLoading, setIsSaveAndAddNewLoading] = useState<boolean>(false);
+
+  // const [ transactionList, setTransactionList ] = useStore('transactionList');
   // @ts-ignore
-  const parsedTransactionList: Transaction[] = transactionList !== '' ? parseObject(transactionList) : [];
+  // const parsedTransactionList: Transaction[] = transactionList !== '' ? parseObject(transactionList) : [];
 
   const updateEntry = (key: keyof Transaction, value: any ) => {
     setEntry({ ...entry, [key]: value })
@@ -40,34 +59,55 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
     updateEntry('paymentMode', route?.params?.paymentMode);
   }, [route?.params?.paymentMode]);
 
-  const changeTransactionType = (transactionType: TransactionType) => {
-    updateEntry('transactionType', transactionType);
+  const changeTransactionType = (transactionType: TRANSACTION_TYPE) => {
+    updateEntry('type', transactionType);
   }
 
-  const saveEntry = () => {
-    const newEntry: Transaction = {
-      ...entry, id: Math.random(), amount: Number(entry.amount).toFixed(2), createdAt: Date.now()
-    };
-    setTransactionList(stringifyObject([ ...parsedTransactionList, newEntry]));
-  }
+  // const saveEntry = () => {
+  //   save();
+    // const newEntry: Transaction = {
+    //   ...entry, id: Math.random(), amount: Number(entry.amount).toFixed(2), createdAt: Date.now()
+    // };
+    // setTransactionList(stringifyObject([ ...parsedTransactionList, newEntry]));
+  // }
 
-  const OnSaveClick = () => {
-    saveEntry();
-    navigation.navigate('Root');
+  const onSaveClick = () => {
+    setIsSaveLoading(true);
+    saveTransaction(getTransactionEntry(entry))
+    .then(() => {
+      Toast.show({
+        type: 'success',
+        text1: 'Entry Saved Successfully',
+      });
+      navigation.navigate('Root')
+    })
+    .catch()
+    .finally(() => setIsSaveLoading(false));
   }
 
   const onSaveAndAddNewClick = () => {
-    saveEntry();
-    navigation.setParams({ category: undefined, paymentMode: undefined });
-    setEntry({ ...entryInitialState, id: Math.random(), transactionType: entry.transactionType });
+    setIsSaveAndAddNewLoading(true);
+    saveTransaction(getTransactionEntry(entry))
+    .then(() => {
+      setEntry({ ...entryInitialState, type: entry.type });
+      Toast.show({
+        type: 'success',
+        text1: 'Entry Saved Successfully',
+      });
+      navigation.setParams({ category: undefined });
+      navigation.setParams({ paymentMode: undefined });
+    })
+    .catch()
+    .finally(() => setIsSaveAndAddNewLoading(false));
   }
 
-  const isInTransaction = entry.transactionType === 'Cash-In'
+  const isExpenseTransaction = entry.type === TRANSACTION_TYPE.EXPENSE
+  const isSaveDisabled = isSaveLoading || isSaveAndAddNewLoading || !entry.category || !entry.paymentMode || !entry.remark;
 
   return (
-    <Card style={[styles.wrapperCard, { borderColor: entry.transactionType === 'Cash-In' ? 'green' : 'red' }]}>
+    <Card style={[styles.wrapperCard, { borderColor: entry.type === TRANSACTION_TYPE.INCOME ? 'green' : 'red' }]}>
       <View style={{ marginHorizontal: 30, marginBottom: 20 }}>
-        <Toggle width={300} value={!isInTransaction} onPress={() => changeTransactionType(isInTransaction ? 'Cash-Out' : 'Cash-In')} />
+        <Toggle width={300} value={isExpenseTransaction} onPress={() => changeTransactionType(isExpenseTransaction ? TRANSACTION_TYPE.INCOME : TRANSACTION_TYPE.EXPENSE)} />
       </View>
       <Input showLabel placeholder='Amount' value={entry.amount || ''} keyboardType='numeric' onChangeText={(amount) => updateEntry('amount', amount)} />
       { entry.amount && (
@@ -93,18 +133,20 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
       )}
       <View style={styles.bottomRow}>
         <ButtonOutline
-          disabled={!entry.category || !entry.paymentMode || !entry.remark}
+          disabled={isSaveDisabled}
+          isLoading={isSaveAndAddNewLoading}
           label={'Save & Add New'}
           style={[{ width: '48%' }]}
           labelStyles={styles.buttonLabel}
           onPress={onSaveAndAddNewClick}
         />
         <ButtonPrimary
-          disabled={!entry.category || !entry.paymentMode || !entry.remark}
+          disabled={isSaveDisabled}
+          isLoading={isSaveLoading}
           label={'Save'}
           style={[{ width: '48%' }]}
           labelStyles={styles.buttonLabel}
-          onPress={OnSaveClick}
+          onPress={onSaveClick}
         />
       </View>
     </Card>
