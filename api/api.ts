@@ -42,8 +42,18 @@ export const deletePaymentMode = (id: string) => {
   return doDelete(API_CONSTANT.DELETE_PAYMENT_MODE, { id });
 };
 
-export const getTransactions = (page: number, limit: number) => {
-  return doGet(API_CONSTANT.GET_TRANSACTIONS, { page: `${page}`, limit: `${limit}` });
+export const getTransactions = (page: number, limit: number, type?: TRANSACTION_TYPE, categories?: string, paymentModes?: string) => {
+  const params: Record<string, string> = {
+    page: `${page}`,
+    limit: `${limit}`,
+  };
+  let url = API_CONSTANT.GET_TRANSACTIONS;
+
+  if (type) url += `&type=${type}`
+  if (categories) url += `&categories=${categories}`
+  if (paymentModes) url += `&paymentModes=${paymentModes}`
+
+  return doGet(url, params);
 };
 
 export const saveTransaction = (data: { amount: number; remark: string; type: TRANSACTION_TYPE; category: string; paymentMode: string }) => {

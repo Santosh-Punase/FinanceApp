@@ -7,28 +7,11 @@ import { HEIGHT, WIDTH } from '../../constants/Layout';
 import { Text, View } from '../Themed';
 import { Card } from '../Card';
 // import { dummyData } from './dummyData';
-import { DropdownOption, TRANSACTION_TYPE } from '../../store/type';
-import { SelectedFilters } from './TransactionFilters';
+import { Transaction, TRANSACTION_TYPE } from '../../store/type';
 import { NoRecord } from '../NoRecord';
 import { NativeStackNavigatorProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { AddEntryFooter } from '../AddEntryFooter';
 import { ListLoading } from '../LoadingSkeleton';
-
-type Transaction = {
-  id?: number;
-  type: TRANSACTION_TYPE;
-  amount: string;
-  category?: DropdownOption;
-  paymentMode?: DropdownOption;
-  remark: string;
-  date: string;
-}
-
-export const filterInitialState: SelectedFilters = {
-  transactionType: '',
-  category: [],
-  paymentMode: [],
-}
 
 const DEFAULT_LIST_HEIGHT = HEIGHT - 190;
 
@@ -46,7 +29,9 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
     <>
     <ScrollView style={{ width: WIDTH, minHeight: listHeight || DEFAULT_LIST_HEIGHT, paddingBottom: 200 }}>
       { isLoading
-      ? <ListLoading />
+      ? <View style={{ minHeight: listHeight || DEFAULT_LIST_HEIGHT + 10 }}>
+          <ListLoading />
+        </View>
       : <View style={{ marginBottom: list.length === 0 ? 0 : 80 }}>
           {list.map((item: Transaction, i: number) => {
             // const date = dayjs(item.createdAt).format('DD-MMM-YYYY');

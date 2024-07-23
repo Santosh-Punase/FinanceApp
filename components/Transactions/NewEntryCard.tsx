@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import { View } from '../../components/Themed';
 // import useStore from '../../hooks/useStore';
-import { /* Transaction, */ DropdownOption, TRANSACTION_TYPE } from '../../store/type';
+import { /* Transaction, */ Transaction, TRANSACTION_TYPE } from '../../store/type';
 import { AddNewScreenProps } from '../../types';
 // import { parseObject, stringifyObject } from '../../utils';
 import { ButtonOutline, ButtonPrimary } from '../Button';
@@ -14,14 +14,6 @@ import Toggle from '../Toggle';
 import Toast from 'react-native-toast-message';
 import { saveTransaction } from '../../api/api';
 
-export type Transaction = {
-  id?: number;
-  type: TRANSACTION_TYPE;
-  amount: string;
-  category?: DropdownOption;
-  paymentMode?: DropdownOption;
-  remark: string;
-}
 const getTransactionEntry = (entry: Transaction) => ({
   amount: parseFloat(entry.amount),
   type: entry.type,

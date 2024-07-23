@@ -59,6 +59,18 @@ export function ListLoading() {
   )
 }
 
+export function ModalListLoading() {
+  return (
+    <LoadingSkeleton style={{ paddingHorizontal: 10 }} itemStyle={{ marginBottom: 20, width: '75%' }}>
+      <DefaultView style={styles.modalListItem} /> 
+      <DefaultView style={styles.modalListItem} /> 
+      <DefaultView style={styles.modalListItem} /> 
+      <DefaultView style={styles.modalListItem} /> 
+      <DefaultView style={styles.modalListItem} /> 
+    </LoadingSkeleton>
+  )
+}
+
 const styles = StyleSheet.create({
   placeholder: { 
     backgroundColor: '#ccc',
@@ -67,5 +79,9 @@ const styles = StyleSheet.create({
   listItem: {
     height: 20,
     marginBottom: 20, 
+  },
+  modalListItem: {
+    height: 10,
+    marginBottom: 10, 
   }
 });

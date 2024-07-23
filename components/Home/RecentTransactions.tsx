@@ -1,31 +1,47 @@
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { View as DefaultView } from 'react-native';
 
 import { HEIGHT, WIDTH } from "../../constants/Layout";
-import useStore from "../../hooks/useStore";
-import { parseObject } from "../../utils";
+// import useStore from "../../hooks/useStore";
+// import { parseObject } from "../../utils";
 import { Text, View } from "../Themed";
 import { styles } from "./styles";
 import { HomeScreenNavigation } from "../../types";
 import { LoadingSkeleton } from "../LoadingSkeleton";
 import TransactionList from "../Transactions/TransactionList";
+import { Transaction } from "../../store/type";
+import useApiCall from "../../hooks/useApiCall";
+import { getTransactions } from "../../api/api";
 
 interface Props {
   navigation: HomeScreenNavigation;
 }
 
 export function RecentTransactions({ navigation }: Props) {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   
-  const [ transactionList, , isLoading , , fetchTransactions ] = useStore('transactionList');
-  // @ts-ignore
-  const parsedTransactionList: Transaction[] = parseObject(transactionList)?.sort((a,b) => b.createdAt - a.createdAt) || [];
- 
+  // const [ transactionList, , isLoading , , fetchTransactions ] = useStore('transactionList');
+  // // @ts-ignore
+  // const parsedTransactionList: Transaction[] = parseObject(transactionList)?.sort((a,b) => b.createdAt - a.createdAt) || [];
   
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     fetchTransactions();
+  //   }, [transactionList])
+  // );
+
+  const { isLoading, doApiCall: fetchTransactions } = useApiCall({
+    apiCall: () => getTransactions(1, 5),
+    onSuccess: (data) => {
+      setTransactions(data.transactions);
+    }
+  });
+
   useFocusEffect(
     useCallback(() => {
       fetchTransactions();
-    }, [transactionList])
+    }, [])
   );
 
   return (
@@ -39,7 +55,7 @@ export function RecentTransactions({ navigation }: Props) {
       }
       </View>
       <TransactionList
-        list={parsedTransactionList.slice(0,5)}
+        list={transactions}
         isLoading={isLoading}
         listHeight={HEIGHT - 500}
         navigation={navigation}
