@@ -50,6 +50,10 @@ export const doPost = (url: string, data: Record<string, any>, options?: any): P
   return axiosRequest({ url, method: 'POST', data, ...options })
 }
 
+export const doPatch = (url: string, data: Record<string, any>, options?: any): Promise<void | AxiosResponse> => {
+  return axiosRequest({ url, method: 'PATCH', data, ...options })
+}
+
 export const doPut = (url: string, data: Record<string, any>, params: Record<string, string>): Promise<void | AxiosResponse> => {
   return axiosRequest({ url: replaceUrlParams(url, params), method: 'PUT', data })
 }

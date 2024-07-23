@@ -1,5 +1,5 @@
 import { API_CONSTANT } from "./apiConstants";
-import { doDelete, doGet, doPost, doPut } from "./apiConfig";
+import { doDelete, doGet, doPatch, doPost, doPut } from "./apiConfig";
 import { TRANSACTION_TYPE } from "../store/type";
 
 export const login = (email: string, password: string) => {
@@ -8,6 +8,14 @@ export const login = (email: string, password: string) => {
 
 export const signup = (username: string, email: string, password: string, confirmPassword: string) => {
   return doPost(API_CONSTANT.REGISTER, { username, email, password, confirmPassword });
+};
+
+export const getUser = () => {
+  return doGet(API_CONSTANT.GET_USER);
+};
+
+export const updateUser = (username: string) => {
+  return doPatch(API_CONSTANT.UPDATE_USER, { username });
 };
 
 export const getCategories = () => {

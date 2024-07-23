@@ -86,7 +86,7 @@ export function InputModal({ title, onSubmit, initialValue = '', required=true, 
                 </TouchableOpacity>
               </View>
 
-              <View>
+              <View style={{ paddingHorizontal: 30 }}>
                 <Animated.View style={{ transform: [{ translateX: animation }] }}>
                   <Input
                     value={value}
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
   },
   textInput: {
-		width: "95%",
+		// width: "100%",
     borderWidth: 0.5,
     alignSelf: 'center',
 

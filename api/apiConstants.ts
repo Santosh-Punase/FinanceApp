@@ -2,6 +2,9 @@ export const API_CONSTANT = {
   LOGIN: '/api/auth/login',
   REGISTER: '/api/auth/register',
 
+  GET_USER: '/api/auth/me',
+  UPDATE_USER: '/api/auth/user',
+
   SAVE_TRANSACTION: '/api/transactions/',
   GET_TRANSACTIONS: '/api/transactions?page=:page&limit=:limit',
   UPDATE_TRANSACTION: '/api/transactions/:id',
