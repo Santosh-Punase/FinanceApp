@@ -32,7 +32,7 @@ export default {
     buttonColor: '#000',
     progressBG: '#919492',
     buttonSuccessBG: '#51ed51',
-    buttonWarningBG: '#eaed51',
+    buttonWarningBG: '#ffbd03',
     buttonErrorBG: '#ed5151',
     buttonPrimaryBG: primary,
     selectedOption: 'rgba(255, 255, 255, 0.2)',

@@ -10,10 +10,10 @@ export const parseObject = (value: string): Object => {
 
 export const getProgressColor = (value: number) => {
   if(value < 0.5) {
-    return Colors.dark.buttonWarningBG;
+    return Colors.dark.buttonSuccessBG;
   }
   if(value < 0.75) {
-    return Colors.dark.buttonSuccessBG;
+    return Colors.dark.buttonWarningBG;
   }
   return Colors.dark.buttonErrorBG;
 }

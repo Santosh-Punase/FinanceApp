@@ -47,13 +47,13 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
                       <View style={styles.listItemRow_1}>
                         {item.category && (
                           <View lightColor='rgba(44, 44, 214, 0.2)' darkColor='rgba(199, 10, 130, 0.3)' style={{ marginRight: 10, borderRadius: 8 }}>
-                            <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.category.name}</Text>
+                            <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.category.name || 'No Category'}</Text>
                             {/* <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(199, 10, 130, 1)'>{item.category}</Text> */}
                           </View>
                         )}
                         {item.paymentMode && (
                           <View lightColor='rgba(79, 79, 79, 0.2)' darkColor='rgba(212, 112, 10, 0.3)' style={{ borderRadius: 8 }}>
-                            <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.paymentMode.name}</Text>
+                            <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.paymentMode.name || 'No Payment Mode'}</Text>
                             {/* <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(212, 112, 10, 1)'>{item.paymentMode}</Text> */}
                           </View>
                         )}

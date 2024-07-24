@@ -1,15 +1,15 @@
 // import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MenuProvider } from 'react-native-popup-menu';
 import Toast from 'react-native-toast-message';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
-import { initialize } from './store/store';
-import { /* defaultCategories, */ defaultPaymentModes } from './constants/Store';
-import { stringifyObject } from './utils';
+// import { initialize } from './store/store';
+// import { /* defaultCategories, */ defaultPaymentModes } from './constants/Store';
+// import { stringifyObject } from './utils';
 import { Theme } from './store/type';
 import { ThemeContext } from './theme';
 import { AuthProvider } from './contexts/AuthContext';
@@ -23,10 +23,10 @@ export default function App() {
   const defaultTheme = useColorScheme();
   const colorScheme = theme === 'default' ? defaultTheme : theme;
 
-  useEffect(() => {
+  // useEffect(() => {
     // initialize('categories', stringifyObject(defaultCategories));
-    initialize('paymentModes', stringifyObject(defaultPaymentModes));
-  }, [])
+    // initialize('paymentModes', stringifyObject(defaultPaymentModes));
+  // }, [])
 
   if (!isLoadingComplete) {
     return null;

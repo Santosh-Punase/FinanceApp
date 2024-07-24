@@ -32,20 +32,20 @@ export function BottomTabNavigator() {
           title: 'Welcome back !',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           tabBarShowLabel: false,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
+          // headerRight: () => (
+          //   <Pressable
+          //     onPress={() => navigation.navigate('Modal')}
+          //     style={({ pressed }) => ({
+          //       opacity: pressed ? 0.5 : 1,
+          //     })}>
+          //     <FontAwesome
+          //       name="info-circle"
+          //       size={25}
+          //       color={Colors[colorScheme].text}
+          //       style={{ marginRight: 15 }}
+          //     />
+          //   </Pressable>
+          // ),
           headerShadowVisible: true,
         })}
       />
