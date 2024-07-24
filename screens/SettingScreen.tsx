@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Alert, StyleSheet, TouchableOpacity, View as DefaultView } from 'react-native';
 import { Card } from '../components/Card';
 import { InputModal } from '../components/Modals/InputModal';
@@ -14,24 +14,23 @@ import { Icon } from '../components/Icon';
 // import { defaultCategories, defaultPaymentModes } from '../constants/Store';
 import { useAuthContext } from '../contexts/AuthContext';
 import { RootTabScreenProps } from '../types';
-import useApiCall from '../hooks/useApiCall';
-import { getUser, updateUser } from '../api/api';
+// import useApiCall from '../hooks/useApiCall';
+import { updateUser } from '../api/api';
 import { LoadingSkeleton } from '../components/LoadingSkeleton';
-import { useFocusEffect } from '@react-navigation/native';
+// import { useFocusEffect } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 
 export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThree'>) {
-  const [user, setUser] = useState<{ username: string, email: string } | null>(null);
-  const { onLogout } = useAuthContext();
+  const { onLogout, user, setUser } = useAuthContext();
   const [isUserUpdateLoading, setIsUserUpdateLoading] = useState<boolean>(false);
 
   // const parsedUser:User = parseObject(user) as User || { name: '', phoneNumber: '' };
-  const { isLoading: isUserLoading, doApiCall: fetchUser } = useApiCall({
-    apiCall: () => getUser(),
-    onSuccess: (data) => {
-      setUser(data);
-    }
-  });
+  // const { isLoading: isUserLoading, doApiCall: fetchUser } = useApiCall({
+  //   apiCall: () => getUser(),
+  //   onSuccess: (data) => {
+  //     setUser(data);
+  //   }
+  // });
 
   const updateUserName = (name: string) => {
     setShowModal(false);
@@ -50,11 +49,11 @@ export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThr
     });
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchUser();
-    }, [])
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     fetchUser();
+  //   }, [])
+  // );
  
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -87,7 +86,7 @@ export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThr
   return (
     <View style={styles.container} lightColor='rgba(255,255,255, 0.5)' darkColor='rgba(255, 255, 255, 0.1)'>
       <Text style={styles.sectionHeader}>Profile</Text>
-      { isUserLoading || isUserUpdateLoading
+      { isUserUpdateLoading
       ? (
         <Card style={{ marginBottom: 10, width: WIDTH - 20, flexDirection: 'column', justifyContent: 'center' }}>
           <DefaultView style={{ width: WIDTH - 40, flexDirection: 'row', alignItems: 'center' }}>

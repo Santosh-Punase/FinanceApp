@@ -15,14 +15,14 @@ import { AuthStack } from './AuthStack';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 
-  const { accessToken } = useAuthContext()
+  const { user, isLaunched } = useAuthContext()
 
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      { accessToken ? <AppStack /> : <AuthStack /> }
-      <StatusBar style={accessToken ? colorScheme === 'dark' ? 'light' : 'dark' : 'light'} />
+      { user ? <AppStack /> : <AuthStack isLaunched={isLaunched} /> }
+      <StatusBar style={user ? colorScheme === 'dark' ? 'light' : 'dark' : 'light'} />
     </NavigationContainer>
   );
 }

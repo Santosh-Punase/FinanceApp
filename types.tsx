@@ -30,7 +30,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 >;
 
 export type AuthStackParamList = {
-  Loading: undefined;
+  Info: undefined;
   Login: undefined;
   Signup: undefined;
 };

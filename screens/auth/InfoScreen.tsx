@@ -5,8 +5,10 @@ import { AuthStackScreenProps } from '../../types';
 import { ButtonPrimary } from '../../components/Button';
 import { Images } from '../../assets/images/index';
 import Colors from '../../constants/Colors';
+import { useAuthContext } from '../../contexts/AuthContext';
 
-export default function InfoScreen(props: AuthStackScreenProps<'Loading'>) {
+export default function InfoScreen({ navigation }: AuthStackScreenProps<'Info'>) {
+  const { isLoading } = useAuthContext();
 
   return (
     <View style={styles.container}>
@@ -27,16 +29,20 @@ export default function InfoScreen(props: AuthStackScreenProps<'Loading'>) {
           <Text style={styles.subTitle}>Take control of your finance!</Text>
         </DefaultView>
         <DefaultView style={styles.footer}>
-          <ButtonPrimary
-            rounded
-            label='Log In'
-            onPress={() => props.navigation?.navigate('Login')}
-          />
-          <ButtonPrimary
-            rounded
-            label='Sign Up'
-            onPress={() => props.navigation?.navigate('Signup')}
-          />
+          { isLoading ? null : (
+            <>
+              <ButtonPrimary
+                rounded
+                label='Log In'
+                onPress={() => navigation?.navigate('Login')}
+              />
+              <ButtonPrimary
+                rounded
+                label='Sign Up'
+                onPress={() => navigation?.navigate('Signup')}
+              />
+            </>
+          )}
         </DefaultView>
       </LinearGradient>
     </View>
@@ -79,6 +85,7 @@ const styles = StyleSheet.create({
   footer: {
     //  flex: 1,
     maxHeight: 180,
+    minHeight: 180,
   //  alignSelf: 'stretch',
    width: '100%',
   }

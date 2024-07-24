@@ -1,6 +1,6 @@
 // import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MenuProvider } from 'react-native-popup-menu';
 import Toast from 'react-native-toast-message';
 
@@ -12,14 +12,16 @@ import Navigation from './navigation';
 // import { stringifyObject } from './utils';
 import { Theme } from './store/type';
 import { ThemeContext } from './theme';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthContext } from './contexts/AuthContext';
+import { setAuthToken, setLogoutHandler } from './api/apiConfig';
+import { removeValue, setValue } from './store/store';
 
 
 export default function App() {
   const [theme, setTheme] = useState<Theme>('default');
   const themeData = { theme, setTheme };
 
-  const isLoadingComplete = useCachedResources();
+  const { isLoading, isLaunched, user, fetchUser, setUser } = useCachedResources();
   const defaultTheme = useColorScheme();
   const colorScheme = theme === 'default' ? defaultTheme : theme;
 
@@ -28,21 +30,36 @@ export default function App() {
     // initialize('paymentModes', stringifyObject(defaultPaymentModes));
   // }, [])
 
-  if (!isLoadingComplete) {
-    return null;
-  } else {
-    return (
-      <SafeAreaProvider>
-        <ThemeContext.Provider value={themeData}>
-          <MenuProvider>
-            <AuthProvider>
-              <Navigation colorScheme={colorScheme} />
-            </AuthProvider>
-            {/* <StatusBar style={colorScheme === Theme.DARK ? 'light' : 'dark'} /> */}
-          </MenuProvider>
-            <Toast />
-        </ThemeContext.Provider>
-      </SafeAreaProvider>
-    );
+  const onLogin = async (token: string) => {
+    if(token) {
+      setAuthToken(token);
+      await setValue('launched', 'true');
+      await setValue('at', token);
+      await fetchUser();
+    }
   }
+
+  const onLogout = async () => {
+    await removeValue('at');
+    setAuthToken(null);
+    setUser(null);
+  }
+
+  useEffect(() => {
+    setLogoutHandler(onLogout);
+  }, []);
+
+  return (
+    <SafeAreaProvider>
+      <ThemeContext.Provider value={themeData}>
+        <MenuProvider>
+          <AuthContext.Provider value={{ isLoading, isLaunched, user, setUser, onLogin, onLogout }}>
+            <Navigation colorScheme={colorScheme} />
+          </AuthContext.Provider>
+          {/* <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} /> */}
+        </MenuProvider>
+          <Toast />
+      </ThemeContext.Provider>
+    </SafeAreaProvider>
+  );
 }

@@ -1,6 +1,6 @@
 import { ColorSchemeName } from "react-native";
 
-export type StoreKey = 'categories' | 'paymentModes' | 'transactionList' | 'user' | 'theme' | 'at';
+export type StoreKey = 'categories' | 'paymentModes' | 'transactionList' | 'user' | 'theme' | 'at' | 'launched';
 
 export type DropdownLabel = 'categories' | 'paymentModes';
 
@@ -51,10 +51,7 @@ export type Transaction = {
   date?: number;
 }
 
-export type User = {
-  name: string;
-  phoneNumber: string;
-}
+export type User = { username: string, email: string } | null;
 
 export type ThemeContextType = {
   theme: Theme
@@ -64,8 +61,9 @@ export type ThemeContextType = {
 
 export type AuthContextType = {
   isLoading: boolean;
-  user?: any;
-  accessToken: string;  
+  isLaunched: boolean;
+  user: User;
+  setUser: (user: User) => void;
   onLogin: (token: string) => void;
   onLogout: () => void
 }
