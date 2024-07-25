@@ -16,13 +16,14 @@ import { ListLoading } from '../components/LoadingSkeleton';
 import { useOnFocusApiCall } from '../hooks/useApiCall';
 import { deleteCategory, getCategories } from '../api/api';
 import Toast from 'react-native-toast-message';
+import { useTransactionContext } from '../contexts/TransactionContext';
 
 export default function CategoryOptionsScreen({ navigation, route }: CategoryOptionsScreenProps) {
 
   const [searchString, setSearchString] = useState<string>('');
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState<boolean>(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
-  const selectedCategory = route?.params?.category || undefined;
+  // const selectedCategory = route?.params?.category || undefined;
   const routeAction = route.params?.action;
 
   const currentTheme:ColorSchemeName = useTheme();
@@ -31,6 +32,8 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
 
   const optionsContainerBackgroundColor = Colors[currentTheme].background;
   const optionsContainerShadowColor = Colors[currentTheme].text;
+
+  const { transaction, setTransaction } = useTransactionContext();
 
   useEffect(() => {
     navigation.setOptions({
@@ -63,7 +66,8 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
     
   const onSelect = (selection: CategoryOption) => {
     if (routeAction === 'select') {
-      navigation.navigate('AddNewTransaction', { category: { id: selection._id, name: selection.name }, paymentMode: route?.params?.paymentMode })
+      setTransaction({ category: { id: selection._id, name: selection.name } })
+      navigation.navigate('AddNewTransaction', {})
     } else {
       editCategory(selection);
     }
@@ -113,7 +117,7 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
         ) : (
           <View style={[{ width: '100%', paddingTop: 10, }]}>
             {filteredRecords.map((op, i) => {
-              const isSelected = selectedCategory?.id === op._id;
+              const isSelected = transaction?.category?.id === op._id;
               return (
                 <View style={isSelected ? [styles.listItem, { backgroundColor: selectedOptionColor }] : styles.listItem} key={i} darkColor={'rgba(255, 255, 255, 0.08)'} >
                   <TouchableOpacity onPress={() => onSelect(op)} style={styles.labelWrapper} activeOpacity={1}>

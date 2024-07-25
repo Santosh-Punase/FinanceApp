@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import { View } from '../../components/Themed';
 // import useStore from '../../hooks/useStore';
-import { /* Transaction, */ Transaction, TRANSACTION_TYPE } from '../../store/type';
+import { /* Transaction, */ TRANSACTION_TYPE } from '../../store/type';
 import { AddNewScreenProps } from '../../types';
 // import { parseObject, stringifyObject } from '../../utils';
 import { ButtonOutline, ButtonPrimary } from '../Button';
@@ -13,27 +13,36 @@ import { Input } from '../Input';
 import Toggle from '../Toggle';
 import Toast from 'react-native-toast-message';
 import { saveTransaction } from '../../api/api';
+import { Transaction, useTransactionContext } from '../../contexts/TransactionContext';
 
-const getTransactionEntry = (entry: Transaction) => ({
-  amount: parseFloat(entry.amount),
+interface Entry {
+  amount: string;
+  remark: string;
+  type: TRANSACTION_TYPE;
+}
+const getTransactionEntry = (entry: Entry, transaction: Transaction) => ({
+  amount: parseFloat(entry.amount || '0'),
   type: entry.type,
   remark: entry.remark,
-  category: entry.category?.id!,
-  paymentMode: entry.paymentMode?.id!,
+  category: transaction.category?.id!,
+  paymentMode: transaction.paymentMode?.id!,
 });
 
 export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
 
-  const entryInitialState: Transaction = {
-    type: route?.params?.transactionType || TRANSACTION_TYPE.INCOME,
-    category: undefined,
-    paymentMode: undefined,
-    remark: '',
-    amount: '',
-  }
-  const [entry, setEntry] = useState<Transaction>(entryInitialState);
+  // const entryInitialState: Transaction = {
+  //   type: route?.params?.transactionType || TRANSACTION_TYPE.INCOME,
+  //   category: undefined,
+  //   paymentMode: undefined,
+  //   remark: '',
+  //   amount: '',
+  // }
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
   const [isSaveAndAddNewLoading, setIsSaveAndAddNewLoading] = useState<boolean>(false);
+  
+  const { transaction, setTransaction } = useTransactionContext();
+  const [entry, setEntry] = useState<Entry>({ amount: transaction.amount || '', remark: transaction.remark || '', type: transaction.type || TRANSACTION_TYPE.INCOME });
+
 
   // const [ transactionList, setTransactionList ] = useStore('transactionList');
   // @ts-ignore
@@ -43,16 +52,16 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
     setEntry({ ...entry, [key]: value })
   }
 
-  useEffect(() => {
-    updateEntry('category', route?.params?.category);
-  }, [route?.params?.category]);
+  // useEffect(() => {
+  //   updateEntry('category', route?.params?.category);
+  // }, [route?.params?.category]);
 
-  useEffect(() => {
-    updateEntry('paymentMode', route?.params?.paymentMode);
-  }, [route?.params?.paymentMode]);
+  // useEffect(() => {
+  //   updateEntry('paymentMode', route?.params?.paymentMode);
+  // }, [route?.params?.paymentMode]);
 
-  const changeTransactionType = (transactionType: TRANSACTION_TYPE) => {
-    updateEntry('type', transactionType);
+  const changeTransactionType = (type: TRANSACTION_TYPE) => {
+    updateEntry('type', type);
   }
 
   // const saveEntry = () => {
@@ -63,10 +72,28 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
     // setTransactionList(stringifyObject([ ...parsedTransactionList, newEntry]));
   // }
 
+  // useEffect(() => {
+  //   navigation.setParams({
+  //     header: 'Add New Transaction',
+  //   });
+  // }, []);
+
+  const selectCategory = () => {
+    setTransaction(entry);
+    navigation.navigate('CategoryOptionsScreen', { header: 'Choose Category', action: 'select' });
+  };
+
+
+  const selectPaymentMode = () => {
+    setTransaction(entry);
+    navigation.navigate('PaymentOptionsScreen', { header: 'Choose Payment Mode', action: 'select' });
+  }
+
   const onSaveClick = () => {
     setIsSaveLoading(true);
-    saveTransaction(getTransactionEntry(entry))
+    saveTransaction(getTransactionEntry(entry, transaction))
     .then(() => {
+      setTransaction({ amount: undefined, remark: undefined, category: undefined, paymentMode: undefined, type: transaction.type });
       Toast.show({
         type: 'success',
         text1: 'Entry Saved Successfully',
@@ -79,47 +106,50 @@ export default function NewEntryCard({ navigation, route }: AddNewScreenProps) {
 
   const onSaveAndAddNewClick = () => {
     setIsSaveAndAddNewLoading(true);
-    saveTransaction(getTransactionEntry(entry))
+    saveTransaction(getTransactionEntry(entry, transaction))
     .then(() => {
-      setEntry({ ...entryInitialState, type: entry.type });
+      setTransaction({ amount: undefined, remark: undefined, category: undefined, paymentMode: undefined, type: transaction.type });
       Toast.show({
         type: 'success',
         text1: 'Entry Saved Successfully',
       });
-      navigation.setParams({ category: undefined });
-      navigation.setParams({ paymentMode: undefined });
+      setEntry({ amount: '', remark: '', type: entry.type });
+      // navigation.setParams({ category: undefined });
+      // navigation.setParams({ paymentMode: undefined });
     })
     .catch()
     .finally(() => setIsSaveAndAddNewLoading(false));
   }
+  console.log('transctin', transaction)
+  console.log('entry', entry)
 
   const isExpenseTransaction = entry.type === TRANSACTION_TYPE.EXPENSE
-  const isSaveDisabled = isSaveLoading || isSaveAndAddNewLoading || !entry.category || !entry.paymentMode || !entry.remark;
+  const isSaveDisabled = isSaveLoading || isSaveAndAddNewLoading || !transaction.category || !transaction.paymentMode || !entry.remark;
 
   return (
     <Card style={[styles.wrapperCard, { borderColor: entry.type === TRANSACTION_TYPE.INCOME ? 'green' : 'red' }]}>
       <View style={{ marginHorizontal: 30, marginBottom: 20 }}>
         <Toggle width={300} value={isExpenseTransaction} onPress={() => changeTransactionType(isExpenseTransaction ? TRANSACTION_TYPE.INCOME : TRANSACTION_TYPE.EXPENSE)} />
       </View>
-      <Input showLabel placeholder='Amount' value={entry.amount || ''} keyboardType='numeric' onChangeText={(amount) => updateEntry('amount', amount)} />
+      <Input showLabel placeholder='Amount' value={entry.amount || ''} keyboardType='numeric' onChangeText={(amount) => updateEntry('amount', amount) } />
       { entry.amount && (
         <>
-          <Input showLabel label='Remark' placeholder='Item, Quantity, Person, Place etc' value={entry.remark || ''} onChangeText={(remark) => updateEntry('remark', remark)} />
+          <Input showLabel label='Remark' placeholder='Item, Quantity, Person, Place etc' value={entry.remark || ''} onChangeText={(remark) => updateEntry('remark', remark) } />
           <Dropdown
             key='category'
             iconStyle={{ size: 18 }}
             placeholder='Category'
             label={'Category'}
-            value={entry?.category}
-            onPress={() => navigation.navigate('CategoryOptionsScreen', { header: 'Choose Category', category: entry.category, paymentMode: entry.paymentMode, action: 'select' })}
+            value={transaction?.category}
+            onPress={selectCategory}
           />
           <Dropdown
             key='Payment Mode'
             iconStyle={{ size: 18 }}
             placeholder='Payment Mode'
             label={'Payment Mode'}
-            value={entry?.paymentMode}
-            onPress={() => navigation.navigate('PaymentOptionsScreen', { header: 'Choose Payment Mode', category: entry.category, paymentMode: entry.paymentMode, action: 'select' })}
+            value={transaction?.paymentMode}
+            onPress={selectPaymentMode}
           />
         </>
       )}

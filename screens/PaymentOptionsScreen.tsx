@@ -20,6 +20,7 @@ import useApiCall from '../hooks/useApiCall';
 import { deletePaymentMode, getPaymentModes, savePaymentMode, updatePaymentMode } from '../api/api';
 import { useFocusEffect } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import { useTransactionContext } from '../contexts/TransactionContext';
 
 export default function PaymentOptionsScreen({ navigation, route }: PaymentOptionsScreenProps) {
 
@@ -28,7 +29,7 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
   const [isSearchBoxOpen, setIsSearchBoxOpen] = useState<boolean>(false);
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
   // const [availableOptions, mutateOptions, isLoading] = useStore('paymentModes');
-  const selectedPaymentMode = route?.params?.paymentMode || undefined;
+  // const selectedPaymentMode = route?.params?.paymentMode || undefined;
   const routeAction = route.params?.action;
 
   const currentTheme:ColorSchemeName = useTheme();
@@ -71,6 +72,8 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
     }
   });
 
+  const { transaction, setTransaction } = useTransactionContext();
+
   useFocusEffect(
     useCallback(() => {
       fetchPaymentModes();
@@ -80,7 +83,8 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
   const onSelect = (selection: PaymentModeOption) => {
   //   updateTimestamp({ ...selection, lastUsedAt: Date.now() });
     if (routeAction === 'select') {
-      navigation.navigate('AddNewTransaction', { category: route?.params?.category, paymentMode:  { id: selection._id, name: selection.name } });
+      setTransaction({ paymentMode:  { id: selection._id, name: selection.name } })
+      navigation.navigate('AddNewTransaction', {});
     } else {
       editOption(selection);
     }
@@ -185,7 +189,7 @@ export default function PaymentOptionsScreen({ navigation, route }: PaymentOptio
         ) : (
           <View style={[{ width: '100%', paddingTop: 10, }]}>
             {filteredRecords.map((op, i) => {
-              const isSelected = selectedPaymentMode?.id === op._id;
+              const isSelected = transaction?.paymentMode?.id === op._id;
               return (
                 <View style={isSelected ? [styles.listItem, { backgroundColor: selectedOptionColor }] : styles.listItem} key={i} darkColor={'rgba(255, 255, 255, 0.08)'} >
                   <TouchableOpacity onPress={() => onSelect(op)} style={styles.labelWrapper} activeOpacity={1}>

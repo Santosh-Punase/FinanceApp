@@ -3,11 +3,15 @@ import { WIDTH } from "../constants/Layout";
 import { TRANSACTION_TYPE } from "../store/type";
 import { NativeStackNavigatorProps } from "react-native-screens/lib/typescript/native-stack/types";
 import { View } from "./Themed";
+import { useTransactionContext } from "../contexts/TransactionContext";
 
 export function AddEntryFooter({ navigation }: { navigation : NativeStackNavigatorProps }) {
 
-  const addNewTransaction = (transactionType: TRANSACTION_TYPE ) => {
-    navigation.navigate('AddNewTransaction', { category: undefined, paymentMode: undefined, transactionType })
+  const { setTransaction } = useTransactionContext();
+
+  const addNewTransaction = (type: TRANSACTION_TYPE ) => {
+    setTransaction({ type });
+    navigation.navigate('AddNewTransaction', {});
   }
  
   return (

@@ -17,10 +17,10 @@ declare global {
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
-  AddNewTransaction: { category: TransactionCategory, paymentMode: TransactionPaymentMode, transactionType?: TRANSACTION_TYPE } | undefined;
+  AddNewTransaction: { header?: string };
   AddCategoryScreen: { header: string, category: { name: string, budget?: number, id?: string } | undefined, action: 'Add' | 'Edit' };
-  CategoryOptionsScreen: { header: string, category: TransactionCategory, paymentMode: TransactionPaymentMode, action: 'select' | 'list' };
-  PaymentOptionsScreen: { header: string, category: TransactionCategory, paymentMode: TransactionPaymentMode, action: 'select' | 'list' };
+  CategoryOptionsScreen: { header: string, action: 'select' | 'list' };
+  PaymentOptionsScreen: { header: string, action: 'select' | 'list' };
   NotFound: undefined;
 };
 
