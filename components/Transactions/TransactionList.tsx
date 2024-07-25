@@ -1,6 +1,8 @@
 import React from 'react';
-import { FlatList, ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import dayjs from 'dayjs';
+import SwipeableFlatList from 'rn-gesture-swipeable-flatlist';
+
 // import { getCalendars } from 'expo-localization';
 
 import { HEIGHT, WIDTH } from '../../constants/Layout';
@@ -12,6 +14,9 @@ import { NoRecord } from '../NoRecord';
 import { NativeStackNavigatorProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { AddEntryFooter } from '../AddEntryFooter';
 import { ListLoading } from '../LoadingSkeleton';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Icon } from '../Icon';
+import Colors from '../../constants/Colors';
 
 const DEFAULT_LIST_HEIGHT = HEIGHT - 190;
 
@@ -30,18 +35,18 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
 
   if (isLoading && !isLoadingMore) {
     return (
-      <ScrollView style={{ width: WIDTH, minHeight: listHeight || DEFAULT_LIST_HEIGHT, paddingBottom: 200 }}>
+      <View style={{ flex: 1, width: WIDTH, minHeight: listHeight || DEFAULT_LIST_HEIGHT, paddingBottom: 200 }}>
         <View style={{ minHeight: listHeight || DEFAULT_LIST_HEIGHT + 10 }}>
           <ListLoading />
         </View>
-      </ScrollView>  
+      </View>  
     )
   };
 
   if (!isLoading && list.length === 0) {
     return (
       <>
-        <View style={{ width: WIDTH, minHeight: listHeight || DEFAULT_LIST_HEIGHT + 10 }}>
+        <View style={{ width: WIDTH, minHeight: listHeight || DEFAULT_LIST_HEIGHT }}>
           { isFilterSelected ? 
             <NoRecord
               header={'No Transactions Found'}
@@ -59,51 +64,70 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
     )
   };
 
+  const renderLeftActions = (item: Transaction) => {
+    return (
+      <TouchableOpacity style={[styles.listIconWrapper, { backgroundColor: Colors.light.buttonPrimaryBG }]}>
+        <Icon type='AntDesign' name={'edit'} size={24} color={Colors.light.buttonColor} />
+      </TouchableOpacity>
+    );
+  };
+
+  const renderRightActions = (item: Transaction) => {
+    return (
+      <TouchableOpacity style={[styles.listIconWrapper, { backgroundColor: Colors.light.buttonErrorBG }]}>
+        <Icon type='AntDesign' name={'delete'} size={24} color={Colors.light.buttonColor} />
+      </TouchableOpacity>
+    );
+  };
+
+  const renderItem = (item: Transaction, index: number) => (
+    <Card style={[styles.listItem, !isLoading && index === list.length - 1 ? { paddingBottom: 80 } : { }]}>
+      <View style={styles.listItemWrapper}>
+        <View style={styles.transactionDetails}>
+          {item.remark && <Text>{item.remark}</Text>}
+          <View style={styles.listItemRow_1}>
+            {item.category && (
+              <View lightColor='rgba(44, 44, 214, 0.2)' darkColor='rgba(199, 10, 130, 0.3)' style={{ marginRight: 10, borderRadius: 8 }}>
+                <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.category.name || 'No Category'}</Text>
+                {/* <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(199, 10, 130, 1)'>{item.category}</Text> */}
+              </View>
+            )}
+            {item.paymentMode && (
+              <View lightColor='rgba(79, 79, 79, 0.2)' darkColor='rgba(212, 112, 10, 0.3)' style={{ borderRadius: 8 }}>
+                <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.paymentMode.name || 'No Payment Mode'}</Text>
+                {/* <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(212, 112, 10, 1)'>{item.paymentMode}</Text> */}
+              </View>
+            )}
+          </View>
+          <Text style={styles.transactionTime}>{`${dayjs(item.date).format(`DD-MMM-YYYY | HH:mm`)}`}</Text>
+          {/* <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text> */}
+        </View>
+        <View style={styles.amount}>
+          {item.type === TRANSACTION_TYPE.INCOME && <Text style={styles.credit}>{item.amount}</Text>}
+          {item.type === TRANSACTION_TYPE.EXPENSE && <Text style={styles.debit}>{item.amount}</Text>}
+        </View>
+      </View>
+    </Card>
+  );
+
   return (
     <>
-      <FlatList
-        style={{ minHeight: listHeight || DEFAULT_LIST_HEIGHT }}
-        data={list}
-        keyExtractor={(item, i) => `${item.date}_${i}`}
-        renderItem={({ item, index }) => {
-          return (
-            <Card style={[styles.listItem, !isLoading && index === list.length - 1 ? { paddingBottom: 80 } : { }]}>
-              <View style={styles.listItemWrapper}>
-                <View style={styles.transactionDetails}>
-                  {item.remark && <Text>{item.remark}</Text>}
-                  <View style={styles.listItemRow_1}>
-                    {item.category && (
-                      <View lightColor='rgba(44, 44, 214, 0.2)' darkColor='rgba(199, 10, 130, 0.3)' style={{ marginRight: 10, borderRadius: 8 }}>
-                        <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.category.name || 'No Category'}</Text>
-                        {/* <Text style={styles.category} lightColor='rgba(44, 44, 214, 1)' darkColor='rgba(199, 10, 130, 1)'>{item.category}</Text> */}
-                      </View>
-                    )}
-                    {item.paymentMode && (
-                      <View lightColor='rgba(79, 79, 79, 0.2)' darkColor='rgba(212, 112, 10, 0.3)' style={{ borderRadius: 8 }}>
-                        <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(255, 255, 255, 0.7)'>{item.paymentMode.name || 'No Payment Mode'}</Text>
-                        {/* <Text style={styles.paymentMode} lightColor='rgba(79, 79, 79, 1)' darkColor='rgba(212, 112, 10, 1)'>{item.paymentMode}</Text> */}
-                      </View>
-                    )}
-                  </View>
-                  <Text style={styles.transactionTime}>{`${dayjs(item.date).format(`DD-MMM-YYYY | HH:mm`)}`}</Text>
-                  {/* <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text> */}
-                </View>
-                <View style={styles.amount}>
-                  {item.type === TRANSACTION_TYPE.INCOME && <Text style={styles.credit}>{item.amount}</Text>}
-                  {item.type === TRANSACTION_TYPE.EXPENSE && <Text style={styles.debit}>{item.amount}</Text>}
-                </View>
-              </View>
-            </Card>
-          )
-        }}
-        onEndReached={loadMore}
-        onEndReachedThreshold={0.1}
-      />
-      { isLoading && isLoadingMore && (
-        <View style={{ width: WIDTH, minHeight: listHeight || DEFAULT_LIST_HEIGHT + 10 }}>
-          <ListLoading />
-        </View>
-      )}
+      <GestureHandlerRootView style={{ flex: 1, minHeight: listHeight || DEFAULT_LIST_HEIGHT }}>
+        <SwipeableFlatList
+          data={list}
+          keyExtractor={(item, i) => `${item.date}_${i}`}
+          renderItem={({ item, index }) => renderItem(item, index)}
+          renderLeftActions={renderLeftActions}
+          renderRightActions={renderRightActions}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.1}
+        />
+        { isLoading && isLoadingMore && (
+          <View style={{ width: WIDTH, minHeight: listHeight || DEFAULT_LIST_HEIGHT + 10 }}>
+            <ListLoading />
+          </View>
+        )}
+      </GestureHandlerRootView>
       <AddEntryFooter navigation={navigation} />
     </>
   );
@@ -135,6 +159,10 @@ const styles = StyleSheet.create({
     borderRadius: 0,
     paddingTop: 0,
     paddingBottom: 1,
+  },
+  listIconWrapper: {
+    paddingHorizontal: 15,
+    justifyContent: 'center'
   },
   listItemWrapper: {
     flexDirection: 'row',

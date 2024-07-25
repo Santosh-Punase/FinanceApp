@@ -31,7 +31,7 @@ export function PasswordInput({ password, passwordError, setPassword }: Password
           disabled={!password}
           style={styles.eyeIcon}
         >
-          <Icon type='Ionicons' name={`${showPassword ? 'eye-off': 'eye'}`} size={20} />
+          <Icon type='Ionicons' name={`${showPassword ? 'eye': 'eye-off'}`} size={20} />
         </TouchableOpacity>
     </View>
   );
