@@ -42,7 +42,7 @@ export type TransactionCategory = DropdownOption | undefined;
 export type TransactionPaymentMode = DropdownOption | undefined;
 
 export type Transaction = {
-  id?: number;
+  id?: string;
   type: TRANSACTION_TYPE;
   amount: string;
   category: TransactionCategory;
@@ -57,7 +57,6 @@ export type ThemeContextType = {
   theme: Theme
   setTheme: (theme:Theme) => void
 }
-
 
 export type AuthContextType = {
   isLoading: boolean;

@@ -21,6 +21,7 @@ import Colors from '../../constants/Colors';
 import { ConcentModal } from '../Modals/ConsentModal';
 import useApiCall from '../../hooks/useApiCall';
 import { deleteTransaction } from '../../api/api';
+import { useTransactionContext } from '../../contexts/TransactionContext';
 
 const DEFAULT_LIST_HEIGHT = HEIGHT - 190;
 
@@ -51,6 +52,8 @@ export default function TransactionList({
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [itemToDelete, setItemToDelete] = useState<Transaction>();
 
+  const { setTransaction } = useTransactionContext();
+
   const { isLoading: isDeleteLoadig, doApiCall: onDelete } = useApiCall({
     apiCall: () => itemToDelete && itemToDelete.id && deleteTransaction(`${itemToDelete.id}`),
     onSuccess: () => {
@@ -72,6 +75,12 @@ export default function TransactionList({
   const openDeleteModal = (item: Transaction) => {
     setShowDeleteModal(true);
     setItemToDelete(item);
+  }
+
+  const editTransaction = (item: Transaction) => {
+    flatListRef.current?.closeAnyOpenRows();
+    setTransaction({ ...item, amount: `${item.amount}` });
+    navigation.navigate('AddNewTransaction', {});
   }
 
   if (isLoading && !isLoadingMore) {
@@ -107,7 +116,7 @@ export default function TransactionList({
 
   const renderLeftActions = (item: Transaction) => {
     return (
-      <TouchableOpacity style={[styles.listIconWrapper, { backgroundColor: Colors.light.buttonPrimaryBG }]}>
+      <TouchableOpacity style={[styles.listIconWrapper, { backgroundColor: Colors.light.buttonPrimaryBG }]} onPress={() => editTransaction(item)}>
         <Icon type='AntDesign' name={'edit'} size={24} color={Colors.light.buttonColor} />
       </TouchableOpacity>
     );
@@ -217,8 +226,7 @@ const styles = StyleSheet.create({
   listIconWrapper: {
     paddingHorizontal: 15,
     justifyContent: 'center',
-    maxHeight: 80,
-
+    // maxHeight: 80,
   },
   listItemWrapper: {
     flexDirection: 'row',

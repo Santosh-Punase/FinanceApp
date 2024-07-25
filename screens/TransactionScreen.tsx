@@ -58,11 +58,19 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
 
   useFocusEffect(
     useCallback(() => {
-      setCurrentPage(1);
-      setIsStaleCategories(true);
-      setIsStalePaymentModes(true);
+      let isActive = true;
+      if (isActive) {
+        setCurrentPage(1);
+        setIsStaleCategories(true);
+        setIsStalePaymentModes(true);
+      }
+      return () => {
+        isActive = false;
+        setCurrentPage(0);
+      };
     }, [])
   );
+
 
   const refreshList = () => {
     setCurrentPage(1);
@@ -77,7 +85,7 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
 
 
   useEffect(() => {
-    if(currentPage) {
+    if(currentPage >= 1) {
       fetchTransactions(currentPage);
     }
   }, [currentPage]);

@@ -156,6 +156,7 @@ export default function TransactionFilters({
         title='Set Filter For Transaction Type'
         visible={visibleModal === 'TRANSACTION_TYPE'}
         onClose={closeModal}
+        cancelText='Clear'
         onSubmit={() => {
           if (selectedFilters.type !== transactionType) {
             setFilter('type', transactionType)
