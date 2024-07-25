@@ -1,5 +1,4 @@
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View as DefaultView } from 'react-native';
 
 import Colors from "../../constants/Colors";
@@ -14,7 +13,7 @@ import { LinearGradient, Text, View } from "../Themed";
 import { styles } from "./styles";
 import { HomeScreenNavigation } from "../../types";
 import { LoadingSkeleton } from "../LoadingSkeleton";
-import useApiCall from "../../hooks/useApiCall";
+import { useOnFocusApiCall } from "../../hooks/useApiCall";
 import { getCategories } from "../../api/api";
 interface Props {
   navigation: HomeScreenNavigation;
@@ -22,20 +21,12 @@ interface Props {
 }
 
 export function Categories({ navigation, currentTheme }: Props) {
-  const [categories, setCategories] = useState<CategoryOption[]>([]);
   const [total, setTotal] = useState<{ budget: number, spent: number }>({ budget: 0, spent: 0 });
-  const { isLoading, doApiCall: fetchCategories } = useApiCall({
-    apiCall: () => getCategories(),
-    onSuccess: (data) => {
-      setCategories(data);
-    }
-  });
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchCategories();
-    }, [])
-  );
+  const { isLoading, data: categories } = useOnFocusApiCall<CategoryOption[]>({
+    apiCall: () => getCategories(),
+    initialState: [],
+  });
 
   useEffect(() => {
     let budget = 0;

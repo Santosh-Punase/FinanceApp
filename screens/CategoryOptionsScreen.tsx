@@ -12,9 +12,8 @@ import { RadioButton } from '../components/RadioButton';
 import { View, Text } from '../components/Themed';
 import { useTheme } from '../theme';
 import Colors from '../constants/Colors';
-import { useFocusEffect } from '@react-navigation/native';
 import { ListLoading } from '../components/LoadingSkeleton';
-import useApiCall from '../hooks/useApiCall';
+import { useOnFocusApiCall } from '../hooks/useApiCall';
 import { deleteCategory, getCategories } from '../api/api';
 import Toast from 'react-native-toast-message';
 
@@ -45,19 +44,10 @@ export default function CategoryOptionsScreen({ navigation, route }: CategoryOpt
     )});
   }, [navigation, isSearchBoxOpen, searchString]);
 
-  const [categories, setCategories] = useState<CategoryOption[]>([]);
-  const { isLoading: isFetchLoading, doApiCall: fetchCategories } = useApiCall({
+  const { isLoading: isFetchLoading, data: categories, setData: setCategories } = useOnFocusApiCall<CategoryOption[]>({
     apiCall: () => getCategories(),
-    onSuccess: (data) => {
-      setCategories(data);
-    }
+    initialState: [],
   });
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchCategories();
-    }, [])
-  );
 
   const addCategory = () => {
     setSearchString('');

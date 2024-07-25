@@ -1,5 +1,3 @@
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useState } from "react";
 import { View as DefaultView } from 'react-native';
 
 import { HEIGHT, WIDTH } from "../../constants/Layout";
@@ -11,7 +9,7 @@ import { HomeScreenNavigation } from "../../types";
 import { LoadingSkeleton } from "../LoadingSkeleton";
 import TransactionList from "../Transactions/TransactionList";
 import { Transaction } from "../../store/type";
-import useApiCall from "../../hooks/useApiCall";
+import { useOnFocusApiCall } from "../../hooks/useApiCall";
 import { getTransactions } from "../../api/api";
 
 interface Props {
@@ -19,7 +17,7 @@ interface Props {
 }
 
 export function RecentTransactions({ navigation }: Props) {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  // const [transactions, setTransactions] = useState<Transaction[]>([]);
   
   // const [ transactionList, , isLoading , , fetchTransactions ] = useStore('transactionList');
   // // @ts-ignore
@@ -31,18 +29,11 @@ export function RecentTransactions({ navigation }: Props) {
   //   }, [transactionList])
   // );
 
-  const { isLoading, doApiCall: fetchTransactions } = useApiCall({
+  const { isLoading, data } = useOnFocusApiCall<Transaction[]>({
     apiCall: () => getTransactions(1, 5),
-    onSuccess: (data) => {
-      setTransactions(data.transactions);
-    }
+    initialState: [],
+    dataExtractor: (data) => data.transactions
   });
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchTransactions();
-    }, [])
-  );
 
   return (
     <>
@@ -55,7 +46,7 @@ export function RecentTransactions({ navigation }: Props) {
       }
       </View>
       <TransactionList
-        list={transactions}
+        list={data}
         isLoading={isLoading}
         listHeight={HEIGHT - 600}
         navigation={navigation}
