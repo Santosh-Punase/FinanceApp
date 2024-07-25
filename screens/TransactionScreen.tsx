@@ -22,6 +22,8 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isStaleCategories, setIsStaleCategories] = useState<boolean>(false);
   const [isStalePaymentModes, setIsStalePaymentModes] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(1);
 
   // const [ transactionList, , isLoading , , fetchList ] = useStore('transactionList');
   // @ts-ignore
@@ -35,12 +37,19 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
   //   }, [transactionList])
   // );
 
-  const fetchTransactions = () => {
+  const fetchTransactions = (page: number) => {
     setIsLoading(true);
-    getTransactions(1, 100, selectedFilters.type, selectedFilters.categories.join(','), selectedFilters.paymentModes.join(','))
+    getTransactions(page, 10, selectedFilters.type, selectedFilters.categories.join(','), selectedFilters.paymentModes.join(','))
     .then((data) => {
-      // @ts-ignore
-      setTransactions(data.transactions);
+      if (page == 1) {
+        // @ts-ignore
+        setTransactions(data.transactions);
+        // @ts-ignore
+        setTotalPages(data.totalPages);
+      } else {
+        // @ts-ignore
+        setTransactions([... transactions, ...data.transactions]);
+      }
     }).catch()
     .finally(() => {
       setIsLoading(false);
@@ -49,16 +58,33 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
 
   useFocusEffect(
     useCallback(() => {
-      fetchTransactions();
+      setCurrentPage(1);
       setIsStaleCategories(true);
       setIsStalePaymentModes(true);
     }, [])
   );
 
   useEffect(() => {
-    fetchTransactions();
-  }, [selectedFilters])
+    setCurrentPage(1);
+    if (currentPage === 1) {
+      fetchTransactions(1);
+    }
+  }, [selectedFilters]);
 
+
+  useEffect(() => {
+    if(currentPage) {
+      fetchTransactions(currentPage);
+    }
+  }, [currentPage]);
+
+
+  const loadMoreData = () => {
+    if (currentPage === totalPages) {
+      return ;
+    }
+    setCurrentPage(currentPage + 1);
+  };
   
   // const filteredList = parsedTransactionList.filter((item: Transaction, i: number) => (
   //   (selectedFilters.transactionType === '' || item.transactionType === selectedFilters.transactionType) &&
@@ -67,7 +93,7 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
   // ));
 
   return (
-    <View style={styles.container} darkColor='rgba(255,255,255,0.08)' lightColor='rgba(0,0,0, 0.02)'>
+    <View style={styles.container}>
       <TransactionFilters
         isLoading={isLoading}
         isStaleCategories={isStaleCategories}
@@ -80,7 +106,9 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
       />
       <TransactionList
         isLoading={isLoading}
+        isLoadingMore={currentPage > 1}
         isFilterSelected={isFilterSelected}
+        loadMore={loadMoreData}
         clearAllFilters={() => setSelectedFilters(filterInitialState)}
         list={transactions}
         navigation={navigation}

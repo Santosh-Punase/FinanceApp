@@ -57,7 +57,7 @@ export function RecentTransactions({ navigation }: Props) {
       <TransactionList
         list={transactions}
         isLoading={isLoading}
-        listHeight={HEIGHT - 500}
+        listHeight={HEIGHT - 600}
         navigation={navigation}
       />
     </>
