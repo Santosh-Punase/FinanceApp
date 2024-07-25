@@ -72,3 +72,7 @@ export const saveTransaction = (data: { amount: number; remark: string; type: TR
   // })
   return doPost(API_CONSTANT.SAVE_TRANSACTION, data);
 };
+
+export const deleteTransaction = (id: string) => {
+  return doDelete(API_CONSTANT.DELETE_TRANSACTION, { id });
+};

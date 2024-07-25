@@ -64,11 +64,15 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
     }, [])
   );
 
-  useEffect(() => {
+  const refreshList = () => {
     setCurrentPage(1);
     if (currentPage === 1) {
       fetchTransactions(1);
     }
+  };
+
+  useEffect(() => {
+    refreshList();
   }, [selectedFilters]);
 
 
@@ -95,7 +99,7 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
   return (
     <View style={styles.container}>
       <TransactionFilters
-        isLoading={isLoading}
+        isLoading={isLoading && currentPage === 1}
         isStaleCategories={isStaleCategories}
         setIsStaleCategories={setIsStaleCategories}
         setIsStalePaymentModes={setIsStalePaymentModes}
@@ -106,6 +110,7 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
       />
       <TransactionList
         isLoading={isLoading}
+        refetchTransactions={refreshList}
         isLoadingMore={currentPage > 1}
         isFilterSelected={isFilterSelected}
         loadMore={loadMoreData}

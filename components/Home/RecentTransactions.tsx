@@ -29,10 +29,10 @@ export function RecentTransactions({ navigation }: Props) {
   //   }, [transactionList])
   // );
 
-  const { isLoading, data } = useOnFocusApiCall<Transaction[]>({
+  const { isLoading, data, refetch } = useOnFocusApiCall<Transaction[]>({
     apiCall: () => getTransactions(1, 5),
     initialState: [],
-    dataExtractor: (data) => data.transactions
+    dataExtractor: (data) => data.transactions,
   });
 
   return (
@@ -47,6 +47,7 @@ export function RecentTransactions({ navigation }: Props) {
       </View>
       <TransactionList
         list={data}
+        refetchTransactions={refetch}
         isLoading={isLoading}
         listHeight={HEIGHT - 600}
         navigation={navigation}

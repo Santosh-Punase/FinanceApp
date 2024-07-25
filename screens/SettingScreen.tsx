@@ -19,6 +19,7 @@ import { updateUser } from '../api/api';
 import { LoadingSkeleton } from '../components/LoadingSkeleton';
 // import { useFocusEffect } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import { ConcentModal } from '../components/Modals/ConsentModal';
 
 export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThree'>) {
   const { onLogout, user, setUser } = useAuthContext();
@@ -56,21 +57,9 @@ export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThr
   // );
  
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
 
-  const onLogoutClick = () => {
-    Alert.alert(
-      'Are you sure',
-      'Logout ?',
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        { text: "OK", onPress: onLogout }
-      ]
-    )
-  }
-
+  const closeLogoutModal = () => setShowLogoutModal(false);
   // const onResetCategoryAndPaymentModes = async() => {
   //   removeValue('categories');
   //   removeValue('paymentModes');
@@ -144,7 +133,7 @@ export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThr
           <Icon type="Ionicons" name='refresh-circle' size={30} />
           <Text style={styles.label}>Reset transaction list</Text>
         </TouchableOpacity> */}
-        <TouchableOpacity onPress={onLogoutClick} style={[{ flexDirection: 'row', marginBottom: 20, alignItems: 'center', }]}>
+        <TouchableOpacity onPress={() => setShowLogoutModal(true)} style={[{ flexDirection: 'row', marginBottom: 20, alignItems: 'center', }]}>
           <Icon type="Ionicons" name='log-out-outline' size={30} style={{ marginLeft: 3, marginRight: -3, }}/>
           <Text style={styles.label}>Log-out</Text>
         </TouchableOpacity>
@@ -160,6 +149,16 @@ export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThr
           placeholder={'Username'}
           onCancel={() => setShowModal(false)}
           onSubmit={updateUserName}
+        />
+      )}
+      { showLogoutModal && (
+        <ConcentModal
+          visible
+          message="Are you sure. Logout?"
+          onClose={closeLogoutModal}
+          onSubmit={onLogout}
+          submitText='Logout'
+          onCancel={closeLogoutModal}
         />
       )}
     </View>

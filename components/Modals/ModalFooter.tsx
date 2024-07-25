@@ -10,17 +10,18 @@ type Props = {
   cancelText: string;
   submitText: string;
   isLoading?: boolean;
+	submitCTALabelStyle?: { };
   onSubmit: () => void;
   onCancel: () => void;
   showCancelButtonIcon?: boolean;
 }
 
-export function ModalFooter({ cancelText, submitText, showCancelButtonIcon=false, onSubmit, onCancel, isLoading }: Props) {
+export function ModalFooter({ cancelText, submitText, submitCTALabelStyle, showCancelButtonIcon=false, onSubmit, onCancel, isLoading }: Props) {
 
   return (
     <View style={styles.buttonsOuterView}>
       <View style={styles.buttonsInnerView}>
-        <TouchableOpacity onPress={onCancel}>
+        <TouchableOpacity onPress={onCancel} disabled={isLoading}>
 					<View style={styles.button}>
 						{ showCancelButtonIcon && (
 							<Icon type="AntDesign" name="close" style={{ marginRight: 10 }} size={18} />
@@ -42,7 +43,7 @@ export function ModalFooter({ cancelText, submitText, showCancelButtonIcon=false
         </TouchableOpacity> */}
 
 				<View style={{ width: 100, marginRight: 20, backgroundColor: 'transparent' }}>
-					<ButtonPrimary label={submitText} style={{ height: 40 }} onPress={onSubmit} isLoading={isLoading} />
+					<ButtonPrimary label={submitText} style={{ height: 40 }} labelStyles={submitCTALabelStyle} onPress={onSubmit} isLoading={isLoading} />
 				</View>
       </View>
     </View>

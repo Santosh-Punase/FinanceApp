@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import dayjs from 'dayjs';
-import SwipeableFlatList from 'rn-gesture-swipeable-flatlist';
+import SwipeableFlatList, { SwipeableFlatListRef } from 'rn-gesture-swipeable-flatlist';
+import { NativeStackNavigatorProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Toast from 'react-native-toast-message';
 
 // import { getCalendars } from 'expo-localization';
 
@@ -11,12 +14,13 @@ import { Card } from '../Card';
 // import { dummyData } from './dummyData';
 import { Transaction, TRANSACTION_TYPE } from '../../store/type';
 import { NoRecord } from '../NoRecord';
-import { NativeStackNavigatorProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { AddEntryFooter } from '../AddEntryFooter';
-import { ListLoading } from '../LoadingSkeleton';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ListLoading, ListLoadingMore } from '../LoadingSkeleton';
 import { Icon } from '../Icon';
 import Colors from '../../constants/Colors';
+import { ConcentModal } from '../Modals/ConsentModal';
+import useApiCall from '../../hooks/useApiCall';
+import { deleteTransaction } from '../../api/api';
 
 const DEFAULT_LIST_HEIGHT = HEIGHT - 190;
 
@@ -28,10 +32,47 @@ type TransactionListProps = {
   isLoading?: boolean;
   isLoadingMore?: boolean;
   clearAllFilters?: () => void;
+  refetchTransactions: () => void | Promise<void>;
   navigation?: NativeStackNavigatorProps;
 }
 
-export default function TransactionList({ isFilterSelected, clearAllFilters, list, isLoading = false, listHeight, navigation, loadMore, isLoadingMore = false } : TransactionListProps) {
+export default function TransactionList({
+  isFilterSelected,
+  clearAllFilters,
+  list,
+  isLoading = false,
+  listHeight,
+  navigation,
+  loadMore,
+  refetchTransactions,
+  isLoadingMore = false
+} : TransactionListProps) {
+  const flatListRef = useRef<SwipeableFlatListRef<Transaction> | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [itemToDelete, setItemToDelete] = useState<Transaction>();
+
+  const { isLoading: isDeleteLoadig, doApiCall: onDelete } = useApiCall({
+    apiCall: () => itemToDelete && itemToDelete.id && deleteTransaction(`${itemToDelete.id}`),
+    onSuccess: () => {
+      refetchTransactions();
+      closeDeleteModal();
+      Toast.show({
+        type: 'success',
+        text1: 'Deleted!'
+      })
+    }
+  });
+
+  const closeDeleteModal = () => {
+    setItemToDelete(undefined);
+    setShowDeleteModal(false);
+    flatListRef.current?.closeAnyOpenRows();
+  }
+
+  const openDeleteModal = (item: Transaction) => {
+    setShowDeleteModal(true);
+    setItemToDelete(item);
+  }
 
   if (isLoading && !isLoadingMore) {
     return (
@@ -74,7 +115,7 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
 
   const renderRightActions = (item: Transaction) => {
     return (
-      <TouchableOpacity style={[styles.listIconWrapper, { backgroundColor: Colors.light.buttonErrorBG }]}>
+      <TouchableOpacity style={[styles.listIconWrapper, { backgroundColor: Colors.light.buttonErrorBG }]} onPress={() => openDeleteModal(item)}>
         <Icon type='AntDesign' name={'delete'} size={24} color={Colors.light.buttonColor} />
       </TouchableOpacity>
     );
@@ -114,20 +155,33 @@ export default function TransactionList({ isFilterSelected, clearAllFilters, lis
     <>
       <GestureHandlerRootView style={{ flex: 1, minHeight: listHeight || DEFAULT_LIST_HEIGHT }}>
         <SwipeableFlatList
+          ref={flatListRef}
           data={list}
           keyExtractor={(item, i) => `${item.date}_${i}`}
           renderItem={({ item, index }) => renderItem(item, index)}
+          enableOpenMultipleRows={false}
           renderLeftActions={renderLeftActions}
           renderRightActions={renderRightActions}
           onEndReached={loadMore}
           onEndReachedThreshold={0.1}
         />
         { isLoading && isLoadingMore && (
-          <View style={{ width: WIDTH, minHeight: listHeight || DEFAULT_LIST_HEIGHT + 10 }}>
-            <ListLoading />
+          <View style={{ width: WIDTH }}>
+            <ListLoadingMore />
           </View>
         )}
       </GestureHandlerRootView>
+      { showDeleteModal && (
+        <ConcentModal
+          visible
+          message="Are you sure. Delete?"
+          onClose={closeDeleteModal}
+          onSubmit={onDelete}
+          isLoading={isDeleteLoadig}
+          submitText='Delete'
+          onCancel={closeDeleteModal}
+        />
+      )}
       <AddEntryFooter navigation={navigation} />
     </>
   );
@@ -162,7 +216,9 @@ const styles = StyleSheet.create({
   },
   listIconWrapper: {
     paddingHorizontal: 15,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    maxHeight: 80,
+
   },
   listItemWrapper: {
     flexDirection: 'row',

@@ -33,7 +33,12 @@ export default function useApiCall({ apiCall, onSuccess, onFailure }: Props) {
   return { isLoading, doApiCall };
 }
 
-type UseOnFocusApiCallReturnType<T, S> =  { isLoading: boolean, data: T | S, setData: (d: T | S) => void };
+type UseOnFocusApiCallReturnType<T, S> =  {
+  isLoading: boolean;
+  data: T | S;
+  setData: (d: T | S) => void;
+  refetch: () => Promise<void>;
+};
 
 export function useOnFocusApiCall<T,S = T>({ apiCall, onSuccess, onFailure, initialState, dataExtractor }: OnFocusProps & { initialState: S }): UseOnFocusApiCallReturnType<T,S> {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -41,6 +46,7 @@ export function useOnFocusApiCall<T,S = T>({ apiCall, onSuccess, onFailure, init
   
   const doApiCall = async () => {
     try {
+      setIsLoading(true);
       const resp = await apiCall();
       const data = dataExtractor?.(resp) || resp;
       // @ts-ignore
@@ -60,5 +66,5 @@ export function useOnFocusApiCall<T,S = T>({ apiCall, onSuccess, onFailure, init
     }, [])
   );
 
-  return { isLoading, data, setData };
+  return { isLoading, data, setData, refetch: doApiCall };
 }

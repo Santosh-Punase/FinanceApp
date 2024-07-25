@@ -66,6 +66,7 @@ export default function SignupScreen({ navigation }: AuthStackScreenProps<'Signu
           <Text style={styles.subTitle}>Already have an account? </Text>
           <ButtonLink
             label='Log In'
+            disabled={isLoading}
             activeOpacity={1}
             onPress={() => navigation.replace('Login')}
             labelStyles={styles.subTitle}

@@ -9,7 +9,7 @@ import { StyleTheme } from "../../store/type";
 export function ButtonPrimary({ labelStyles, ...rest }: ButtonProps) {
   const theme: StyleTheme = useTheme();
   return (
-    <Button labelStyles={{ ...styles(theme).primaryLabel, labelStyles }} { ...rest } />
+    <Button labelStyles={{ ...styles(theme).primaryLabel, ...labelStyles }} { ...rest } />
   );
 }
 
@@ -27,7 +27,7 @@ export function ButtonOutline({ labelStyles, ...rest }: ButtonProps) {
   const theme: StyleTheme = useTheme();
 
   return (
-    <Button labelStyles={{ ...styles(theme).outlineLabel, labelStyles }} loaderColor={Colors[theme].buttonPrimaryBG} { ...rest } />
+    <Button labelStyles={{ ...styles(theme).outlineLabel, ...labelStyles }} loaderColor={Colors[theme].buttonPrimaryBG} { ...rest } />
   );
 }
 

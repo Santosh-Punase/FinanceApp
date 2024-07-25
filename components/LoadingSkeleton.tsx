@@ -59,6 +59,14 @@ export function ListLoading() {
   )
 }
 
+export function ListLoadingMore() {
+  return (
+    <LoadingSkeleton style={{ padding: 20 }} itemStyle={{ marginBottom: 20 }}>
+      <DefaultView style={styles.listItem} /> 
+    </LoadingSkeleton>
+  )
+}
+
 export function ModalListLoading() {
   return (
     <LoadingSkeleton style={{ paddingHorizontal: 10 }} itemStyle={{ marginBottom: 20, width: '75%' }}>
