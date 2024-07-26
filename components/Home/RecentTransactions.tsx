@@ -37,7 +37,7 @@ export function RecentTransactions({ navigation }: Props) {
 
   return (
     <>
-      <View style={{ width: WIDTH }}>
+      <View style={{ width: WIDTH, borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
         { isLoading ? (
           <LoadingSkeleton style={{ marginHorizontal: 20, marginTop: 10 }} itemStyle={{ width: 150 }}>
             <DefaultView style={{ height: 20 }} />

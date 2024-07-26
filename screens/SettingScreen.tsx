@@ -115,14 +115,14 @@ export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThr
           onPress={() => navigation.navigate('CategoryOptionsScreen', { header: 'Categories', category: undefined, paymentMode: undefined, action: 'list' })}
           style={[{ flexDirection: 'row', marginBottom: 10, alignItems: 'center' }]}
         >
-          <Icon type="Ionicons" name='list-circle-outline' size={30} />
+          <Icon type="Ionicons" name='list-circle-outline' size={24} />
           <Text style={styles.label}>Categories</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate('PaymentOptionsScreen', { header: 'Payment Modes', category: undefined, paymentMode: undefined, action: 'list' })}
           style={[{ flexDirection: 'row', marginBottom: 10, alignItems: 'center' }]}
         >
-          <Icon type="Ionicons" name='card-outline' size={30} />
+          <Icon type="Ionicons" name='card-outline' size={24} />
           <Text style={styles.label}>Payment Modes</Text>
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={onResetCategoryAndPaymentModes} style={[{ flexDirection: 'row', marginBottom: 10, alignItems: 'center' }]}>
@@ -134,7 +134,7 @@ export default function SettingScreen({ navigation }: RootTabScreenProps<'TabThr
           <Text style={styles.label}>Reset transaction list</Text>
         </TouchableOpacity> */}
         <TouchableOpacity onPress={() => setShowLogoutModal(true)} style={[{ flexDirection: 'row', marginBottom: 20, alignItems: 'center', }]}>
-          <Icon type="Ionicons" name='log-out-outline' size={30} style={{ marginLeft: 3, marginRight: -3, }}/>
+          <Icon type="Ionicons" name='log-out-outline' size={24} style={{ marginLeft: 3, marginRight: -3, }}/>
           <Text style={styles.label}>Log-out</Text>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, alignItems: 'center' }}>
@@ -202,6 +202,6 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    marginLeft: 20,
+    marginLeft: 15,
   },
 });

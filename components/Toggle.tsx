@@ -15,9 +15,9 @@ const TOGGLE_HEIGHT = 50;
 const TOGGLE_MARGIN = 3;
 const TOGGLE_BORDER = 1;
 const TOGGLE_BORDER_RADIUS = 50;
+const width = 260;
 
-export default function Toggle({ width, value, onPress }: { width: number, value: boolean, onPress: () => void }) {
-
+export default function Toggle({ value, onPress }: { value: boolean, onPress: () => void }) {
   const positionButton = useRef(new Animated.Value(value ? 1 : 0)).current;
   const currentTheme:ColorSchemeName = useTheme();
 
@@ -42,40 +42,37 @@ export default function Toggle({ width, value, onPress }: { width: number, value
 
   return (
     <View style={styles.container}>
-      {/* <View style={{ position: 'absolute', top: 0, left: 0, height: TOGGLE_HEIGHT, width: '50%', zIndex: 99, backgroundColor: 'rgba(0,0,0,0.2)'}}></View> */}
-      <TouchableOpacity style={{ height:TOGGLE_HEIGHT, width:'100%' }}  activeOpacity={0.9} onPress={onChange} >
+      <TouchableOpacity style={{ borderRadius: TOGGLE_BORDER_RADIUS, backgroundColor: 'green', width: width }}  activeOpacity={0.9} onPress={onChange} >
         <Animated.View style={[styles.mainStyes,{
-          // backgroundColor:backgroundColorAnim,
           borderColor: Colors[currentTheme].buttonPrimaryBG,
           backgroundColor: Colors[currentTheme].background
         }]} >
-          <Animated.Text
-            style={[
-              styles.eachStyles,
-              {
-                left: 10,
-                width: width / 2 - 30,
-                color: value ? colorLink : colorButton,
-              },
-            ]}>
-            Income
-          </Animated.Text>
-          <Animated.Text
-            style={[
-              styles.eachStyles,
-              {
-                left: width / 2 + 10,
-                width: width / 2 - 30,
-                color: value ? colorButton : colorLink,
-              },
-            ]}>
-            Expense
-          </Animated.Text>
-          <Animated.View style={[styles.basicStyle,{
-            // width: (width / 2), // - (2 * TOGGLE_MARGIN)- (2 * TOGGLE_BORDER),
+          <View style={styles.viewWrapper}>
+            <Animated.Text
+              style={[
+                styles.eachStyles,
+                {
+                  color: value ? colorLink : colorButton,
+                },
+              ]}>
+              Income
+            </Animated.Text>
+          </View>
+          <View style={styles.viewWrapper}>
+            <Animated.Text
+              style={[
+                styles.eachStyles,
+                {
+                  color: value ? colorButton : colorLink,
+                },
+              ]}>
+              Expense
+            </Animated.Text>
+          </View>
+          <Animated.View style={[styles.basicStyle, {
             backgroundColor: Colors[currentTheme].buttonPrimaryBG,
             transform:[{
-              translateX:positionInterPol
+              translateX: positionInterPol
             }]
           }]} />
         </Animated.View>
@@ -88,31 +85,38 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: 50,
-    justifyContent: 'center',
-    // position: 'relative'
   },
   basicStyle: {
     height: TOGGLE_HEIGHT - (2 * TOGGLE_MARGIN) - (2 * TOGGLE_BORDER),
-    width: '48%',//WIDTH / 2 - 25 - (2 * TOGGLE_MARGIN)- (2 * TOGGLE_BORDER) - 10,
+    width: '50%',
     borderRadius: TOGGLE_BORDER_RADIUS,
-    marginTop: TOGGLE_MARGIN,
-    marginLeft: TOGGLE_MARGIN,
+    margin: TOGGLE_MARGIN,
+    position: 'absolute',
+    top: 0,
+    zIndex: 10,
   },
   eachStyles: {
     fontSize: 16,
+    lineHeight: 20,
     zIndex: 20,
-    position: 'absolute',
+  },
+  viewWrapper: {
+    borderRadius: TOGGLE_BORDER_RADIUS,
+    height: '100%',
+    width: '50%',
     flex: 1,
+    zIndex: 20,
     justifyContent: 'center',
-    alignSelf: 'center',
-    top: TOGGLE_HEIGHT / 2 - 14,
-    textAlign: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    position: 'relative',
   },
   mainStyes: {
     borderRadius: TOGGLE_BORDER_RADIUS,
     borderWidth: TOGGLE_BORDER,
     height: TOGGLE_HEIGHT,
     width: '100%',
+    flexDirection: 'row',
     elevation: 5,
   },
 });

@@ -150,8 +150,8 @@ export default function NewEntryCard({ navigation }: AddNewScreenProps) {
 
   return (
     <Card style={[styles.wrapperCard, { borderColor: entry.type === TRANSACTION_TYPE.INCOME ? 'green' : 'red' }]}>
-      <View style={{ marginHorizontal: 30, marginBottom: 20 }}>
-        <Toggle width={300} value={isExpenseTransaction} onPress={() => changeTransactionType(isExpenseTransaction ? TRANSACTION_TYPE.INCOME : TRANSACTION_TYPE.EXPENSE)} />
+      <View style={{ marginBottom: 20, alignSelf: 'center' }}>
+        <Toggle value={isExpenseTransaction} onPress={() => changeTransactionType(isExpenseTransaction ? TRANSACTION_TYPE.INCOME : TRANSACTION_TYPE.EXPENSE)} />
       </View>
       <Input showLabel placeholder='Amount' value={entry.amount || ''} keyboardType='numeric' onChangeText={(amount) => updateEntry('amount', amount) } />
       { entry.amount && (
