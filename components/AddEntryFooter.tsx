@@ -7,10 +7,10 @@ import { useTransactionContext } from "../contexts/TransactionContext";
 
 export function AddEntryFooter({ navigation }: { navigation : NativeStackNavigatorProps }) {
 
-  const { setTransaction } = useTransactionContext();
+  const { resetTransaction } = useTransactionContext();
 
   const addNewTransaction = (type: TRANSACTION_TYPE ) => {
-    setTransaction({ type });
+    resetTransaction({ type });
     navigation.navigate('AddNewTransaction', {});
   }
  

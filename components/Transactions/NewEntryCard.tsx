@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { View } from '../../components/Themed';
@@ -14,6 +14,7 @@ import Toggle from '../Toggle';
 import Toast from 'react-native-toast-message';
 import { saveTransaction, updateTransaction } from '../../api/api';
 import { Transaction, useTransactionContext } from '../../contexts/TransactionContext';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface Entry {
   amount: string;
@@ -40,7 +41,7 @@ export default function NewEntryCard({ navigation }: AddNewScreenProps) {
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
   const [isSaveAndAddNewLoading, setIsSaveAndAddNewLoading] = useState<boolean>(false);
   
-  const { transaction, setTransaction } = useTransactionContext();
+  const { transaction, setTransaction, resetTransaction } = useTransactionContext();
   const [entry, setEntry] = useState<Entry>({ amount: transaction.amount || '', remark: transaction.remark || '', type: transaction.type || TRANSACTION_TYPE.INCOME });
   const isEdit = !!transaction.id;
 
@@ -72,11 +73,14 @@ export default function NewEntryCard({ navigation }: AddNewScreenProps) {
     // setTransactionList(stringifyObject([ ...parsedTransactionList, newEntry]));
   // }
 
-  // useEffect(() => {
-  //   navigation.setParams({
-  //     header: 'Add New Transaction',
-  //   });
-  // }, []);
+ 
+  useFocusEffect(
+    useCallback(() => {
+      navigation.setParams({
+        header: isEdit ? 'Edit Transaction' : 'Add New Transaction',
+      });
+    }, [])
+  );
 
   const selectCategory = () => {
     setTransaction(entry);
@@ -93,7 +97,7 @@ export default function NewEntryCard({ navigation }: AddNewScreenProps) {
     setIsSaveLoading(true);
     saveTransaction(getTransactionEntry(entry, transaction))
     .then(() => {
-      setTransaction({ amount: undefined, remark: undefined, category: undefined, paymentMode: undefined, type: transaction.type });
+      resetTransaction();
       Toast.show({
         type: 'success',
         text1: 'Entry Saved Successfully',
@@ -118,15 +122,17 @@ export default function NewEntryCard({ navigation }: AddNewScreenProps) {
     .finally(() => setIsSaveLoading(false));
   }
 
+  const onCancelClick = () => {
+    resetTransaction();
+    navigation.canGoBack() && navigation.goBack();
+    return;
+  }
+
   const onSaveAndAddNewClick = () => {
-    if (isEdit) {
-      navigation.canGoBack() && navigation.goBack();
-      return;
-    }
     setIsSaveAndAddNewLoading(true);
     saveTransaction(getTransactionEntry(entry, transaction))
     .then(() => {
-      setTransaction({ amount: undefined, remark: undefined, category: undefined, paymentMode: undefined, type: transaction.type });
+      resetTransaction();
       Toast.show({
         type: 'success',
         text1: 'Saved Successfully',
@@ -176,7 +182,7 @@ export default function NewEntryCard({ navigation }: AddNewScreenProps) {
           label={isEdit ? 'Cancel' : 'Save & Add New'}
           style={[{ width: '48%' }]}
           labelStyles={styles.buttonLabel}
-          onPress={onSaveAndAddNewClick}
+          onPress={isEdit ? onCancelClick : onSaveAndAddNewClick}
         />
         <ButtonPrimary
           disabled={isSaveDisabled}

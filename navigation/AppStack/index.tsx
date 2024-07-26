@@ -13,19 +13,23 @@ import CategoryOptionsScreen from '../../screens/CategoryOptionsScreen';
 import PaymentOptionsScreen from '../../screens/PaymentOptionsScreen';
 import { BottomTabNavigator } from '.././BottomTabNavigator';
 import AddCategoryScreen from '../../screens/AddCategoryScreen';
-import { TransactionContext } from '../../contexts/TransactionContext';
+import { Transaction, TransactionContext, TransactionContextType } from '../../contexts/TransactionContext';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function RootNavigator() {
-  const [transaction, setTransaction] = React.useState({ });
+  const [transaction, setTransaction] = React.useState<Transaction>({ });
 
   const updateTransaction = (value: {}) => {
     setTransaction({ ...transaction, ...value });
   };
 
+  const resetTransaction: TransactionContextType['resetTransaction'] = (val) => {
+    val ? setTransaction(val) : setTransaction({})
+  };
+
   return (
-    <TransactionContext.Provider value={{ transaction, setTransaction: updateTransaction }}>
+    <TransactionContext.Provider value={{ transaction, setTransaction: updateTransaction, resetTransaction }}>
       <Stack.Navigator>
         <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
