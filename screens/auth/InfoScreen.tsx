@@ -15,7 +15,7 @@ export default function InfoScreen({ navigation }: AuthStackScreenProps<'Info'>)
       <LinearGradient
         colors={Colors.screenGadiant}
         style={{ height: '100%', width: '100%', padding: 40 }}
-        locations={[0.2, 0.4, 0.5, 0.7]}
+        locations={[0.2, 0.4, 0.6, 0.8]}
       >
         <DefaultView style={styles.titleWrapper}>
           <Text style={styles.title}>FinoVue</Text>
