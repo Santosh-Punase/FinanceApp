@@ -92,8 +92,8 @@ export default function TransactionScreen({ navigation }: RootTabScreenProps<'Ta
 
 
   const loadMoreData = () => {
-    if (currentPage === totalPages) {
-      return ;
+    if (!totalPages || currentPage === totalPages) {
+      return;
     }
     setCurrentPage(currentPage + 1);
   };

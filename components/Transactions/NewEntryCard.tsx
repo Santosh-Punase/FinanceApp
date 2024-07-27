@@ -100,7 +100,7 @@ export default function NewEntryCard({ navigation }: AddNewScreenProps) {
       resetTransaction();
       Toast.show({
         type: 'success',
-        text1: 'Entry Saved Successfully',
+        text1: 'Saved Successfully',
       });
       navigation.navigate('Root')
     })

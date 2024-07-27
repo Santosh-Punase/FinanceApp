@@ -165,7 +165,9 @@ export default function TransactionFilters({
         }}
         onCancel={() => {
           closeModal();
-          setFilter('type', undefined);
+          if (selectedFilters.type !== undefined) {
+            setFilter('type', undefined);
+          }
         }}
       >
         <View style={styles.optionsWrapper}>
@@ -190,8 +192,10 @@ export default function TransactionFilters({
           closeModal();
         }}
         onCancel={() => {
+          if (selectedFilters.categories.length !== 0) {
+            setFilter('categories', []);
+          }
           closeModal();
-          setFilter('categories', []);
           setOptions([]);
         }}
       >
@@ -219,8 +223,10 @@ export default function TransactionFilters({
           closeModal();
         }}
         onCancel={() => {
+          if (selectedFilters.paymentModes.length !== 0) {
+            setFilter('paymentModes', []);
+          }
           closeModal();
-          setFilter('paymentModes', []);
           setOptions([]);
         }}
       >

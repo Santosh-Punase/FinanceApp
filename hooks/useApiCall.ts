@@ -44,16 +44,14 @@ export function useOnFocusApiCall<T,S = T>({ apiCall, onSuccess, onFailure, init
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<T | S>(initialState);
   
-  const doApiCall = async (isActive = false) => {
+  const doApiCall = async () => {
     try {
       setIsLoading(true);
       const resp = await apiCall();
       const data = dataExtractor?.(resp) || resp;
-      if (isActive) {
-        // @ts-ignore
-        setData(data);
-        onSuccess?.(data);
-      }
+      // @ts-ignore
+      setData(data);
+      onSuccess?.(data);
       setIsLoading(false);
     } catch (e) {
       onFailure?.();
@@ -64,11 +62,7 @@ export function useOnFocusApiCall<T,S = T>({ apiCall, onSuccess, onFailure, init
 
   useFocusEffect(
     useCallback(() => {
-      let isActive = true;
-      doApiCall(isActive);
-      return () => {
-        isActive = false;
-      };
+      doApiCall();
     }, [])
   );
 

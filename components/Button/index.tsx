@@ -13,11 +13,11 @@ export function ButtonPrimary({ labelStyles, ...rest }: ButtonProps) {
   );
 }
 
-export function ButtonLink({ labelStyles, label, onPress, activeOpacity }: ButtonProps) {
+export function ButtonLink({ labelStyles, label, disabled, onPress, activeOpacity }: ButtonProps) {
   const theme: StyleTheme = useTheme();
 
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={activeOpacity}>
+    <TouchableOpacity onPress={onPress} disabled={disabled} activeOpacity={activeOpacity}>
       <Text style={[styles(theme).linkLabel, labelStyles]}>{label}</Text>
     </TouchableOpacity>
   );

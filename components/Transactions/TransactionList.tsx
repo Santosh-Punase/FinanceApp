@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { ColorSchemeName, StyleSheet, TouchableOpacity } from 'react-native';
 import dayjs from 'dayjs';
 import SwipeableFlatList, { SwipeableFlatListRef } from 'rn-gesture-swipeable-flatlist';
 import { NativeStackNavigatorProps } from 'react-native-screens/lib/typescript/native-stack/types';
@@ -22,6 +22,7 @@ import { ConcentModal } from '../Modals/ConsentModal';
 import useApiCall from '../../hooks/useApiCall';
 import { deleteTransaction } from '../../api/api';
 import { useTransactionContext } from '../../contexts/TransactionContext';
+import { useTheme } from '../../theme';
 
 const DEFAULT_LIST_HEIGHT = HEIGHT - 190;
 
@@ -52,6 +53,7 @@ export default function TransactionList({
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [itemToDelete, setItemToDelete] = useState<Transaction>();
 
+  const currentTheme: ColorSchemeName = useTheme();
   const { setTransaction } = useTransactionContext();
 
   const { isLoading: isDeleteLoadig, doApiCall: onDelete } = useApiCall({
@@ -93,10 +95,10 @@ export default function TransactionList({
     )
   };
 
-  if (!isLoading && list.length === 0) {
+  const listEmpty = () => {
     return (
       <>
-        <View style={{ width: WIDTH, minHeight: listHeight || DEFAULT_LIST_HEIGHT }}>
+        <View style={{ width: WIDTH, height: 150 }}>
           { isFilterSelected ? 
             <NoRecord
               header={'No Transactions Found'}
@@ -131,7 +133,7 @@ export default function TransactionList({
   };
 
   const renderItem = (item: Transaction, index: number) => (
-    <Card style={[styles.listItem, !isLoading && index === list.length - 1 ? { paddingBottom: 80 } : { }]}>
+    <Card style={styles.listItem}>
       <View style={styles.listItemWrapper}>
         <View style={styles.transactionDetails}>
           {item.remark && <Text>{item.remark}</Text>}
@@ -149,7 +151,7 @@ export default function TransactionList({
               </View>
             )}
           </View>
-          <Text style={styles.transactionTime}>{`${dayjs(item.date).format(`DD-MMM-YYYY | HH:mm`)}`}</Text>
+          <Text style={{ color: Colors[currentTheme].mutedText }}>{`${dayjs(item.date).format(`DD-MMM-YYYY | HH:mm`)}`}</Text>
           {/* <Text style={styles.transactionTime}>{`${dayjs(item.createdAt).format(`DD-MMM-YYYY | ${ getCalendars()[0].uses24hourClock ? 'HH:mm' : 'h:mm A'}`)}`}</Text> */}
         </View>
         <View style={styles.amount}>
@@ -165,8 +167,12 @@ export default function TransactionList({
       <GestureHandlerRootView style={{ flex: 1, minHeight: listHeight || DEFAULT_LIST_HEIGHT }}>
         <SwipeableFlatList
           ref={flatListRef}
+          ListFooterComponent={() => (
+            <View style={{ minHeight: 80 }} />
+          )}
           data={list}
           keyExtractor={(item, i) => `${item.date}_${i}`}
+          ListEmptyComponent={listEmpty}
           renderItem={({ item, index }) => renderItem(item, index)}
           enableOpenMultipleRows={false}
           renderLeftActions={renderLeftActions}
@@ -199,13 +205,13 @@ export default function TransactionList({
 const styles = StyleSheet.create({
   credit: {
     fontSize: 16,
-    color: 'green',
+    color: Colors.light.buttonSuccess,
     paddingBottom: 3,
   },
   debit: {
     fontSize: 16,
     paddingBottom: 3,
-    color: 'red',
+    color: Colors.light.buttonError,
   },
   date: {
     marginVertical: 5,
@@ -239,9 +245,6 @@ const styles = StyleSheet.create({
   transactionDetails: {
     width: '70%',
     flexDirection: 'column',
-  },
-  transactionTime: {
-    color: 'rgba(0,0,0, 0.6)',
   },
   amount: {
     width: '30%' ,

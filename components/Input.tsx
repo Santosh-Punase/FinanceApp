@@ -6,11 +6,11 @@ import Colors from "../constants/Colors";
 import { useTheme } from "../theme";
 import { View, Text } from "./Themed";
 
-export function Input({ placeholder, showLabel=false, label, style, autoFocus, error, onBlur, ...rest }: TextInputProps & { showLabel?: boolean, label?: string, error?: string }) {
+export function Input({ placeholder, showLabel=false, label, style, autoFocus, error, onBlur, wrapperStyle, ...rest }: TextInputProps & { showLabel?: boolean, label?: string, error?: string, wrapperStyle?: {} }) {
   const [touched, setTouched] = useState<boolean>(false);
   const textRef = useRef<TextInput>(null);
   const currentTheme:ColorSchemeName = useTheme();
-  const backgroundColor =Colors[currentTheme].background;
+  const backgroundColor = Colors[currentTheme].background;
   const textColor = Colors[currentTheme].text;
   const borderColor = touched && error ? Colors[currentTheme].buttonErrorBG : Colors[currentTheme].border;
 
@@ -30,14 +30,14 @@ export function Input({ placeholder, showLabel=false, label, style, autoFocus, e
   );
 
   return (
-    <View style={styles.inputWrapper}>
-      { showLabel && <Text style={[styles.inputLabel, { backgroundColor: backgroundColor }]}>{label || placeholder}</Text> }
+    <View style={[styles.inputWrapper, wrapperStyle]}>
+      { showLabel && <Text style={[styles.inputLabel, { backgroundColor }]}>{label || placeholder}</Text> }
       <View style={{ marginBottom: 30 }}>
         <TextInput
           ref={autoFocus ? textRef : undefined}
           style={[styles.input, { borderColor, color: textColor }, style ]}
           placeholder={placeholder}
-          // placeholderTextColor={borderColor}
+          placeholderTextColor={borderColor}
           { ...rest }
           onBlur={(e) => { onBlur?.(e); setTouched(true)}}
         />

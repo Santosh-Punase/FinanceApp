@@ -16,9 +16,9 @@ export function HeaderSearchBar({ isSearchBoxOpen, searchString, setIsSearchBoxO
   if(isSearchBoxOpen) {
     return (
       <>
-        <Input value={searchString} autoFocus style={styles.searchInput} onChangeText={(t) => setSearchString(t)} placeholder={'Search'} />
+        <Input value={searchString} autoFocus wrapperStyle={styles.searchInputWrapper} style={styles.searchInput} onChangeText={(t) => setSearchString(t)} placeholder={'Search'} />
         <TouchableOpacity onPress={() => { setIsSearchBoxOpen(false); setSearchString('') }}>
-          <Icon type="AntDesign" name='close' size={20} style={{ marginRight: 30, padding: 10 }}/>
+          <Icon type="AntDesign" name='close' size={20} style={{ marginRight: 0, padding: 10 }}/>
         </TouchableOpacity>
       </>
     )
@@ -36,12 +36,12 @@ export function HeaderSearchBar({ isSearchBoxOpen, searchString, setIsSearchBoxO
 }
 
 const styles = StyleSheet.create({
-  searchInput: {
-    position: 'absolute',
-    right: 20,
-    top: -5,
+  searchInputWrapper: {
     height: 40,
-    width: Layout.window.width - 120,
+    width: Layout.window.width - 110,
+  },
+  searchInput: {
+    height: 40,
     borderWidth: 0,
     fontSize: 18,
   },

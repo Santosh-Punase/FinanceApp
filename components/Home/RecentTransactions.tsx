@@ -45,13 +45,15 @@ export function RecentTransactions({ navigation }: Props) {
         ): <Text style={styles.header}>Recent Transactions</Text>
       }
       </View>
-      <TransactionList
-        list={data}
-        refetchTransactions={refetch}
-        isLoading={isLoading}
-        listHeight={HEIGHT - 600}
-        navigation={navigation}
-      />
+      <View style={{ height: HEIGHT - 530 }}>
+        <TransactionList
+          list={data}
+          refetchTransactions={refetch}
+          isLoading={isLoading}
+          listHeight={HEIGHT - 600}
+          navigation={navigation}
+        />
+      </View>
     </>
   )
 }
