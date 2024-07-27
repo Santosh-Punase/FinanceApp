@@ -19,6 +19,7 @@ export default function InfoScreen({ navigation }: AuthStackScreenProps<'Info'>)
       >
         <DefaultView style={styles.titleWrapper}>
           <Text style={styles.title}>FinoVue</Text>
+          <Text style={styles.subTitle}>Budget Better, Invest Smarter!</Text>
         </DefaultView>
         <DefaultView style={styles.logoWrapper}>
           <Image
@@ -26,7 +27,6 @@ export default function InfoScreen({ navigation }: AuthStackScreenProps<'Info'>)
             source={Images.logo}
             style={{ width: 150, height: 150 }}
           />
-          <Text style={styles.subTitle}>Take control of your finance!</Text>
         </DefaultView>
         <DefaultView style={styles.footer}>
           { isLoading ? null : (
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
   },
   titleWrapper: {
     alignSelf: 'stretch',
+    height: 180,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
@@ -83,9 +84,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footer: {
-    //  flex: 1,
-    maxHeight: 180,
-    minHeight: 180,
+    flex: 1,
+    height: 180,
+    // maxHeight: 180,
+    // minHeight: 180,
   //  alignSelf: 'stretch',
    width: '100%',
   }

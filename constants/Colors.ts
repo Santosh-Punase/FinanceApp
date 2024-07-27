@@ -47,6 +47,7 @@ export default {
   },
   // screenGadiant: ['#10223E', '#0D2D61', '#0D2D61', '#10223E'],
   screenGadiant: ['#0D2D61', '#2557B9', '#2557B9', '#0D2D61'],
-  headerGradiant: ['#10223E', '#4681f4'],
+  // headerGradiant: ['#10223E', '#4681f4'],
+  headerGradiant: ['#0D2D61', '#2557B9'],
   categoryCardGradiant: ['#5c50ff', '#2c8bd6'],
 };

@@ -16,8 +16,8 @@ export function AuthStack({ isLaunched } : { isLaunched: boolean }) {
   if (isLaunched) {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} options={{ animation: 'fade', headerShown: false }} />
-        <Stack.Screen name="Signup" component={SignupScreen} options={{ animation: 'fade', headerShown: false }} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ animation: 'slide_from_right', headerShown: false }} />
+        <Stack.Screen name="Signup" component={SignupScreen} options={{ animation: 'slide_from_bottom', headerShown: false }} />
       </Stack.Navigator>
     );
   }
@@ -25,7 +25,7 @@ export function AuthStack({ isLaunched } : { isLaunched: boolean }) {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Info" component={InfoScreen} options={{ animation: 'fade', headerShown: false }} />
-      <Stack.Screen name="Login" component={LoginScreen} options={{ animation: 'fade', headerShown: false }} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ animation: 'slide_from_right', headerShown: false }} />
       <Stack.Screen name="Signup" component={SignupScreen} options={{ animation: 'slide_from_bottom', headerShown: false }} />
     </Stack.Navigator>
   );
